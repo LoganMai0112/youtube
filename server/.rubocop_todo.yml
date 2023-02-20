@@ -79,3 +79,6 @@ Style/SpecialGlobalVars:
 # URISchemes: http, https
 Layout/LineLength:
   Max: 198
+
+Metrics/BlockLength:
+  Enabled: false
