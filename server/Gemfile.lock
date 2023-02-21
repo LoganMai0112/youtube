@@ -79,6 +79,10 @@ GEM
     debug (1.7.1)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -197,6 +201,11 @@ GEM
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
     ruby-progressbar (1.11.0)
+    sentry-rails (5.8.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.8.0)
+    sentry-ruby (5.8.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -221,6 +230,8 @@ DEPENDENCIES
   bootsnap
   bullet
   debug
+  dotenv
+  dotenv-rails
   factory_bot_rails
   pg (~> 1.1)
   puma (~> 5.0)
@@ -230,6 +241,8 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
+  sentry-rails
+  sentry-ruby
   simplecov
   tzinfo-data
 
