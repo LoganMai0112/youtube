@@ -11,4 +11,3 @@ Sentry.init do |config|
   end
 end
 
-Sentry.capture_message('test message')
