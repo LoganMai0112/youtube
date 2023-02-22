@@ -21,7 +21,10 @@ function Login() {
 			.then(async (res) => {
 				console.log(res);
 				await localStorage.setItem('token', res.headers.get('Authorization'));
-				await localStorage.setItem('current_user', res.data.data);
+				await localStorage.setItem(
+					'current_user',
+					JSON.stringify(res.data.data)
+				);
 				navigate('/');
 			})
 			.catch((err) => console.error(err));
