@@ -26,6 +26,7 @@ function Signup() {
 			.then(async (res) => {
 				if (res.data.status.code === 200) {
 					await localStorage.setItem('token', res.headers.get('Authorization'));
+					await localStorage.setItem('current_user', res.data.data);
 					navigate('/');
 				}
 				if (res.data.status.code === 409) {
@@ -66,7 +67,7 @@ function Signup() {
 							<input
 								className="mb-6 rounded-md border-2 text-md w-full border-main-color bg-sec-color px-2 h-10 focus:outline-none focus:border-main-color placeholder-text-color  text-main-color focus:invalid:border-red-800 focus:invalid:text-red-600"
 								type="password"
-								placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+								placeholder="Enter the password"
 								{...register('password', {
 									required: 'You must specify a password',
 									minLength: {
