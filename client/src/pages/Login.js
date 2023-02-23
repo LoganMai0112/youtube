@@ -6,6 +6,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
 
 function Login() {
 	const navigate = useNavigate();
@@ -28,6 +29,15 @@ function Login() {
 				navigate('/');
 			})
 			.catch((err) => console.error(err));
+	};
+
+	const oauth = async (provider) => {
+		await axios
+			.post(`/auth/${provider}`)
+			.then(async (res) => {
+				console.log(res);
+			})
+			.catch((err) => console.log(err));
 	};
 	return (
 		<div className="w-full h-screen bg-purple-800 flex justify-center items-center">
@@ -66,7 +76,7 @@ function Login() {
 								<p className="text-red-700">{errors.email.message}</p>
 							)}
 							{errors.password && (
-								<span className="text-red-700">{errors.password.message}</span>
+								<p className="text-red-700">{errors.password.message}</p>
 							)}
 							<div className="w-full flex justify-end items-center mb-6">
 								<a href className="text-white cursor-pointer hover:underline">
@@ -79,15 +89,33 @@ function Login() {
 								value="Login"
 							/>
 						</form>
-						<p className="w-full text-center text-white">
-							Don&apos;t have an account?{' '}
-							<Link
-								to="/signup"
-								className="text-main-color hover:underline cursor-pointer"
+						<div className="flex flex-col gap-2">
+							<p className="w-full text-center text-white">
+								Don&apos;t have an account?{' '}
+								<Link
+									to="/signup"
+									className="text-main-color hover:underline cursor-pointer"
+								>
+									Sign up
+								</Link>
+							</p>
+							<button
+								className="bg-[#24292e] flex justify-center items-center gap-1 h-10 w-full rounded-md text-white"
+								type="submit"
+								onClick={() => oauth('github')}
 							>
-								Sign up
-							</Link>
-						</p>
+								<AiFillGithub />
+								Continue with Github
+							</button>
+							<button
+								className="bg-[#1877f2] flex justify-center items-center gap-1 h-10 w-full rounded-md text-white"
+								type="submit"
+								onClick={() => oauth('facebook')}
+							>
+								<AiFillFacebook />
+								Continue with Facebook
+							</button>
+						</div>
 					</div>
 				</div>
 				<div className="flex-1">
