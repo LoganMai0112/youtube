@@ -150,14 +150,14 @@ function Login() {
 								</Link>
 							</p>
 							{/* <button
-								className="bg-[#24292e] flex justify-center items-center gap-1 h-10 w-full rounded-md text-white"
-								type="submit"
-								onClick={() => oauth('github')}
-							>
-								<AiFillGithub />
-								Continue with Github
-							</button>
-							*/}
+                className="bg-[#24292e] flex justify-center items-center gap-1 h-10 w-full rounded-md text-white"
+                type="submit"
+                onClick={() => oauth('github')}
+              >
+                <AiFillGithub />
+                Continue with Github
+              </button>
+              */}
 							<FacebookLogin
 								appId={783380446539231}
 								fields="name, email, picture"
