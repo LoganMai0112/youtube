@@ -273,6 +273,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :facebook, ENV['FB_OAUTH_ID'], ENV['FB_OAUTH_SECRET'], scope: 'email'
+  config.omniauth :google_oauth2, ENV['GOOGLE_OAUTH_ID'], ENV['GOOGLE_OAUTH_SECRET'], scope: 'email', info_fields: 'email', provider_ignores_state: true
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
@@ -314,7 +315,9 @@ Devise.setup do |config|
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.fetch(:secret_key_base)
     jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
+      ['POST', %r{^/login$}],
+      ['POST', %r{^/auth/facebook/callback$}],
+      ['POST', %r{^/auth/google_oauth2/callback$}]
     ]
     jwt.revocation_requests = [
       ['DELETE', %r{^/logout$}]

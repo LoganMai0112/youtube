@@ -10,18 +10,31 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   # end
 
   def facebook
+    callback_by_provider('facebook')
+  end
+
+  def google_oauth2
+    callback_by_provider('google_oauth2')
+  end
+
+  def callback_by_provider(provider)
     @user = User.from_omniauth(request.env['omniauth.auth'])
-    if @user.persisted?
+    if @user.nil?
+      render json: {
+        status: 'This email is already taken'
+      }, status: :conflict
+    elsif @user.persisted?
       sign_in @user
       render json: {
         code: '200',
-        status: 'logged in successfully'
+        status: 'Logged in successfully',
+        data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
       }, status: :ok
     else
-      session['devise.facebook_data'] = request.env['omniauth.auth']
+      session["devise.#{provider}_data"] = request.env['omniauth.auth']
       render json: {
         code: '422',
-        status: 'something went wrong'
+        status: 'Something went wrong'
       }, status: :unprocessable_entity
     end
   end

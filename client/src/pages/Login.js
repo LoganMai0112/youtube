@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
 import FacebookLogin from 'react-facebook-login';
+import { useGoogleLogin } from '@react-oauth/google';
 
 function Login() {
 	const navigate = useNavigate();
@@ -22,7 +23,7 @@ function Login() {
 		await axios
 			.post('login', { user })
 			.then(async (res) => {
-				if (res.status === 2000) {
+				if (res.status === 200) {
 					await localStorage.setItem('token', res.headers.get('Authorization'));
 					await localStorage.setItem(
 						'current_user',
@@ -36,18 +37,49 @@ function Login() {
 			});
 	};
 
-	const responseFacebook = (res) => {
-		axios
+	const responseFacebook = async (res) => {
+		await axios
 			.post('/auth/facebook/callback', { res })
-			.then((response) => {
+			.then(async (response) => {
 				if (response.data.code === '200') {
+					await localStorage.setItem(
+						'token',
+						response.headers.get('Authorization')
+					);
+					await localStorage.setItem(
+						'current_user',
+						JSON.stringify(response.data.data)
+					);
 					navigate('/');
 				} else if (response.data.code === '422') {
 					navigate('/signup');
 				}
 			})
-			.catch((err) => console.log('err:', err));
+			.catch((err) => err);
 	};
+
+	const responseGoogle = useGoogleLogin({
+		onSuccess: (codeResponse) => {
+			axios
+				.post('/auth/google_oauth2/callback', {
+					code: codeResponse.code,
+				})
+				.then(async (res) => {
+					if (res.data.code === '200') {
+						await localStorage.setItem(
+							'token',
+							res.headers.get('Authorization')
+						);
+						await localStorage.setItem(
+							'current_user',
+							JSON.stringify(res.data.data)
+						);
+						navigate('/');
+					}
+				});
+		},
+		flow: 'auth-code',
+	});
 	return (
 		<div className="w-full h-screen bg-purple-800 flex justify-center items-center">
 			<div className="max-w-5xl w-full h-fit bg-gray-900 flex p-3 rounded-3xl">
@@ -136,6 +168,14 @@ function Login() {
 								cssClass="bg-[#1877f2] flex justify-center items-center gap-1 h-10 w-full rounded-md text-white"
 								icon={<AiFillFacebook />}
 							/>
+							<button
+								className="bg-white flex justify-center items-center gap-1 h-10 w-full rounded-md text-color"
+								type="submit"
+								onClick={() => responseGoogle()}
+							>
+								<AiFillGithub />
+								Continue with Google
+							</button>
 						</div>
 					</div>
 				</div>

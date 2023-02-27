@@ -26,7 +26,10 @@ function Signup() {
 			.then(async (res) => {
 				if (res.data.status.code === 200) {
 					await localStorage.setItem('token', res.headers.get('Authorization'));
-					await localStorage.setItem('current_user', res.data.data);
+					await localStorage.setItem(
+						'current_user',
+						JSON.stringify(res.data.data)
+					);
 					navigate('/');
 				}
 				if (res.data.status.code === 409) {
