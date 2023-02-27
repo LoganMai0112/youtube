@@ -10,4 +10,3 @@ Sentry.init do |config|
     true
   end
 end
-

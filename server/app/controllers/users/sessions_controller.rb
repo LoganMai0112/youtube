@@ -43,13 +43,13 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def verify_signed_out_user
-    if all_signed_out?
-      set_flash_message! :notice, :already_signed_out
+    return unless all_signed_out?
 
-      render json: {
-        status: 401,
-        message: "Couldn't find an active session."
-      }, status: :unauthorized
-    end
+    set_flash_message! :notice, :already_signed_out
+
+    render json: {
+      status: 401,
+      message: "Couldn't find an active session."
+    }, status: :unauthorized
   end
 end

@@ -13,7 +13,7 @@ class User < ApplicationRecord
     elsif user.provider == auth.provider && user.uid == auth.uid
       return user
     end
-    
-    return nil
+
+    nil
   end
 end
