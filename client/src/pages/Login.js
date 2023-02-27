@@ -29,7 +29,7 @@ function Login() {
             'current_user',
             JSON.stringify(res.data.data)
           );
-          navigate('/');
+          navigate(-1);
         }
       })
       .catch((err) => {
@@ -50,7 +50,7 @@ function Login() {
             'current_user',
             JSON.stringify(response.data.data)
           );
-          navigate('/');
+          navigate(-1);
         } else if (response.data.code === '422') {
           navigate('/signup');
         }
@@ -74,7 +74,7 @@ function Login() {
               'current_user',
               JSON.stringify(res.data.data)
             );
-            navigate('/');
+            navigate(-1);
           }
         });
     },
@@ -159,7 +159,7 @@ function Login() {
               </button>
               */}
               <FacebookLogin
-                appId={783380446539231}
+                appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
                 fields="name, email, picture"
                 scope="public_profile"
                 cookie
