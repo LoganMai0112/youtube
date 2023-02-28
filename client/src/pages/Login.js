@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
+import { FcGoogle } from 'react-icons/fc';
 import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -55,7 +56,7 @@ function Login() {
           navigate('/signup');
         }
       })
-      .catch((err) => err);
+      .catch((err) => setSuccessLogin(false));
   };
 
   const responseGoogle = useGoogleLogin({
@@ -76,10 +77,12 @@ function Login() {
             );
             navigate(-1);
           }
-        });
+        })
+        .catch((err) => setSuccessLogin(false));
     },
     flow: 'auth-code',
   });
+
   return (
     <div className="w-full h-screen bg-purple-800 flex justify-center items-center">
       <div className="max-w-5xl w-full h-fit bg-gray-900 flex p-3 rounded-3xl">
@@ -173,7 +176,7 @@ function Login() {
                 type="submit"
                 onClick={() => responseGoogle()}
               >
-                <AiFillGithub />
+                <FcGoogle />
                 Continue with Google
               </button>
             </div>

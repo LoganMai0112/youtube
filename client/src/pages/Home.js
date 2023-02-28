@@ -15,10 +15,13 @@ function Home() {
       })
       .catch((err) => err);
   };
+
   return (
-    <button type="button" onClick={() => logOut()}>
-      Logout
-    </button>
+    <div className="w-full bg-main">
+      <button type="button" onClick={() => logOut()}>
+        Logout
+      </button>
+    </div>
   );
 }
 

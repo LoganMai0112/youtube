@@ -44,7 +44,7 @@ function Signup() {
         <div className="flex-1">
           <img
             className="h-full w-full rounded-2xl"
-            src="./Mytube-1.png"
+            src="./logo.png"
             alt="signup"
           />
         </div>
