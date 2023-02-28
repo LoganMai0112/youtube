@@ -1,26 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import Card from '../components/Card';
 
 function Home() {
-  const navigate = useNavigate();
-  const logOut = async () => {
-    await axios
-      .delete('/logout')
-      .then(async (res) => {
-        if (res.data.code === '200') {
-          localStorage.clear();
-          navigate('/login');
-        }
-      })
-      .catch((err) => err);
-  };
-
   return (
-    <div className="w-full bg-main">
-      <button type="button" onClick={() => logOut()}>
-        Logout
-      </button>
+    <div className="w-full h-full px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-x-5 gap-y-8 overflow-y-scroll">
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
+      <Card />
     </div>
   );
 }
