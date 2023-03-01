@@ -13,6 +13,9 @@ module.exports = {
         'icon-color': '#504f56',
         'text-color': '#8b8897',
       },
+      rotate: {
+        360: '360deg',
+      },
     },
   },
   plugins: [],

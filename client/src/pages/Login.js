@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,8 +10,10 @@ import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
+import { UserUpdateContext } from '../contexts/UserContext';
 
 function Login() {
+  const useUserUpdate = useContext(UserUpdateContext);
   const navigate = useNavigate();
   const [successLogin, setSuccessLogin] = useState(true);
   const {
@@ -26,10 +28,7 @@ function Login() {
       .then(async (res) => {
         if (res.status === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
-          await localStorage.setItem(
-            'current_user',
-            JSON.stringify(res.data.data)
-          );
+          useUserUpdate(res.data.data);
           navigate(-1);
         }
       })
@@ -47,10 +46,7 @@ function Login() {
             'token',
             response.headers.get('Authorization')
           );
-          await localStorage.setItem(
-            'current_user',
-            JSON.stringify(response.data.data)
-          );
+          useUserUpdate(response.data.data);
           navigate(-1);
         } else if (response.data.code === '422') {
           navigate('/signup');
@@ -71,10 +67,7 @@ function Login() {
               'token',
               res.headers.get('Authorization')
             );
-            await localStorage.setItem(
-              'current_user',
-              JSON.stringify(res.data.data)
-            );
+            useUserUpdate(res.data.data);
             navigate(-1);
           }
         })
