@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'video/index'
+  resources :posts
   devise_for :users, path: '',
                      path_names: {
                        sign_in: 'login',
@@ -11,6 +11,7 @@ Rails.application.routes.draw do
                        registrations: 'users/registrations',
                        omniauth_callbacks: 'users/omniauth_callbacks'
                      }
+  resources :videos
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

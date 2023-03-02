@@ -1,14 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useContext } from 'react';
 import { BsSearch } from 'react-icons/bs';
-import {
-  AiOutlineVideoCameraAdd,
-  AiTwotoneBell,
-  AiFillYoutube,
-} from 'react-icons/ai';
+import { AiTwotoneBell, AiFillYoutube } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import LogOutButton from './LogOutButton';
+import CreateVideoButton from './CreateVideoButton';
 
 function Header({ dropdownOpen }) {
   const useUser = useContext(UserContext);
@@ -38,15 +35,7 @@ function Header({ dropdownOpen }) {
       </div>
       {useUserSignedIn && (
         <div className="flex items-center gap-2 relative">
-          <button
-            type="button"
-            className="rounded-full p-3 bg-sec-color flex items-center w-fit h-fit hover:bg-hover"
-          >
-            <div className="h-5 w-5 mr-3">
-              <AiOutlineVideoCameraAdd className="h-full w-full fill-main-color" />
-            </div>
-            <p className="text-white">Start stream</p>
-          </button>
+          <CreateVideoButton />
           <button
             type="button"
             className="group rounded-full p-3 hover:bg-hover relative"
@@ -66,7 +55,7 @@ function Header({ dropdownOpen }) {
             />
           </button>
           {menuOpen && (
-            <div className="absolute flex flex-col right-0 top-full bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
+            <div className="absolute flex flex-col right-0 top-16 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
               <section>
                 <div className="flex flex-row px-3">
                   <div className="w-10 h-10 mr-3">

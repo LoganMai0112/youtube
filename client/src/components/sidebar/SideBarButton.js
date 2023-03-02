@@ -8,7 +8,9 @@ function SideBarButton({ icon, avatar, text, option, endIcon, number }) {
           {icon}
           {avatar && <img src={avatar} alt="avatar" className="rounded-full" />}
         </div>
-        <p className="text-text-color group-hover:text-white text-sm">{text}</p>
+        <p className="text-text-color group-hover:text-white text-sm whitespace-nowrap">
+          {text}
+        </p>
       </div>
       {option && (
         <div className="h-5 w-5 flex items-center justify-between [&>svg]:h-full [&>svg]:w-full [&>svg]:fill-white hover:[&>svg]:fill-main-color">

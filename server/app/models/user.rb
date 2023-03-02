@@ -8,6 +8,7 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: %i[facebook google_oauth2]
 
   has_one_attached :avatar
+  has_many :videos, dependent: :destroy
 
   def avatar_url
     Rails.application.routes.url_helpers.url_for(avatar) if avatar.attached?
