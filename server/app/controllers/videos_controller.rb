@@ -1,6 +1,10 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, only: %i[edit create destroy]
+
   def index
+    videos = Video.all
+    options = {include: [:user]}
+    render json: VideoSerializer.new(videos, options).serializable_hash
   end
 
   def create
@@ -8,11 +12,16 @@ class VideosController < ApplicationController
     if video.save
       render json: VideoSerializer.new(video).serializable_hash[:data][:attributes], status: :created
     else
-      byebug
       render json: {message: "Unsuccessfully created"}, status: 500
     end
   end
 
+  def edit
+  end
+
+  def destroy
+  end
+  
   private
 
   def video_params
