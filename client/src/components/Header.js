@@ -19,7 +19,9 @@ function Header({ dropdownOpen }) {
   return (
     <div className="p-5 w-full h-fit flex justify-between items-center">
       {!dropdownOpen && (
-        <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
+        <Link to="/">
+          <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
+        </Link>
       )}
       <div className="flex bg-sec-color py-2 px-4 rounded-full items-center">
         <button
@@ -49,7 +51,7 @@ function Header({ dropdownOpen }) {
             className="transition-all ease-in-out p-0 rounded-full border-2 border-solid border-main-color hover:p-2 hover:border-dashed m-2 hover:m-0 hover:rotate-360"
           >
             <img
-              src={useUser.avatar_url}
+              src={useUser.avatarUrl}
               alt="avatar"
               className="w-10 h-10 rounded-full"
             />
@@ -61,7 +63,7 @@ function Header({ dropdownOpen }) {
                   <div className="w-10 h-10 mr-3">
                     <img
                       className="w-full h-full rounded-full"
-                      src={useUser.avatar_url}
+                      src={useUser.avatarUrl}
                       alt="avatar"
                     />
                   </div>

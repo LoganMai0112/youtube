@@ -50,10 +50,12 @@ function UploadVideoPortal({ setCreating }) {
     })
       .then(() => {
         setIsLoading(false);
+        setCreating(false);
       })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
+        setCreating(false);
       });
   };
 
@@ -97,7 +99,7 @@ function UploadVideoPortal({ setCreating }) {
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-[rgba(0,0,0,.7)] z-10 flex justify-center items-center">
-      <div className="bg-gray-900 w-1/2 h-fit rounded-2xl flex flex-col px-6 py-4">
+      <div className="bg-gray-900 w-1/2 h-5/6 rounded-2xl flex flex-col px-6 py-4 overflow-y-scroll">
         <div className="w-full flex justify-between px-6 py-4 border-b border-main-color">
           <p className="text-xl text-white">Upload videos</p>
           <button
@@ -135,6 +137,7 @@ function UploadVideoPortal({ setCreating }) {
           {preview && (
             <video width="100%" height="100%" controls className="h-full">
               <source src={URL.createObjectURL(preview)} type="video/webm" />
+              <source src={URL.createObjectURL(preview)} type="video/mp4" />
             </video>
           )}
           <div className="w-full flex justify-center">

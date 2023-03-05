@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaStream } from 'react-icons/fa';
 import {
   AiFillYoutube,
@@ -33,7 +34,9 @@ function SideBar({ setDropdownOpen }) {
       </div>
       <div className="overflow-y-scroll">
         <section>
-          <SideBarButton icon={<AiFillHome />} text="Home" />
+          <Link to="/">
+            <SideBarButton icon={<AiFillHome />} text="Home" />
+          </Link>
           <SideBarButton
             icon={<AiFillCompass />}
             text="Discover"

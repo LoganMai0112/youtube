@@ -7,6 +7,8 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Layout from './components/layout/Layout';
 import UserProvider from './contexts/UserContext';
+import WatchLayout from './components/layout/WatchLayout';
+import WatchVideo from './pages/WatchVideo';
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+            </Route>
+            <Route element={<WatchLayout />}>
+              <Route path="/videos/:videoId" element={<WatchVideo />} />
             </Route>
           </Routes>
         </BrowserRouter>
