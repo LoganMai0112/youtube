@@ -10,11 +10,13 @@ import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
 import { UserUpdateContext } from '../contexts/UserContext';
 
 function Login() {
   const useUserUpdate = useContext(UserUpdateContext);
   const navigate = useNavigate();
+  const successLoginToastify = () => toast('Logged in successfully');
   const [successLogin, setSuccessLogin] = useState(true);
   const {
     register,
@@ -29,6 +31,7 @@ function Login() {
         if (res.status === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
           useUserUpdate(res.data.data);
+          successLoginToastify();
           navigate(-1);
         }
       })
@@ -47,6 +50,7 @@ function Login() {
             response.headers.get('Authorization')
           );
           useUserUpdate(response.data.data);
+          successLoginToastify();
           navigate(-1);
         } else if (response.data.code === '422') {
           navigate('/signup');
@@ -68,6 +72,7 @@ function Login() {
               res.headers.get('Authorization')
             );
             useUserUpdate(res.data.data);
+            successLoginToastify();
             navigate(-1);
           }
         })

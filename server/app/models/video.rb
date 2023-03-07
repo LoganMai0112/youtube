@@ -8,6 +8,10 @@ class Video < ApplicationRecord
   end
 
   def thumbnail_url
-    Rails.application.routes.url_helpers.url_for(thumbnail) if thumbnail.attached?
+    if thumbnail.attached?
+      Rails.application.routes.url_helpers.url_for(thumbnail)
+    else
+      Rails.application.routes.url_helpers.url_for(source.preview(resize_to_limit: [300, 300]).processed)
+    end
   end
 end

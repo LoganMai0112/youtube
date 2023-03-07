@@ -316,6 +316,7 @@ DEPENDENCIES
   factory_bot_rails
   image_processing (~> 1.2)
   jsonapi-serializer
+  mini_magick
   multi_json (~> 1.15)
   omniauth
   omniauth-facebook

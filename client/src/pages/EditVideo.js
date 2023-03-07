@@ -185,7 +185,7 @@ function EditVideo() {
             />
             <div className="">
               <div {...getRootThumbnailProps({ style })}>
-                <input {...getInputThumbnailProps()} required />
+                <input {...getInputThumbnailProps()} />
                 <p>Drag 1 drop some files here, or click to upload thumbnail</p>
                 <em>(Only *.jpg and *.png images will be accepted)</em>
               </div>

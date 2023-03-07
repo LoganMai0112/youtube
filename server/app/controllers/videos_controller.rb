@@ -1,9 +1,9 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: %i[edit create destroy]
+  before_action :authenticate_user!, only: %i[update create destroy]
   before_action :set_video, only: %i[show update destroy]
 
   def index
-    videos = Video.all
+    videos = Video.all.includes(:user, { thumbnail_attachment: :blob }, { source_attachment: :blob })
     options = { include: [:user] }
     render json: VideoSerializer.new(videos, options).serializable_hash
   end

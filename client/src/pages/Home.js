@@ -11,7 +11,6 @@ function Home() {
       const response = await axios.get('/videos');
       setVideos(response.data.data);
       setChannels(response.data.included);
-      console.log(response.data.data);
     };
 
     try {

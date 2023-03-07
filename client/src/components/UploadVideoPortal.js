@@ -117,7 +117,9 @@ function UploadVideoPortal({ setCreating }) {
     );
     data.append('video[source]', acceptedFiles[0]);
     data.append('video[user_id]', currentUser.id);
-    data.append('video[thumbnail', acceptedThumbnailFiles[0]);
+    if (acceptedThumbnailFiles[0]) {
+      data.append('video[thumbnail', acceptedThumbnailFiles[0]);
+    }
     setIsLoading(true);
     await submitToAPI(data);
     setIsLoading(false);
@@ -173,7 +175,7 @@ function UploadVideoPortal({ setCreating }) {
               </div>
               <div className="">
                 <div {...getRootThumbnailProps({ style })}>
-                  <input {...getInputThumbnailProps()} required />
+                  <input {...getInputThumbnailProps()} />
                   <p>
                     Drag 1 drop some files here, or click to upload thumbnail
                   </p>

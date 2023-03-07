@@ -10,6 +10,13 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :videos, dependent: :destroy
 
+  after_create :add_avatar_after_create
+
+  def add_avatar_after_create
+    avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{self.email}.svg").open
+    self.avatar.attach(io: avatar, filename: "user#{email}.svg")
+  end
+
   def avatar_url
     Rails.application.routes.url_helpers.url_for(avatar) if avatar.attached?
   end
@@ -18,8 +25,6 @@ class User < ApplicationRecord
     user = User.find_by(email: auth[:info][:email])
     if user.nil?
       user = User.create(email: auth.info.email, password: Devise.friendly_token, provider: auth.provider, uid: auth.uid, name: auth.info.name)
-      avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{auth[:info][:email]}.svg").open
-      user.avatar.attach(io: avatar, filename: "#{user.name}.svg")
       return user
     elsif user.provider == auth.provider && user.uid == auth.uid
       return user
