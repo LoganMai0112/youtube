@@ -13,7 +13,7 @@ class VideosController < ApplicationController
     if video.save
       render json: VideoSerializer.new(video).serializable_hash[:data][:attributes], status: :created
     else
-      render json: {message: "Unsuccessfully created"}, status: 500
+      render json: { message: 'Unsuccessfully created' }, status: :internal_server_error
     end
   end
 
@@ -22,16 +22,26 @@ class VideosController < ApplicationController
     render json: VideoSerializer.new(@video, options).serializable_hash
   end
 
-  def edit
+  def update
+    if @video.update(video_params)
+      render json: VideoSerializer.new(@video).serializable_hash[:data][:attributes], status: :accepted
+    else
+      render json: { message: 'Unsuccesfully updated' }, status: internal_server_error
+    end
   end
 
   def destroy
+    if @video.destroy
+      render json: { message: 'successfully deleted' }, status: :ok
+    else
+      render json: { message: 'Unsuccessfully deleted' }, status: internal_server_error
+    end
   end
-  
+
   private
 
   def video_params
-    params.require(:video).permit(:title, :description, :user_id, :source)
+    params.require(:video).permit(:title, :description, :user_id, :source, :thumbnail)
   end
 
   def set_video

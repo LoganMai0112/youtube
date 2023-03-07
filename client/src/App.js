@@ -9,6 +9,7 @@ import Layout from './components/layout/Layout';
 import UserProvider from './contexts/UserContext';
 import WatchLayout from './components/layout/WatchLayout';
 import WatchVideo from './pages/WatchVideo';
+import EditVideo from './pages/EditVideo';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             </Route>
             <Route element={<WatchLayout />}>
               <Route path="/videos/:videoId" element={<WatchVideo />} />
+              <Route path="/videos/:videoId/edit" element={<EditVideo />} />
             </Route>
           </Routes>
         </BrowserRouter>

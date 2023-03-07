@@ -11,7 +11,7 @@ function Home() {
       const response = await axios.get('/videos');
       setVideos(response.data.data);
       setChannels(response.data.included);
-      console.log(response.data);
+      console.log(response.data.data);
     };
 
     try {
@@ -23,7 +23,6 @@ function Home() {
 
   const findChannel = (channelId) => {
     const channel = channels.find((c) => c.id === channelId);
-    console.log(channel);
     return channel.attributes;
   };
 
@@ -31,8 +30,10 @@ function Home() {
     <div className="w-full h-full px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8 overflow-y-scroll">
       {videos.map((video) => (
         <Card
+          key={video.id}
           id={video.id}
           title={video.attributes.title}
+          thumbnailUrl={video.attributes.thumbnailUrl}
           channel={findChannel(video.relationships.user.data.id)}
           createdAt={video.attributes.createdAt}
         />

@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
 
-export default function SideCard({ id, title, channel, createdAt }) {
+export default function SideCard({ id, title, channel, createdAt, thumbnail }) {
   return (
     <Link to={`/videos/${id}`} replace>
       <div className="w-full h-fit flex flex-row cursor-pointer">
         <img
-          src="/logo.png"
+          src={thumbnail}
           alt="thumbnail"
-          className="aspect-video rounded-lg w-40"
+          className="aspect-video rounded-lg w-40 object-cover"
         />
         <div className="flex flex-row items-start pl-3">
           <div>

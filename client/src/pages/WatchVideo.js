@@ -1,21 +1,29 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Player } from 'video-react';
 import { BiLike, BiShare } from 'react-icons/bi';
 import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
+import parse from 'html-react-parser';
 import RecommendSide from '../components/RecommendSide/RecommendSide';
+import { UserContext } from '../contexts/UserContext';
+import 'video-react/dist/video-react.css';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
-  const [videoSource, setVideoSource] = useState();
+  const [videoSource, setVideoSource] = useState('');
   const [channel, setChannel] = useState({});
   const [showDescription, setShowDescription] = useState(false);
   const player = useRef();
+  const currentUser = useContext(UserContext);
   const params = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getVideo = async () => {
@@ -23,7 +31,9 @@ function WatchVideo() {
       setVideo(res.data.data.attributes);
       setVideoSource(res.data.data.attributes.videoUrl);
       setChannel(res.data.included[0].attributes);
-      player.current.load();
+      if (player.current) {
+        player.current.load();
+      }
     };
 
     getVideo();
@@ -49,14 +59,25 @@ function WatchVideo() {
               </div>
               <div>
                 <p className="text-white text-xl">{channel.name}</p>
-                <p className="text-text-color text-sm">suscriber</p>
+                <p className="text-text-color text-sm">subscriber</p>
               </div>
-              <button
-                type="button"
-                className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
-              >
-                Subscribe
-              </button>
+              {channel.id !== currentUser.id && (
+                <button
+                  type="button"
+                  className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
+                >
+                  Subscribe
+                </button>
+              )}
+              {channel.id === currentUser.id && (
+                <button
+                  type="button"
+                  className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
+                  onClick={() => navigate(`/videos/${params.videoId}/edit`)}
+                >
+                  Edit video
+                </button>
+              )}
             </div>
             <div className="flex gap-4 items-center">
               <button
@@ -84,7 +105,9 @@ function WatchVideo() {
           </div>
           <div
             className={`p-3 mt-5 bg-icon-color/50 text-white font-normal w-full ${
-              showDescription ? 'h-fit' : 'h-24 hover:bg-icon-color'
+              showDescription
+                ? 'h-fit'
+                : 'h-24 hover:bg-icon-color cursor-pointer'
             } rounded-2xl overflow-hidden`}
           >
             <p
@@ -93,9 +116,9 @@ function WatchVideo() {
                 setShowDescription(true);
               }}
             >
-              <span>{moment(video.createdAt).fromNow}</span>
+              <span>view - {moment(video.createdAt).fromNow()}</span>
               <br />
-              {video.description}
+              {parse(video.description ? video.description : '')}
             </p>
             {showDescription && (
               <button
