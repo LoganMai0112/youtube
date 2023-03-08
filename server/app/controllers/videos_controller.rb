@@ -33,7 +33,7 @@ class VideosController < ApplicationController
   end
 
   def destroy
-    authorzie @video
+    authorize @video
     if @video.destroy
       render json: { message: 'successfully deleted' }, status: :ok
     else

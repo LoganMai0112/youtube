@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   has_many :videos, dependent: :destroy
+  has_many :likes, dependent: :destroy
 
   after_create :add_avatar_after_create
 
