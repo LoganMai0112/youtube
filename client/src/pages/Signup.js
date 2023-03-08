@@ -1,12 +1,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useForm } from 'react-hook-form';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
+import { UserUpdateContext } from '../contexts/UserContext';
 
 function Signup() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function Signup() {
   const password = useRef();
   const [req, setReq] = useState({ status: true, message: null });
   password.current = watch('password', '');
+  const useUserUpdate = useContext(UserUpdateContext);
 
   const onSubmit = async (user) => {
     await axios
@@ -26,10 +28,7 @@ function Signup() {
       .then(async (res) => {
         if (res.data.status.code === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
-          await localStorage.setItem(
-            'current_user',
-            JSON.stringify(res.data.data)
-          );
+          useUserUpdate(res.data.data);
           navigate('/');
         }
         if (res.data.status.code === 409) {
@@ -44,7 +43,7 @@ function Signup() {
         <div className="flex-1">
           <img
             className="h-full w-full rounded-2xl"
-            src="./Mytube-1.png"
+            src="./logo.png"
             alt="signup"
           />
         </div>

@@ -1,17 +1,22 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AiFillGithub, AiFillFacebook } from 'react-icons/ai';
+import { FcGoogle } from 'react-icons/fc';
 import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
+import { UserUpdateContext } from '../contexts/UserContext';
 
 function Login() {
+  const useUserUpdate = useContext(UserUpdateContext);
   const navigate = useNavigate();
+  const successLoginToastify = () => toast('Logged in successfully');
   const [successLogin, setSuccessLogin] = useState(true);
   const {
     register,
@@ -25,10 +30,8 @@ function Login() {
       .then(async (res) => {
         if (res.status === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
-          await localStorage.setItem(
-            'current_user',
-            JSON.stringify(res.data.data)
-          );
+          useUserUpdate(res.data.data);
+          successLoginToastify();
           navigate(-1);
         }
       })
@@ -46,16 +49,14 @@ function Login() {
             'token',
             response.headers.get('Authorization')
           );
-          await localStorage.setItem(
-            'current_user',
-            JSON.stringify(response.data.data)
-          );
+          useUserUpdate(response.data.data);
+          successLoginToastify();
           navigate(-1);
         } else if (response.data.code === '422') {
           navigate('/signup');
         }
       })
-      .catch((err) => err);
+      .catch((err) => setSuccessLogin(false));
   };
 
   const responseGoogle = useGoogleLogin({
@@ -70,16 +71,16 @@ function Login() {
               'token',
               res.headers.get('Authorization')
             );
-            await localStorage.setItem(
-              'current_user',
-              JSON.stringify(res.data.data)
-            );
+            useUserUpdate(res.data.data);
+            successLoginToastify();
             navigate(-1);
           }
-        });
+        })
+        .catch((err) => setSuccessLogin(false));
     },
     flow: 'auth-code',
   });
+
   return (
     <div className="w-full h-screen bg-purple-800 flex justify-center items-center">
       <div className="max-w-5xl w-full h-fit bg-gray-900 flex p-3 rounded-3xl">
@@ -173,7 +174,7 @@ function Login() {
                 type="submit"
                 onClick={() => responseGoogle()}
               >
-                <AiFillGithub />
+                <FcGoogle />
                 Continue with Google
               </button>
             </div>

@@ -1,24 +1,43 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Card from '../components/Card';
 
 function Home() {
-  const navigate = useNavigate();
-  const logOut = async () => {
-    await axios
-      .delete('/logout')
-      .then(async (res) => {
-        if (res.data.code === '200') {
-          localStorage.clear();
-          navigate('/login');
-        }
-      })
-      .catch((err) => err);
+  const [videos, setVideos] = useState([]);
+  const [channels, setChannels] = useState([]);
+
+  useEffect(() => {
+    const getVideos = async () => {
+      const response = await axios.get('/videos');
+      setVideos(response.data.data);
+      setChannels(response.data.included);
+    };
+
+    try {
+      getVideos();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
+  const findChannel = (channelId) => {
+    const channel = channels.find((c) => c.id === channelId);
+    return channel.attributes;
   };
+
   return (
-    <button type="button" onClick={() => logOut()}>
-      Logout
-    </button>
+    <div className="w-full h-full px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8 overflow-y-scroll">
+      {videos.map((video) => (
+        <Card
+          key={video.id}
+          id={video.id}
+          title={video.attributes.title}
+          thumbnailUrl={video.attributes.thumbnailUrl}
+          channel={findChannel(video.relationships.user.data.id)}
+          createdAt={video.attributes.createdAt}
+        />
+      ))}
+    </div>
   );
 }
 

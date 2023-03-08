@@ -1,5 +1,7 @@
 require 'active_support/core_ext/integer/time'
 
+Rails.application.routes.default_url_options = { host: 'localhost', port: 3001 }
+
 Rails.application.configure do
   config.after_initialize do
     Bullet.enable        = true
