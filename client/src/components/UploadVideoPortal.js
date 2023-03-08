@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable no-shadow */
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable no-param-reassign */
@@ -55,6 +56,7 @@ function UploadVideoPortal({ setCreating }) {
   const [isLoading, setIsLoading] = useState(false);
   const editorRef = useRef();
   const navigate = useNavigate();
+  const [checkValue, setCheckValue] = useState('published');
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -117,7 +119,10 @@ function UploadVideoPortal({ setCreating }) {
     );
     data.append('video[source]', acceptedFiles[0]);
     data.append('video[user_id]', currentUser.id);
-    data.append('video[thumbnail', acceptedThumbnailFiles[0]);
+    data.append('video[status]', checkValue);
+    if (acceptedThumbnailFiles[0]) {
+      data.append('video[thumbnail', acceptedThumbnailFiles[0]);
+    }
     setIsLoading(true);
     await submitToAPI(data);
     setIsLoading(false);
@@ -155,31 +160,51 @@ function UploadVideoPortal({ setCreating }) {
           onSubmit={(e) => handleSubmit(e)}
           className="flex flex-col px-6 py-4 gap-3"
         >
-          <div className="flex gap-3 w-fit">
-            <div className="flex flex-col gap-3 flex-1">
-              <input
-                type="text"
-                name="title"
-                placeholder="Title..."
-                className="bg-gray-900 text-white :outline-none border border-icon-color rounded-md h-10 px-3"
-                required
+          <input
+            type="text"
+            name="title"
+            placeholder="Title..."
+            className="bg-gray-900 text-white :outline-none border border-icon-color rounded-md h-10 px-3 flex-1"
+            required
+          />
+          <div className="flex gap-3 mb-3 pb-3 border-b-2 border-main-color">
+            <div className="flex-1">
+              <div {...getRootProps({ style })}>
+                <input {...getInputProps()} required />
+                <p>Drag 1 drop some files here, or click to upload video</p>
+                <em>(Only *.webm and *.mp4 images will be accepted)</em>
+              </div>
+            </div>
+            {preview && (
+              <video
+                width="100%"
+                height="100%"
+                controls
+                className="h-fit flex-1"
+              >
+                <source src={preview} type="video/webm" />
+                <source src={preview} type="video/mp4" />
+              </video>
+            )}
+          </div>
+          <div className="flex gap-3 mb-3 pb-3 border-b-2 border-main-color">
+            <div className="flex-1">
+              <div {...getRootThumbnailProps({ style })}>
+                <input {...getInputThumbnailProps()} />
+                <p>Drag 1 drop some files here, or click to upload thumbnail</p>
+                <em>(Only *.jpg and *.png images will be accepted)</em>
+              </div>
+            </div>
+            {thumbnailPreview && (
+              <img
+                src={thumbnailPreview}
+                alt="thumbnail"
+                className="flex-1 w-1/2"
               />
-              <div className="">
-                <div {...getRootProps({ style })}>
-                  <input {...getInputProps()} required />
-                  <p>Drag 1 drop some files here, or click to upload video</p>
-                  <em>(Only *.webm and *.mp4 images will be accepted)</em>
-                </div>
-              </div>
-              <div className="">
-                <div {...getRootThumbnailProps({ style })}>
-                  <input {...getInputThumbnailProps()} required />
-                  <p>
-                    Drag 1 drop some files here, or click to upload thumbnail
-                  </p>
-                  <em>(Only *.jpg and *.png images will be accepted)</em>
-                </div>
-              </div>
+            )}
+          </div>
+          <div className="flex gap-3 mb-3 pb-3 border-b-2 border-main-color">
+            <div className="flex-1">
               <Editor
                 ref={editorRef}
                 onClick={focus}
@@ -191,24 +216,32 @@ function UploadVideoPortal({ setCreating }) {
                 placeholder="description"
               />
             </div>
-            <div className="flex flex-col gap-3 flex-1">
-              <textarea
-                className="bg-gray-900 text-white outline-none border border-icon-color rounded-md h-10 px-3"
-                type="text"
-                disabled
-                value={convertToHTML(editorState.getCurrentContent())}
-                placeholder="Description..."
+            <textarea
+              className="flex-1 bg-gray-900 text-white outline-none border border-icon-color rounded-md h-10 px-3"
+              type="text"
+              disabled
+              value={convertToHTML(editorState.getCurrentContent())}
+              placeholder="Description..."
+            />
+          </div>
+          <div className="flex flex-col items-start">
+            <h2 className="text-white">Save or publish?</h2>
+            <label>
+              <input
+                type="checkbox"
+                checked={checkValue === 'only_me'}
+                onClick={() => setCheckValue('only_me')}
               />
-              {preview && (
-                <video width="100%" height="100%" controls className="h-fit">
-                  <source src={preview} type="video/webm" />
-                  <source src={preview} type="video/mp4" />
-                </video>
-              )}
-              {thumbnailPreview && (
-                <img src={thumbnailPreview} alt="thumbnail" />
-              )}
-            </div>
+              <span className="text-white ml-3">Private</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={checkValue === 'published'}
+                onClick={() => setCheckValue('published')}
+              />
+              <span className="text-white ml-3">Public</span>
+            </label>
           </div>
           <div className="w-full flex justify-center">
             {isLoading && (

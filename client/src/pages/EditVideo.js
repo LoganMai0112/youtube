@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-undef */
@@ -54,6 +55,7 @@ function EditVideo() {
   const editorRef = useRef();
   const [videoUrl, setVideoUrl] = useState();
   const navigate = useNavigate();
+  const [checkValue, setCheckValue] = useState();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -64,6 +66,7 @@ function EditVideo() {
       setThumbnailPreview(res.data.data.attributes.thumbnailUrl);
       setVideoUrl(res.data.data.attributes.videoUrl);
       setTitle(res.data.data.attributes.title);
+      setCheckValue(res.data.data.attributes.status);
       const blockFromHTMl = convertFromHTML(
         res.data.data.attributes.description
       );
@@ -127,8 +130,9 @@ function EditVideo() {
       convertToHTML(editorState.getCurrentContent())
     );
     if (acceptedThumbnailFiles[0]) {
-      data.append('video[thumbnail', acceptedThumbnailFiles[0]);
+      data.append('video[thumbnail]', acceptedThumbnailFiles[0]);
     }
+    data.append('video[status]', checkValue);
     setIsLoading(true);
     await submitToAPI(data);
     setIsLoading(false);
@@ -185,7 +189,7 @@ function EditVideo() {
             />
             <div className="">
               <div {...getRootThumbnailProps({ style })}>
-                <input {...getInputThumbnailProps()} required />
+                <input {...getInputThumbnailProps()} />
                 <p>Drag 1 drop some files here, or click to upload thumbnail</p>
                 <em>(Only *.jpg and *.png images will be accepted)</em>
               </div>
@@ -218,6 +222,25 @@ function EditVideo() {
             />
             {thumbnailPreview && <img src={thumbnailPreview} alt="thumbnail" />}
           </div>
+        </div>
+        <div className="flex flex-col items-start">
+          <h2 className="text-white">Save or publish?</h2>
+          <label>
+            <input
+              type="checkbox"
+              checked={checkValue === 'only_me'}
+              onClick={() => setCheckValue('only_me')}
+            />
+            <span className="text-white ml-3">Private</span>
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={checkValue === 'published'}
+              onClick={() => setCheckValue('published')}
+            />
+            <span className="text-white ml-3">Public</span>
+          </label>
         </div>
       </form>
     </div>

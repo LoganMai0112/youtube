@@ -13,7 +13,6 @@ import moment from 'moment';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/RecommendSide/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
-import 'video-react/dist/video-react.css';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});

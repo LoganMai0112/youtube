@@ -9,8 +9,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     build_resource(sign_up_params)
     resource.name = "username#{(User.last&.id || -1) + 1}" if resource.name.nil?
-    avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{(User.last&.id || -1) + 1}.svg").open
-    resource.avatar.attach(io: avatar, filename: "user#{(User.last&.id || -1) + 1}.svg")
     resource.save
     yield resource if block_given?
     if resource.persisted?
