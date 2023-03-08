@@ -3,6 +3,8 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  enum role: { admin: 0, user: 1 }
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
   devise :omniauthable, omniauth_providers: %i[facebook google_oauth2]
@@ -13,7 +15,7 @@ class User < ApplicationRecord
   after_create :add_avatar_after_create
 
   def add_avatar_after_create
-    avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{self.email}.svg").open
+    avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{email}.svg").open
     self.avatar.attach(io: avatar, filename: "user#{email}.svg")
   end
 
