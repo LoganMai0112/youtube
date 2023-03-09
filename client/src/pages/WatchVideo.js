@@ -11,6 +11,7 @@ import { BiShare } from 'react-icons/bi';
 import { AiFillLike } from 'react-icons/ai';
 import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/RecommendSide/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
@@ -20,7 +21,7 @@ function WatchVideo() {
   const [videoSource, setVideoSource] = useState('');
   const [channel, setChannel] = useState({});
   const [showDescription, setShowDescription] = useState(false);
-  const [liked, setLiked] = useState();
+  const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState();
   const player = useRef();
   const currentUser = useContext(UserContext);
@@ -34,6 +35,14 @@ function WatchVideo() {
       setVideoSource(res.data.data.attributes.videoUrl);
       setChannel(res.data.included[0].attributes);
       setLikeCount(res.data.data.attributes.likesCount);
+      if (
+        res.data.data.attributes.likedYet &&
+        res.data.data.attributes.likedYet !== null
+      ) {
+        setLiked(true);
+      } else {
+        setLiked(false);
+      }
       if (player.current) {
         player.current.load();
       }
@@ -41,23 +50,6 @@ function WatchVideo() {
 
     getVideo();
   }, [params, videoSource]);
-
-  useEffect(() => {
-    const getLike = async () => {
-      try {
-        const res = await axios.get(`/videos/${params.videoId}/like`);
-        if (res.data !== null) {
-          setLiked(true);
-        } else {
-          setLiked(false);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getLike();
-  }, []);
 
   const like = async () => {
     try {
@@ -67,7 +59,11 @@ function WatchVideo() {
         setLikeCount(likeCount + 1);
       }
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 401) {
+        toast(err.response.data);
+        localStorage.clear();
+        navigate('/login');
+      }
     }
   };
 
@@ -79,7 +75,11 @@ function WatchVideo() {
         setLikeCount(likeCount - 1);
       }
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 401) {
+        toast(err.response.data);
+        localStorage.clear();
+        navigate('/login');
+      }
     }
   };
 

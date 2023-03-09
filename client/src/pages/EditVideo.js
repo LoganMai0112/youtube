@@ -18,6 +18,7 @@ import { convertToHTML } from 'draft-convert';
 import { useDropzone } from 'react-dropzone';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { toast } from 'react-toastify';
 
 const baseStyle = {
   flex: 1,
@@ -107,7 +108,7 @@ function EditVideo() {
       .then((res) => res.json())
       .then(() => navigate(`/videos/${params.videoId}`))
       .catch((err) => {
-        console.log(err);
+        toast(err.message);
       });
   };
 

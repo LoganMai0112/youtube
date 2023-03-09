@@ -19,7 +19,7 @@ class VideosController < ApplicationController
 
   def show
     authorize @video
-    options = { include: [:user] }
+    options = { include: [:user], params: { current_user: } }
     render json: VideoSerializer.new(@video, options).serializable_hash
   end
 

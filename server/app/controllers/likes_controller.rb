@@ -1,13 +1,10 @@
 class LikesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_like, only: %i[destroy show]
-
-  def show
-    render json: @like, status: :ok
-  end
+  before_action :set_like, only: %i[destroy]
 
   def create
-    like = Like.new(video_id: params[:video_id], user_id: current_user.id)
+    like = Like.where(video_id: params[:video_id], user_id: current_user.id).first_or_initialize
+    authorize like
     if like.save
       render json: like, status: :created
     else
@@ -16,10 +13,11 @@ class LikesController < ApplicationController
   end
 
   def destroy
+    authorize @like
     if @like.destroy
-      render json: { status: 'Successfully destroyed' }, status: :ok
+      render json: { message: 'Successfully destroyed' }, status: :ok
     else
-      render json: { status: 'Unsuccessfully destroyed' }, status: :internal_server_error
+      render json: { message: 'Unsuccessfully destroyed' }, status: :internal_server_error
     end
   end
 
