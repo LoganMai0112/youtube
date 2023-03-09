@@ -7,9 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Player } from 'video-react';
-import { BiLike, BiShare } from 'react-icons/bi';
+import { BiShare } from 'react-icons/bi';
+import { AiFillLike } from 'react-icons/ai';
 import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/RecommendSide/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
@@ -19,6 +21,8 @@ function WatchVideo() {
   const [videoSource, setVideoSource] = useState('');
   const [channel, setChannel] = useState({});
   const [showDescription, setShowDescription] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState();
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -30,6 +34,15 @@ function WatchVideo() {
       setVideo(res.data.data.attributes);
       setVideoSource(res.data.data.attributes.videoUrl);
       setChannel(res.data.included[0].attributes);
+      setLikeCount(res.data.data.attributes.likesCount);
+      if (
+        res.data.data.attributes.likedYet &&
+        res.data.data.attributes.likedYet !== null
+      ) {
+        setLiked(true);
+      } else {
+        setLiked(false);
+      }
       if (player.current) {
         player.current.load();
       }
@@ -37,6 +50,39 @@ function WatchVideo() {
 
     getVideo();
   }, [params, videoSource]);
+
+  const like = async () => {
+    try {
+      const res = await axios.post(`/videos/${params.videoId}/like`);
+      if (res) {
+        setLiked(true);
+        setLikeCount(likeCount + 1);
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast(err.response.data);
+        localStorage.clear();
+        navigate('/login');
+      }
+    }
+  };
+
+  const unLike = async () => {
+    try {
+      const res = await axios.delete(`/videos/${params.videoId}/like`);
+      if (res) {
+        setLiked(false);
+        setLikeCount(likeCount - 1);
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        toast(err.response.data);
+        localStorage.clear();
+        navigate('/login');
+      }
+    }
+  };
+
   return (
     <div className="flex h-full w-full">
       <div className="flex-1 px-5 h-fit">
@@ -48,7 +94,7 @@ function WatchVideo() {
         <div className="flex w-full flex-col mt-4">
           <p className="text-white text-2xl font-bold">{video.title}</p>
           <div className="flex justify-between items-center w-full pt-3">
-            <div className="flex flex-row items-start">
+            <div className="flex flex-row items-center">
               <div className="p-1 min-w-[48px] rounded-full border-dashed border-2 border-main-color mr-3">
                 <img
                   src={channel.avatarUrl}
@@ -79,13 +125,26 @@ function WatchVideo() {
               )}
             </div>
             <div className="flex gap-4 items-center">
-              <button
-                type="button"
-                className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
-              >
-                <BiLike className="w-6 h-6" />
-                Like
-              </button>
+              {!liked && (
+                <button
+                  type="button"
+                  onClick={() => like()}
+                  className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
+                >
+                  <AiFillLike className="w-6 h-6" />
+                  {likeCount}
+                </button>
+              )}
+              {liked && (
+                <button
+                  type="button"
+                  onClick={() => unLike()}
+                  className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
+                >
+                  <AiFillLike className="w-6 h-6 fill-purple-800" />
+                  {likeCount}
+                </button>
+              )}
               <button
                 type="button"
                 className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"

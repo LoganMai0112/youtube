@@ -82,3 +82,6 @@ Layout/LineLength:
 
 Metrics/BlockLength:
   Enabled: false
+
+Style/HashSyntax:
+  Enabled: false

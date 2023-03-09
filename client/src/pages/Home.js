@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import Card from '../components/Card';
 
 function Home() {
@@ -16,7 +17,7 @@ function Home() {
     try {
       getVideos();
     } catch (err) {
-      console.log(err);
+      toast('Something went wrong');
     }
   }, []);
 

@@ -17,6 +17,7 @@ import { useDropzone } from 'react-dropzone';
 import { EditorState } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import { Editor } from 'react-draft-wysiwyg';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -72,7 +73,7 @@ function UploadVideoPortal({ setCreating }) {
       .then((res) => res.json())
       .then((res) => navigate(`/videos/${res.id}`))
       .catch((err) => {
-        console.log(err);
+        toast(err.message);
       });
   };
 

@@ -1,7 +1,7 @@
 class VideoPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user.admin?
+      if user && user.admin?
         scope
       else
         scope.where(status: 'published')

@@ -19,7 +19,7 @@ class VideosController < ApplicationController
 
   def show
     authorize @video
-    options = { include: [:user] }
+    options = { include: [:user], params: { current_user: current_user } }
     render json: VideoSerializer.new(@video, options).serializable_hash
   end
 
@@ -33,7 +33,7 @@ class VideosController < ApplicationController
   end
 
   def destroy
-    authorzie @video
+    authorize @video
     if @video.destroy
       render json: { message: 'successfully deleted' }, status: :ok
     else

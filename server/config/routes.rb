@@ -10,7 +10,9 @@ Rails.application.routes.draw do
                        registrations: 'users/registrations',
                        omniauth_callbacks: 'users/omniauth_callbacks'
                      }
-  resources :videos
+  resources :videos do
+    resource :like
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")

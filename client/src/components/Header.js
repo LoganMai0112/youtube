@@ -17,7 +17,7 @@ function Header({ dropdownOpen }) {
   };
 
   return (
-    <div className="p-5 w-full h-fit flex justify-between items-center">
+    <div className="p-5 w-full h-fit flex justify-between items-center relative z-10">
       {!dropdownOpen && (
         <Link to="/">
           <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
@@ -80,7 +80,13 @@ function Header({ dropdownOpen }) {
           )}
         </div>
       )}
-      {!useUserSignedIn && <Link to="/login">Sign in</Link>}
+      {!useUserSignedIn && (
+        <Link to="/login">
+          <div className="px-4 py-2 bg-main-color hover:bg-yellow-700 rounded-2xl hover:text-white">
+            Sign in
+          </div>
+        </Link>
+      )}
     </div>
   );
 }
