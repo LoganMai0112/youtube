@@ -5,6 +5,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   enum role: { admin: 0, user: 1 }
 
+  after_create :add_avatar_after_create
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
   devise :omniauthable, omniauth_providers: %i[facebook google_oauth2]
@@ -12,8 +14,11 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :videos, dependent: :destroy
   has_many :likes, dependent: :destroy
+  has_many :comments, dependent: :destroy
 
-  after_create :add_avatar_after_create
+  validates :role, presence: true
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
 
   def add_avatar_after_create
     avatar = URI.parse("https://avatars.dicebear.com/api/adventurer-neutral/#{email}.svg").open

@@ -18,9 +18,10 @@ class VideosController < ApplicationController
   end
 
   def show
-    authorize @video
+    video = Video.find(params[:id])
+    authorize video
     options = { include: [:user], params: { current_user: current_user } }
-    render json: VideoSerializer.new(@video, options).serializable_hash
+    render json: VideoSerializer.new(video, options).serializable_hash
   end
 
   def update
