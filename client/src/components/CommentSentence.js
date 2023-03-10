@@ -95,7 +95,7 @@ function CommentSentence({
                     type="button"
                     onClick={() => {
                       setEditing(true);
-                      setCommentInput(comment.attributes.content);
+                      setCommentInput(commentContent);
                     }}
                     className="w-full px-3 py-1 hover:bg-hover text-text-color hover:text-white"
                   >
