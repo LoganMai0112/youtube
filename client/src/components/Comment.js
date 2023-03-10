@@ -102,13 +102,15 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
           </form>
         </div>
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 mb-48">
         {comments &&
           comments.map((comment) => (
             <CommentSentence
               key={comment.id}
               comment={comment}
               commenter={findCommenter(comment)}
+              commentsCount={commentsCount}
+              setCommentsCount={setCommentsCount}
             />
           ))}
       </div>

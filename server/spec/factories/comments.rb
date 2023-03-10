@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :comment do
     user { nil }
     video { nil }
-    content { "MyString" }
+    content { 'MyString' }
   end
 end
