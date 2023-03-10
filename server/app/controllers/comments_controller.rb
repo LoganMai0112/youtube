@@ -3,7 +3,8 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[update destroy]
 
   def index
-    comments = Video.find(params[:video_id]).comments.includes(:user)
+    comments = Video.find(params[:video_id]).comments.includes({ user: { avatar_attachment: :blob } })
+    comments = policy_scope(comments)
     options = { include: [:user] }
     render json: CommentSerializer.new(comments, options).serializable_hash
   end

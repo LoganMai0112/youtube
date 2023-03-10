@@ -20,6 +20,9 @@ function CommentSentence({
   const [editing, setEditing] = useState();
   const [commentInput, setCommentInput] = useState();
   const signedIn = useContext(UserSignedInContext);
+  const [commentContent, setCommentContent] = useState(
+    comment.attributes.content
+  );
   const navigate = useNavigate();
   const deleteComment = () => {
     axios
@@ -48,7 +51,8 @@ function CommentSentence({
       })
       .then((res) => {
         if (res) {
-          setCommentsCount(commentsCount + 1);
+          setCommentContent(commentInput);
+          toast('Comment updated');
         }
       })
       .catch((err) => {
@@ -109,9 +113,7 @@ function CommentSentence({
             </div>
           )}
         </div>
-        {!editing && (
-          <p className="text-white font-light">{comment.attributes.content}</p>
-        )}
+        {!editing && <p className="text-white font-light">{commentContent}</p>}
         {editing && (
           <form className="flex flex-col w-full items-end">
             <textarea
