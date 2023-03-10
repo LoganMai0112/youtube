@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AiFillLike } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { UserSignedInContext } from '../contexts/UserContext';
 
 function LikeVideoButton({
   liked,
@@ -12,6 +13,7 @@ function LikeVideoButton({
   setLikeCount,
 }) {
   const navigate = useNavigate();
+  const signedIn = useContext(UserSignedInContext);
   const like = async () => {
     try {
       const res = await axios.post(`/videos/${videoId}/like`);
@@ -40,6 +42,8 @@ function LikeVideoButton({
         toast(err.response.data);
         localStorage.clear();
         navigate('/login');
+      } else {
+        toast(err.message);
       }
     }
   };
@@ -48,7 +52,13 @@ function LikeVideoButton({
       {!liked && (
         <button
           type="button"
-          onClick={() => like()}
+          onClick={() => {
+            if (signedIn) {
+              like();
+            } else {
+              navigate('/login');
+            }
+          }}
           className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
         >
           <AiFillLike className="w-6 h-6" />
@@ -58,7 +68,13 @@ function LikeVideoButton({
       {liked && (
         <button
           type="button"
-          onClick={() => unLike()}
+          onClick={() => {
+            if (signedIn) {
+              unLike();
+            } else {
+              navigate('/login');
+            }
+          }}
           className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
         >
           <AiFillLike className="w-6 h-6 fill-purple-800" />

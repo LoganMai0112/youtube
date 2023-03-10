@@ -2,7 +2,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { UserContext } from '../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
+import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import CommentSentence from './CommentSentence';
 
 function Comment({ videoId, commentsCount, setCommentsCount }) {
@@ -11,6 +12,8 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   const [commenting, setCommenting] = useState(false);
   const [comments, setComments] = useState();
   const [commenters, setCommenters] = useState();
+  const signedIn = useContext(UserSignedInContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getComments = () => {
@@ -36,9 +39,15 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
           setCommentsCount(commentsCount + 1);
         }
       })
-      .catch((err) =>
-        err.response ? toast(err.response.data.message) : console.log(err)
-      );
+      .catch((err) => {
+        if (err.response.status === 401) {
+          toast(err.response.data);
+          localStorage.clear();
+          navigate('/login');
+        } else {
+          toast(err.message);
+        }
+      });
   };
 
   const findCommenter = (comment) => {
@@ -56,7 +65,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
           <div className="min-w-[48px] mr-3">
             <img
               className="w-10 h-10 rounded-full"
-              src={currentUser ? currentUser.avatarUrl : '/logo.png'}
+              src={signedIn ? currentUser.avatarUrl : '/logo.png'}
               alt="user avatar"
             />
           </div>
@@ -66,7 +75,13 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
               placeholder="Add a comment..."
               value={commentInput}
               onChange={(e) => setCommentInput(e.target.value)}
-              onFocus={() => setCommenting(true)}
+              onFocus={() => {
+                if (signedIn) {
+                  setCommenting(true);
+                } else {
+                  navigate('/login');
+                }
+              }}
               required
             />
             {commenting && (

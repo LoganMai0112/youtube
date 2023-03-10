@@ -6,7 +6,8 @@ import moment from 'moment';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { UserContext } from '../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
+import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 
 function CommentSentence({
   comment,
@@ -18,6 +19,8 @@ function CommentSentence({
   const currentUser = useContext(UserContext);
   const [editing, setEditing] = useState();
   const [commentInput, setCommentInput] = useState();
+  const signedIn = useContext(UserSignedInContext);
+  const navigate = useNavigate();
   const deleteComment = () => {
     axios
       .delete(`/videos/${comment.attributes.videoId}/comments/${comment.id}`)
@@ -28,7 +31,13 @@ function CommentSentence({
         }
       })
       .catch((err) => {
-        toast(err.response.data.message);
+        if (err.response.status === 401) {
+          toast(err.response.data);
+          localStorage.clear();
+          navigate('/login');
+        } else {
+          toast(err.message);
+        }
       });
   };
 
@@ -42,9 +51,15 @@ function CommentSentence({
           setCommentsCount(commentsCount + 1);
         }
       })
-      .catch((err) =>
-        err.response ? toast(err.response.data.message) : console.log(err)
-      );
+      .catch((err) => {
+        if (err.response.status === 401) {
+          toast(err.response.data);
+          localStorage.clear();
+          navigate('/login');
+        } else {
+          toast(err.message);
+        }
+      });
   };
 
   return (
@@ -64,7 +79,7 @@ function CommentSentence({
               {moment(comment.attributes.createdAt).fromNow()}
             </span>
           </div>
-          {commenter.id == currentUser.id && (
+          {commenter.id == currentUser.id && signedIn && (
             <div
               className="relative cursor-pointer p-2 active:bg-hover rounded-full"
               onClick={() => setOpenBox(!openBox)}
