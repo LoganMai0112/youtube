@@ -148,7 +148,7 @@ function UploadVideoPortal({ setCreating }) {
     <div className="fixed inset-0 bg-[rgba(0,0,0,.7)] z-10 flex justify-center items-center">
       <div className="bg-gray-900 w-fit mx-10 h-5/6 rounded-2xl flex flex-col px-6 py-4 overflow-y-scroll">
         <div className="w-full flex justify-between px-6 py-4 border-b border-main-color">
-          <p className="text-xl text-white">Upload videos</p>
+          <p className="text-xl text-white flex items-center">Upload videos</p>
           <button
             type="button"
             onClick={() => setCreating(false)}
