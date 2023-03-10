@@ -8,13 +8,13 @@ import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Player } from 'video-react';
 import { BiShare } from 'react-icons/bi';
-import { AiFillLike } from 'react-icons/ai';
 import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
-import { toast } from 'react-toastify';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/RecommendSide/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
+import LikeVideoButton from '../components/LikeVideoButton';
+import Comment from '../components/Comment';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -23,18 +23,29 @@ function WatchVideo() {
   const [showDescription, setShowDescription] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState();
+  const [commentsCount, setCommentsCount] = useState();
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
   const navigate = useNavigate();
+
+  const findChannel = (channelId, includedData) => {
+    const videoCreator = includedData.find(
+      (c) => c.id === channelId && c.type === 'user'
+    );
+    return videoCreator.attributes;
+  };
 
   useEffect(() => {
     const getVideo = async () => {
       const res = await axios.get(`/videos/${params.videoId}`);
       setVideo(res.data.data.attributes);
       setVideoSource(res.data.data.attributes.videoUrl);
-      setChannel(res.data.included[0].attributes);
+      setChannel(
+        findChannel(res.data.data.relationships.user.data.id, res.data.included)
+      );
       setLikeCount(res.data.data.attributes.likesCount);
+      setCommentsCount(res.data.data.attributes.commentsCount);
       if (
         res.data.data.attributes.likedYet &&
         res.data.data.attributes.likedYet !== null
@@ -50,38 +61,6 @@ function WatchVideo() {
 
     getVideo();
   }, [params, videoSource]);
-
-  const like = async () => {
-    try {
-      const res = await axios.post(`/videos/${params.videoId}/like`);
-      if (res) {
-        setLiked(true);
-        setLikeCount(likeCount + 1);
-      }
-    } catch (err) {
-      if (err.response.status === 401) {
-        toast(err.response.data);
-        localStorage.clear();
-        navigate('/login');
-      }
-    }
-  };
-
-  const unLike = async () => {
-    try {
-      const res = await axios.delete(`/videos/${params.videoId}/like`);
-      if (res) {
-        setLiked(false);
-        setLikeCount(likeCount - 1);
-      }
-    } catch (err) {
-      if (err.response.status === 401) {
-        toast(err.response.data);
-        localStorage.clear();
-        navigate('/login');
-      }
-    }
-  };
 
   return (
     <div className="flex h-full w-full">
@@ -125,26 +104,13 @@ function WatchVideo() {
               )}
             </div>
             <div className="flex gap-4 items-center">
-              {!liked && (
-                <button
-                  type="button"
-                  onClick={() => like()}
-                  className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
-                >
-                  <AiFillLike className="w-6 h-6" />
-                  {likeCount}
-                </button>
-              )}
-              {liked && (
-                <button
-                  type="button"
-                  onClick={() => unLike()}
-                  className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
-                >
-                  <AiFillLike className="w-6 h-6 fill-purple-800" />
-                  {likeCount}
-                </button>
-              )}
+              <LikeVideoButton
+                liked={liked}
+                likeCount={likeCount}
+                setLikeCount={setLikeCount}
+                setLiked={setLiked}
+                videoId={params.videoId}
+              />
               <button
                 type="button"
                 className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
@@ -190,6 +156,11 @@ function WatchVideo() {
               </button>
             )}
           </div>
+          <Comment
+            videoId={params.videoId}
+            commentsCount={commentsCount}
+            setCommentsCount={setCommentsCount}
+          />
         </div>
       </div>
       <div className="w-[420px] flex flex-col">

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
                      }
   resources :videos do
     resource :like
+    resources :comments, only: %i[create destroy update index]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

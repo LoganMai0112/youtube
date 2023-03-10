@@ -3,7 +3,7 @@ class VideosController < ApplicationController
   before_action :set_video, only: %i[show update destroy]
 
   def index
-    videos = policy_scope(Video.all.includes(:user, { thumbnail_attachment: :blob }, { source_attachment: :blob }))
+    videos = policy_scope(Video.all.includes(:user, { thumbnail_attachment: :blob }, { source_attachment: {blob: :preview_image_attachment} }))
     options = { include: [:user] }
     render json: VideoSerializer.new(videos, options).serializable_hash
   end
