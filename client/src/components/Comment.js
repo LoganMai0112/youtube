@@ -23,7 +23,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
           setComments(res.data.data);
           setCommenters(res.data.included);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast(err.message));
     };
 
     getComments();
