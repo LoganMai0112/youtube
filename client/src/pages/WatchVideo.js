@@ -15,6 +15,7 @@ import RecommendSide from '../components/RecommendSide/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
 import LikeVideoButton from '../components/LikeVideoButton';
 import Comment from '../components/Comment';
+import ShareVideoPortal from '../components/ShareVideoPortal';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -24,6 +25,7 @@ function WatchVideo() {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
+  const [shareBox, setShareBox] = useState(false);
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -113,6 +115,7 @@ function WatchVideo() {
               />
               <button
                 type="button"
+                onClick={() => setShareBox(true)}
                 className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
               >
                 <BiShare className="w-6 h-6" />
@@ -166,6 +169,7 @@ function WatchVideo() {
       <div className="w-[420px] flex flex-col">
         <RecommendSide />
       </div>
+      {shareBox && <ShareVideoPortal setShareBox={setShareBox} />}
     </div>
   );
 }
