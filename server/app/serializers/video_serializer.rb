@@ -9,4 +9,10 @@ class VideoSerializer
                             } do |video, params|
     Like.find_by(video_id: video.id, user_id: params[:current_user].id)
   end
+
+  attribute :subscribed_yet, if: proc { |_video, params|
+                                  params[:current_user].present?
+                                  } do |video, params|
+    Subscribe.find_by(subscriber_id: params[:current_user].id, subscribed_id: video.user.id)
+  end
 end
