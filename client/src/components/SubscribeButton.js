@@ -55,7 +55,7 @@ function SubscribeButton({ subscribed, setSubscribed, channelId }) {
               navigate('/login');
             }
           }}
-          className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
+          className="py-2 px-4 rounded-3xl bg-main-color hover:bg-yellow-600 text-black ml-5"
         >
           Subscribe
         </button>
@@ -70,7 +70,7 @@ function SubscribeButton({ subscribed, setSubscribed, channelId }) {
               navigate('/login');
             }
           }}
-          className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
+          className="py-2 px-4 rounded-3xl bg-sec hover:bg-hover text-white ml-5"
         >
           Subscribed
         </button>
