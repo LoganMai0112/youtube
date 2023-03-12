@@ -26,6 +26,8 @@ function LikeVideoButton({
         toast(err.response.data);
         localStorage.clear();
         navigate('/login');
+      } else {
+        toast(err.message);
       }
     }
   };

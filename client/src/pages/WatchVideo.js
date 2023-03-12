@@ -16,6 +16,7 @@ import { UserContext } from '../contexts/UserContext';
 import LikeVideoButton from '../components/LikeVideoButton';
 import Comment from '../components/Comment';
 import ShareVideoPortal from '../components/ShareVideoPortal';
+import SubscribeButton from '../components/SubscribeButton';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -23,6 +24,7 @@ function WatchVideo() {
   const [channel, setChannel] = useState({});
   const [showDescription, setShowDescription] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [subscribed, setSubscribed] = useState();
   const [likeCount, setLikeCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
   const [shareBox, setShareBox] = useState(false);
@@ -41,20 +43,23 @@ function WatchVideo() {
   useEffect(() => {
     const getVideo = async () => {
       const res = await axios.get(`/videos/${params.videoId}`);
-      setVideo(res.data.data.attributes);
-      setVideoSource(res.data.data.attributes.videoUrl);
+      const { attributes } = res.data.data;
+      setVideo(attributes);
+      setVideoSource(attributes.videoUrl);
       setChannel(
         findChannel(res.data.data.relationships.user.data.id, res.data.included)
       );
-      setLikeCount(res.data.data.attributes.likesCount);
-      setCommentsCount(res.data.data.attributes.commentsCount);
-      if (
-        res.data.data.attributes.likedYet &&
-        res.data.data.attributes.likedYet !== null
-      ) {
+      setLikeCount(attributes.likesCount);
+      setCommentsCount(attributes.commentsCount);
+      if (attributes.likedYet && attributes.likedYet !== null) {
         setLiked(true);
       } else {
         setLiked(false);
+      }
+      if (attributes.subscribedYet && attributes.subscribedYet !== null) {
+        setSubscribed(true);
+      } else {
+        setSubscribed(false);
       }
       if (player.current) {
         player.current.load();
@@ -88,12 +93,11 @@ function WatchVideo() {
                 <p className="text-text-color text-sm">subscriber</p>
               </div>
               {channel.id !== currentUser.id && (
-                <button
-                  type="button"
-                  className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
-                >
-                  Subscribe
-                </button>
+                <SubscribeButton
+                  subscribed={subscribed}
+                  setSubscribed={setSubscribed}
+                  channelId={channel.id}
+                />
               )}
               {channel.id === currentUser.id && (
                 <button
