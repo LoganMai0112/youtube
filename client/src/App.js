@@ -12,6 +12,7 @@ import UserProvider from './contexts/UserContext';
 import WatchLayout from './components/layout/WatchLayout';
 import WatchVideo from './pages/WatchVideo';
 import EditVideo from './pages/EditVideo';
+import Search from './pages/Search';
 import 'video-react/dist/video-react.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="/result" element={<Search />} />
             </Route>
             <Route element={<WatchLayout />}>
               <Route path="/videos/:videoId" element={<WatchVideo />} />

@@ -15,10 +15,11 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create destroy update index]
   end
 
+  get '/search', to: 'searchs#search'
+
   resources :users do
     resource :subscribe, only: %i[create destroy]
   end
-
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
