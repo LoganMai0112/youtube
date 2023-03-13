@@ -17,8 +17,8 @@ function Search() {
         .then((res) => {
           if (res.data[0]) {
             setResults(res.data);
-            setIsLoading(false);
           }
+          setIsLoading(false);
         })
         .catch((err) => toast(err.message));
     };
