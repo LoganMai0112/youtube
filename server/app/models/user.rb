@@ -15,6 +15,10 @@ class User < ApplicationRecord
   has_many :videos, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :subscriptions, foreign_key: :subscriber_id, class_name: 'Subscribe', dependent: :destroy, inverse_of: :subscriber
+  has_many :received_subscriptions, foreign_key: :subscribed_id, class_name: 'Subscribe', dependent: :destroy, inverse_of: :subscribed_user
+  has_many :subscribers, through: :received_subscriptions, source: :subscriber
+  has_many :subscription_channels, through: :subscriptions, source: :subscribed_user
 
   validates :role, presence: true
   validates :name, presence: true

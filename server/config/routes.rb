@@ -14,6 +14,12 @@ Rails.application.routes.draw do
     resource :like
     resources :comments, only: %i[create destroy update index]
   end
+
+  resources :users do
+    resource :subscribe, only: %i[create destroy]
+  end
+
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
