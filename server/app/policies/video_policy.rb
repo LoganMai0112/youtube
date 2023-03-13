@@ -9,6 +9,10 @@ class VideoPolicy < ApplicationPolicy
     end
   end
 
+  def create?
+    user
+  end
+
   def update?
     user.admin? or record.user == user
   end
