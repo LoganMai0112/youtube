@@ -15,9 +15,7 @@ function Search() {
       await axios
         .get(`/search?query=${searchParams.get('search_query')}`)
         .then((res) => {
-          if (res.data[0]) {
-            setResults(res.data);
-          }
+          setResults(res.data);
           setIsLoading(false);
         })
         .catch((err) => toast(err.message));
@@ -29,7 +27,7 @@ function Search() {
   return (
     <div className="px-5 flex flex-col gap-2">
       {!isLoading &&
-        results &&
+        results.length &&
         results.map((video) => (
           <SearchCard
             id={video.data.id}
@@ -41,7 +39,7 @@ function Search() {
             description={video.data.attributes.description}
           />
         ))}
-      {!isLoading && !results && (
+      {!isLoading && !results.length && (
         <p className="text-text-color text-lg">
           There are no results matching your query
         </p>
