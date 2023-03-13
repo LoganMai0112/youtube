@@ -7,14 +7,17 @@ import SearchCard from '../components/SearchCard';
 function Search() {
   const [searchParams] = useSearchParams();
   const [results, setResults] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getSearch = () => {
-      axios
+    const getSearch = async () => {
+      setIsLoading(true);
+      await axios
         .get(`/search?query=${searchParams.get('search_query')}`)
         .then((res) => {
           if (res.data[0]) {
             setResults(res.data);
+            setIsLoading(false);
           }
         })
         .catch((err) => toast(err.message));
@@ -25,7 +28,8 @@ function Search() {
 
   return (
     <div className="px-5 flex flex-col gap-2">
-      {results &&
+      {!isLoading &&
+        results &&
         results.map((video) => (
           <SearchCard
             id={video.data.id}
@@ -37,11 +41,12 @@ function Search() {
             description={video.data.attributes.description}
           />
         ))}
-      {!results && (
+      {!isLoading && !results && (
         <p className="text-text-color text-lg">
           There are no results matching your query
         </p>
       )}
+      {isLoading && <p className="text-white">Loading...</p>}
     </div>
   );
 }
