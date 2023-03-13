@@ -103,6 +103,14 @@ GEM
     dry-core (1.0.0)
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
+    elastic-transport (8.2.0)
+      faraday (< 3)
+      multi_json
+    elasticsearch (8.6.0)
+      elastic-transport (~> 8)
+      elasticsearch-api (= 8.6.0)
+    elasticsearch-api (8.6.0)
+      multi_json
     erubi (1.12.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -270,6 +278,9 @@ GEM
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
+    searchkick (5.2.1)
+      activemodel (>= 5.2)
+      hashie
     sentry-rails (5.8.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.8.0)
@@ -315,6 +326,7 @@ DEPENDENCIES
   devise-jwt
   dotenv
   dotenv-rails
+  elasticsearch
   factory_bot_rails
   image_processing (~> 1.2)
   jsonapi-serializer
@@ -333,6 +345,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
+  searchkick
   sentry-rails
   sentry-ruby
   simplecov
