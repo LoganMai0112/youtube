@@ -8,6 +8,7 @@ function Search() {
   const [searchParams] = useSearchParams();
   const [results, setResults] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [channels, setChannels] = useState();
 
   useEffect(() => {
     const getSearch = async () => {
@@ -15,7 +16,8 @@ function Search() {
       await axios
         .get(`/search?query=${searchParams.get('search_query')}`)
         .then((res) => {
-          setResults(res.data);
+          setResults(res.data.data);
+          setChannels(res.data.included);
           setIsLoading(false);
         })
         .catch((err) => toast(err.message));
@@ -30,13 +32,15 @@ function Search() {
         results.length &&
         results.map((video) => (
           <SearchCard
-            id={video.data.id}
-            title={video.data.attributes.title}
-            channel={video.included[0].attributes}
-            createdAt={video.data.attributes.createdAt}
-            thumbnail={video.data.attributes.thumbnailUrl}
-            avatar={video.included[0].attributes.avatarUrl}
-            description={video.data.attributes.description}
+            id={video.id}
+            title={video.attributes.title}
+            channel={channels.find(
+              (c) =>
+                c.id === video.relationships.user.data.id && c.type === 'user'
+            )}
+            createdAt={video.attributes.createdAt}
+            thumbnail={video.attributes.thumbnailUrl}
+            description={video.attributes.description}
           />
         ))}
       {!isLoading && !results.length && (

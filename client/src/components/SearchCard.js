@@ -3,22 +3,14 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import parse from 'html-react-parser';
 
-function SearchCard({
-  id,
-  title,
-  channel,
-  createdAt,
-  thumbnail,
-  avatar,
-  description,
-}) {
+function SearchCard({ id, title, channel, createdAt, thumbnail, description }) {
   return (
     <Link to={`/videos/${id}`} replace>
       <div className="w-full h-fit flex flex-row cursor-pointer">
         <img
           src={thumbnail}
           alt="thumbnail"
-          className="aspect-video rounded-lg w-1/3 object-cover"
+          className="aspect-video rounded-lg w-1/4 min-w-[200px] object-cover"
         />
         <div className="flex flex-row items-start pl-3">
           <div>
@@ -31,8 +23,14 @@ function SearchCard({
               <p>{moment(createdAt).fromNow()}</p>
             </div>
             <div className="flex gap-2 my-3 items-center">
-              <img src={avatar} alt="avatar" className="rounded-full w-5 h-5" />
-              <p className="text-text-color text-sm">{channel.name}</p>
+              <img
+                src={channel.attributes.avatarUrl}
+                alt="avatar"
+                className="rounded-full w-5 h-5"
+              />
+              <p className="text-text-color text-sm">
+                {channel.attributes.name}
+              </p>
             </div>
             {description && (
               <p className="text-text-color text-sm">{parse(description)}</p>

@@ -3,8 +3,7 @@ class SearchsController < ApplicationController
     videos = policy_scope(Video.search(params[:query]))
     if videos
       options = { include: [:user] }
-      serialized_videos = videos.map { |video| VideoSerializer.new(video, options).serializable_hash}
-      render json: serialized_videos.to_json, status: :ok
+      render json: VideoSerializer.new(videos.to_a, options).serializable_hash, status: :ok
     else
       render json: { message: 'Some thing went wrong' }, status: :internal_server_error
     end
