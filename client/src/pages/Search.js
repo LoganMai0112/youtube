@@ -13,7 +13,9 @@ function Search() {
       axios
         .get(`/search?query=${searchParams.get('search_query')}`)
         .then((res) => {
-          setResults(res.data);
+          if (res.data[0]) {
+            setResults(res.data);
+          }
         })
         .catch((err) => toast(err.message));
     };
@@ -35,6 +37,11 @@ function Search() {
             description={video.data.attributes.description}
           />
         ))}
+      {!results && (
+        <p className="text-text-color text-lg">
+          There are no results matching your query
+        </p>
+      )}
     </div>
   );
 }
