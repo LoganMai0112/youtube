@@ -13,7 +13,6 @@ export default function UserProvider({ children }) {
     setSignedIn(Object.keys(currentUser).length !== 0);
   }, [currentUser]);
 
-  // Object.keys(currentUser).length !== 0;
   return (
     <UserContext.Provider value={currentUser}>
       <UserUpdateContext.Provider value={setCurrentUser}>
