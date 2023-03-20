@@ -1,14 +1,17 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { useContext, useState } from 'react';
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import { RiFileUploadFill } from 'react-icons/ri';
 import { CiStreamOn } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { UserSignedInContext } from '../contexts/UserContext';
+import CreateStreamPortal from './CreateStreamPortal';
 import MenuButton from './MenuButton';
 import UploadVideoPortal from './UploadVideoPortal';
 
 function CreateVideoButton() {
   const [creating, setCreating] = useState(false);
+  const [createStream, setCreateStream] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const useUserSignedIn = useContext(UserSignedInContext);
   const navigate = useNavigate();
@@ -19,6 +22,14 @@ function CreateVideoButton() {
   const openPortal = () => {
     if (useUserSignedIn) {
       setCreating(true);
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const openStreamPortal = () => {
+    if (useUserSignedIn) {
+      setCreateStream(true);
     } else {
       navigate('/login');
     }
@@ -47,7 +58,11 @@ function CreateVideoButton() {
               </button>
             </section>
             <section>
-              <button type="button" className="w-full" onClick={() => {}}>
+              <button
+                type="button"
+                className="w-full"
+                onClick={() => openStreamPortal()}
+              >
                 <MenuButton icon={<CiStreamOn />} text="Go live" />
               </button>
             </section>
@@ -56,6 +71,7 @@ function CreateVideoButton() {
       </button>
 
       {creating && <UploadVideoPortal setCreating={setCreating} />}
+      {createStream && <CreateStreamPortal setCreateStream={setCreateStream} />}
     </>
   );
 }

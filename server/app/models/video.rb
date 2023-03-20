@@ -9,6 +9,7 @@ class Video < ApplicationRecord
   belongs_to :user
 
   validates :source, presence: true
+  validates :title, presence: true
 
   def video_url
     Rails.application.routes.url_helpers.url_for(source) if source.attached?

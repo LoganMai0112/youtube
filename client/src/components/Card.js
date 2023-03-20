@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Card({ id, title, channel, createdAt, thumbnailUrl }) {
   return (
-    <Link to={`/videos/${id}`}>
+    <Link className="h-fit" to={`/videos/${id}`}>
       <div className="w-full h-fit flex flex-col cursor-pointer">
         <img
           src={thumbnailUrl}

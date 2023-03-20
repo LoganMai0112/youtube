@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     resources :comments, only: %i[create destroy update index]
   end
 
+  resources :streams
+
   get '/search', to: 'searchs#search'
 
   resources :users do

@@ -2,10 +2,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/media-has-caption */
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useRef, useEffect, useContext, useState } from 'react';
 import { Client, LocalStream } from 'ion-sdk-js';
 import { IonSFUJSONRPCSignal } from 'ion-sdk-js/lib/signal/json-rpc-impl';
-import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
 import WatchStream from './WatchStream';
 
@@ -18,19 +20,31 @@ export default function Stream() {
     ],
   };
   const params = useParams();
+
+  const signal = new IonSFUJSONRPCSignal('ws://localhost:7000/ws');
+  const client = new Client(signal, config);
+  signal.onopen = () => client.join(params.streamId);
+
   const videoRef = useRef();
+  const navigate = useNavigate();
   const streamRef = useRef();
   const currentUser = useContext(UserContext);
-
-  let signal;
-  let client;
+  const [isStreamming, setIsStreamming] = useState(false);
+  const [streamInfo, setStreamInfo] = useState();
 
   useEffect(() => {
-    signal = new IonSFUJSONRPCSignal('ws://localhost:7000/ws');
-    client = new Client(signal, config);
-    signal.onopen = () => client.join(params.userId);
+    const getStream = async () => {
+      await axios
+        .get(`/streams/${params.streamId}`)
+        .then((res) => {
+          setStreamInfo(res.data.data);
+        })
+        .catch((err) => console.log(err));
+    };
+    getStream();
 
     client.ontrack = (track, stream) => {
+      console.log(track, stream);
       track.onunmute = () => {
         streamRef.current.srcObject = stream;
         streamRef.current.autoplay = true;
@@ -41,8 +55,6 @@ export default function Stream() {
         };
       };
     };
-
-    return () => client.close();
   }, []);
 
   const start = (e) => {
@@ -59,6 +71,7 @@ export default function Stream() {
           videoRef.current.controls = true;
           videoRef.current.muted = true;
           client.publish(media);
+          setIsStreamming(true);
         })
         .catch((err) => {
           console.log(err);
@@ -66,35 +79,52 @@ export default function Stream() {
     }
   };
 
+  const closeStream = () => {
+    axios
+      .put(`/streams/${params.streamId}`, {
+        stream: { streaming: false },
+      })
+      .then(() => {
+        toast('Close Stream');
+        setIsStreamming(false);
+        navigate('/');
+      })
+      .catch((err) => toast(err.message));
+  };
+
   return (
     <div>
-      {String(currentUser.id) === params.userId && (
+      {streamInfo && streamInfo.attributes.userId === currentUser.id && (
         <div className="px-10">
           <div className="flex gap-2 mb-2">
-            <button
-              className="mr-3 p-2 rounded-2xl bg-main-color text-black"
-              type="button"
-              onClick={() => start(true)}
-            >
-              Share screen
-            </button>
-            <button
-              type="button"
-              className="bg-main-color p-2 text-black rounded-2xl"
-              onClick={() => {
-                const tracks = videoRef.current.srcObject.getTracks();
-                tracks.forEach((t) => t.stop());
-                videoRef.current.srcObject = null;
-                streamRef.current.srcObject = null;
-              }}
-            >
-              Stop stream
-            </button>
+            {!isStreamming && (
+              <button
+                className="mr-3 p-2 rounded-2xl bg-main-color text-black"
+                type="button"
+                onClick={() => start(true)}
+              >
+                Share screen
+              </button>
+            )}
+            {isStreamming && (
+              <button
+                type="button"
+                className="bg-main-color p-2 text-black rounded-2xl"
+                onClick={() => {
+                  const tracks = videoRef.current.srcObject.getTracks();
+                  tracks.forEach((t) => t.stop());
+                  videoRef.current.srcObject = null;
+                  closeStream();
+                }}
+              >
+                Stop stream
+              </button>
+            )}
           </div>
           <video width="80%" height="80%" ref={videoRef} />
         </div>
       )}
-      {String(currentUser.id) !== params.userId && (
+      {streamInfo && streamInfo.attributes.userId !== currentUser.id && (
         <WatchStream streamRef={streamRef} />
       )}
     </div>

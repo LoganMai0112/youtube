@@ -31,7 +31,7 @@ function App() {
               <Route path="/result" element={<Search />} />
             </Route>
             <Route element={<WatchLayout />}>
-              <Route path="/stream/:userId" element={<Stream />} />
+              <Route path="/streams/:streamId" element={<Stream />} />
               <Route path="/videos/:videoId" element={<WatchVideo />} />
               <Route path="/videos/:videoId/edit" element={<EditVideo />} />
             </Route>
