@@ -102,7 +102,7 @@ function CreateStreamPortal({ setCreateStream }) {
       data.append('stream[thumbnail]', acceptedThumbnailFiles[0]);
     }
     data.append('stream[user_id]', currentUser.id);
-    data.append('stream[streaming]', true);
+    data.append('stream[streaming]', false);
     setIsLoading(true);
     await submitToAPI(data);
     setIsLoading(false);

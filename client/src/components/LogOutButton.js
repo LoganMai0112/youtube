@@ -3,12 +3,13 @@ import React, { useContext } from 'react';
 import { toast } from 'react-toastify';
 import { GoSignOut } from 'react-icons/go';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import MenuButton from './MenuButton';
 import { UserUpdateContext } from '../contexts/UserContext';
 
 function LogOutButton() {
   const logOutToastify = () => toast('Logged out successfully');
-
+  const navigate = useNavigate();
   const useUserUpdate = useContext(UserUpdateContext);
   const logOut = async () => {
     await axios
@@ -20,7 +21,11 @@ function LogOutButton() {
           logOutToastify();
         }
       })
-      .catch((err) => err);
+      .catch((err) => {
+        localStorage.clear();
+        toast(err.message);
+        navigate('/login');
+      });
   };
 
   return (

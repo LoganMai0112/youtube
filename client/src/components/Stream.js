@@ -20,7 +20,6 @@ export default function Stream() {
     ],
   };
   const params = useParams();
-
   const signal = new IonSFUJSONRPCSignal('ws://localhost:7000/ws');
   const client = new Client(signal, config);
   signal.onopen = () => client.join(params.streamId);
@@ -39,12 +38,11 @@ export default function Stream() {
         .then((res) => {
           setStreamInfo(res.data.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast(err));
     };
     getStream();
 
     client.ontrack = (track, stream) => {
-      console.log(track, stream);
       track.onunmute = () => {
         streamRef.current.srcObject = stream;
         streamRef.current.autoplay = true;
@@ -58,6 +56,13 @@ export default function Stream() {
   }, []);
 
   const start = (e) => {
+    const streamingTrue = () => {
+      axios
+        .put(`/streams/${params.streamId}`, { stream: { streaming: true } })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    };
+    streamingTrue();
     if (e) {
       LocalStream.getDisplayMedia({
         resolution: 'vga',
@@ -74,16 +79,14 @@ export default function Stream() {
           setIsStreamming(true);
         })
         .catch((err) => {
-          console.log(err);
+          toast(err);
         });
     }
   };
 
   const closeStream = () => {
     axios
-      .put(`/streams/${params.streamId}`, {
-        stream: { streaming: false },
-      })
+      .delete(`/streams/${params.streamId}`)
       .then(() => {
         toast('Close Stream');
         setIsStreamming(false);

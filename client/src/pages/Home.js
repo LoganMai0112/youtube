@@ -32,7 +32,6 @@ function Home() {
       axios
         .get('/streams')
         .then((res) => {
-          console.log(res.data.data);
           setStreams(res.data.data);
         })
         .catch((err) => toast(err));
@@ -40,7 +39,6 @@ function Home() {
 
     getStreams();
   }, []);
-  console.log(streams);
 
   const findChannel = (channelId) => {
     const channel = channels.find((c) => c.id === channelId);
@@ -53,8 +51,8 @@ function Home() {
         <Swiper
           spaceBetween={25}
           slidesPerView={2.5}
-          onSlideChange={() => console.log('slide change')}
-          onSwiper={(swiper) => console.log(swiper)}
+          // onSlideChange={() => console.log('slide change')}
+          // onSwiper={(swiper) => console.log(swiper)}
         >
           {streams.map((item) => (
             <SwiperSlide>
