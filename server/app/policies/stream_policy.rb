@@ -19,6 +19,6 @@ class StreamPolicy < ApplicationPolicy
   end
 
   def show?
-    record.streaming == true
+    record
   end
 end

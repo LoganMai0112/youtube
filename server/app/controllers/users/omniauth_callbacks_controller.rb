@@ -25,7 +25,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
       }, status: :ok
     else
-      session["devise.#{provider}_data"] = request.env['omniauth.auth']
+      session["devise.#{provider}_data"] = request.env['omniauth.auth'].except!(:extra)
       render json: {
         code: '422',
         status: 'Something went wrong'
