@@ -10,6 +10,7 @@ class StreamsController < ApplicationController
   def create
     stream = Stream.new(stream_params)
     authorize stream
+
     if stream.save
       render json: StreamSerializer.new(stream).serializable_hash[:data][:attributes], status: :created
     else
@@ -36,7 +37,8 @@ class StreamsController < ApplicationController
 
   def show
     authorize @stream
-    render json: StreamSerializer.new(@stream).serializable_hash, status: :ok
+    options = { include: [:user] }
+    render json: StreamSerializer.new(@stream, options).serializable_hash, status: :ok
   end
 
   private

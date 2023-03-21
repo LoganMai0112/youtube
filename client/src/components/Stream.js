@@ -15,12 +15,12 @@ export default function Stream() {
   const config = {
     iceSevers: [
       {
-        urls: 'stun:stun.l.google.com:19320',
+        urls: process.env.REACT_APP_STUN_SERVER,
       },
     ],
   };
   const params = useParams();
-  const signal = new IonSFUJSONRPCSignal('ws://localhost:7000/ws');
+  const signal = new IonSFUJSONRPCSignal(process.env.REACT_APP_SIGNAL_SERVER);
   const client = new Client(signal, config);
   signal.onopen = () => client.join(params.streamId);
 
@@ -30,12 +30,14 @@ export default function Stream() {
   const currentUser = useContext(UserContext);
   const [isStreamming, setIsStreamming] = useState(false);
   const [streamInfo, setStreamInfo] = useState();
+  const [channel, setChannel] = useState();
 
   useEffect(() => {
     const getStream = async () => {
       await axios
         .get(`/streams/${params.streamId}`)
         .then((res) => {
+          setChannel(res.data.included[0]);
           setStreamInfo(res.data.data);
         })
         .catch((err) => toast(err));
@@ -55,33 +57,36 @@ export default function Stream() {
     };
   }, []);
 
-  const start = (e) => {
+  const start = () => {
     const streamingTrue = () => {
       axios
         .put(`/streams/${params.streamId}`, { stream: { streaming: true } })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-    };
-    streamingTrue();
-    if (e) {
-      LocalStream.getDisplayMedia({
-        resolution: 'vga',
-        audio: true,
-        codec: 'vp8',
-        video: true,
-      })
-        .then((media) => {
-          videoRef.current.srcObject = media;
-          videoRef.current.autoplay = true;
-          videoRef.current.controls = true;
-          videoRef.current.muted = true;
-          client.publish(media);
-          setIsStreamming(true);
+        .then((res) => {
+          if (res) {
+            toast('Start stream');
+          }
         })
-        .catch((err) => {
-          toast(err);
-        });
-    }
+        .catch((err) => toast(err));
+    };
+
+    LocalStream.getDisplayMedia({
+      resolution: 'vga',
+      audio: true,
+      codec: 'vp8',
+      video: true,
+    })
+      .then((media) => {
+        videoRef.current.srcObject = media;
+        videoRef.current.autoplay = true;
+        videoRef.current.controls = true;
+        videoRef.current.muted = true;
+        client.publish(media);
+        setIsStreamming(true);
+        streamingTrue();
+      })
+      .catch((err) => {
+        toast(err);
+      });
   };
 
   const closeStream = () => {
@@ -104,7 +109,7 @@ export default function Stream() {
               <button
                 className="mr-3 p-2 rounded-2xl bg-main-color text-black"
                 type="button"
-                onClick={() => start(true)}
+                onClick={() => start()}
               >
                 Share screen
               </button>
@@ -128,7 +133,11 @@ export default function Stream() {
         </div>
       )}
       {streamInfo && streamInfo.attributes.userId !== currentUser.id && (
-        <WatchStream streamRef={streamRef} />
+        <WatchStream
+          streamRef={streamRef}
+          streamInfo={streamInfo}
+          channel={channel}
+        />
       )}
     </div>
   );

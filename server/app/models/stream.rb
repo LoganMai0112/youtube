@@ -6,8 +6,6 @@ class Stream < ApplicationRecord
   validates :title, presence: true
 
   def thumbnail_url
-    if thumbnail.attached?
-      Rails.application.routes.url_helpers.url_for(thumbnail)
-    end
+    Rails.application.routes.url_helpers.url_for(thumbnail) if thumbnail.attached?
   end
 end

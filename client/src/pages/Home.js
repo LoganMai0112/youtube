@@ -48,12 +48,7 @@ function Home() {
   return (
     <div>
       <div className="px-5 mb-6 overflow-hidden">
-        <Swiper
-          spaceBetween={25}
-          slidesPerView={2.5}
-          // onSlideChange={() => console.log('slide change')}
-          // onSwiper={(swiper) => console.log(swiper)}
-        >
+        <Swiper spaceBetween={25} slidesPerView={2.5}>
           {streams.map((item) => (
             <SwiperSlide>
               <Link to={`/streams/${item.id}`}>
