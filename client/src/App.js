@@ -15,6 +15,7 @@ import EditVideo from './pages/EditVideo';
 import Search from './pages/Search';
 import 'video-react/dist/video-react.css';
 import 'react-toastify/dist/ReactToastify.css';
+import Stream from './components/Stream';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/result" element={<Search />} />
             </Route>
             <Route element={<WatchLayout />}>
+              <Route path="/streams/:streamId" element={<Stream />} />
               <Route path="/videos/:videoId" element={<WatchVideo />} />
               <Route path="/videos/:videoId/edit" element={<EditVideo />} />
             </Route>

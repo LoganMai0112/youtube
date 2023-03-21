@@ -1,13 +1,17 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { useContext, useState } from 'react';
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import { RiFileUploadFill } from 'react-icons/ri';
+import { CiStreamOn } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { UserSignedInContext } from '../contexts/UserContext';
+import CreateStreamPortal from './CreateStreamPortal';
 import MenuButton from './MenuButton';
 import UploadVideoPortal from './UploadVideoPortal';
 
 function CreateVideoButton() {
   const [creating, setCreating] = useState(false);
+  const [createStream, setCreateStream] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const useUserSignedIn = useContext(UserSignedInContext);
   const navigate = useNavigate();
@@ -18,6 +22,14 @@ function CreateVideoButton() {
   const openPortal = () => {
     if (useUserSignedIn) {
       setCreating(true);
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const openStreamPortal = () => {
+    if (useUserSignedIn) {
+      setCreateStream(true);
     } else {
       navigate('/login');
     }
@@ -37,8 +49,21 @@ function CreateVideoButton() {
         {menuOpen && (
           <div className="absolute flex flex-col right-0 top-14 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
             <section>
-              <button type="button" onClick={() => openPortal()}>
+              <button
+                type="button"
+                className="w-full"
+                onClick={() => openPortal()}
+              >
                 <MenuButton icon={<RiFileUploadFill />} text="Upload video" />
+              </button>
+            </section>
+            <section>
+              <button
+                type="button"
+                className="w-full"
+                onClick={() => openStreamPortal()}
+              >
+                <MenuButton icon={<CiStreamOn />} text="Go live" />
               </button>
             </section>
           </div>
@@ -46,6 +71,7 @@ function CreateVideoButton() {
       </button>
 
       {creating && <UploadVideoPortal setCreating={setCreating} />}
+      {createStream && <CreateStreamPortal setCreateStream={setCreateStream} />}
     </>
   );
 }

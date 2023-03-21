@@ -36,7 +36,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     user = User.find_by(email: auth[:info][:email])
     if user.nil?
-      user = User.create(email: auth.info.email, password: Devise.friendly_token, provider: auth.provider, uid: auth.uid, name: auth.info.name)
+      user = User.create(email: auth.info.email, password: Devise.friendly_token, provider: auth.provider, uid: auth.uid, name: auth.info.name, role: 'user')
       return user
     elsif user.provider == auth.provider && user.uid == auth.uid
       return user

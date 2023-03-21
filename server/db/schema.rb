@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_104536) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_20_172332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_104536) do
     t.index ["video_id"], name: "index_likes_on_video_id"
   end
 
+  create_table "streams", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.boolean "streaming"
+    t.index ["user_id"], name: "index_streams_on_user_id"
+  end
+
   create_table "subscribes", force: :cascade do |t|
     t.bigint "subscriber_id"
     t.bigint "subscribed_id"
@@ -104,5 +114,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_104536) do
   add_foreign_key "comments", "videos"
   add_foreign_key "likes", "users"
   add_foreign_key "likes", "videos"
+  add_foreign_key "streams", "users"
   add_foreign_key "videos", "users"
 end
