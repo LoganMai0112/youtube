@@ -54,7 +54,11 @@ function Home() {
               <Link to={`/streams/${item.id}`}>
                 <img
                   className="object-cover w-full h-60 rounded-2xl cursor-pointer"
-                  src={item.attributes.thumbnailUrl}
+                  src={
+                    item.attributes.thumbnailUrl
+                      ? item.attributes.thumbnailUrl
+                      : '/logo.png'
+                  }
                   alt="thumbnail"
                 />
               </Link>

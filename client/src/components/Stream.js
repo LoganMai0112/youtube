@@ -28,7 +28,7 @@ export default function Stream() {
   const navigate = useNavigate();
   const streamRef = useRef();
   const currentUser = useContext(UserContext);
-  const [isStreamming, setIsStreamming] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [streamInfo, setStreamInfo] = useState();
   const [channel, setChannel] = useState();
 
@@ -81,7 +81,7 @@ export default function Stream() {
         videoRef.current.controls = true;
         videoRef.current.muted = true;
         client.publish(media);
-        setIsStreamming(true);
+        setIsStreaming(true);
         streamingTrue();
       })
       .catch((err) => {
@@ -94,7 +94,7 @@ export default function Stream() {
       .delete(`/streams/${params.streamId}`)
       .then(() => {
         toast('Close Stream');
-        setIsStreamming(false);
+        setIsStreaming(false);
         navigate('/');
       })
       .catch((err) => toast(err.message));
@@ -105,7 +105,7 @@ export default function Stream() {
       {streamInfo && streamInfo.attributes.userId === currentUser.id && (
         <div className="px-10">
           <div className="flex gap-2 mb-2">
-            {!isStreamming && (
+            {!isStreaming && (
               <button
                 className="mr-3 p-2 rounded-2xl bg-main-color text-black"
                 type="button"
@@ -114,7 +114,7 @@ export default function Stream() {
                 Share screen
               </button>
             )}
-            {isStreamming && (
+            {isStreaming && (
               <button
                 type="button"
                 className="bg-main-color p-2 text-black rounded-2xl"
