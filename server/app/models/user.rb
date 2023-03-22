@@ -12,6 +12,8 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: %i[facebook google_oauth2]
 
   has_one_attached :avatar
+  has_one_attached :cover
+
   has_many :videos, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy
@@ -19,6 +21,7 @@ class User < ApplicationRecord
   has_many :received_subscriptions, foreign_key: :subscribed_id, class_name: 'Subscribe', dependent: :destroy, inverse_of: :subscribed_user
   has_many :subscribers, through: :received_subscriptions, source: :subscriber
   has_many :subscription_channels, through: :subscriptions, source: :subscribed_user
+  has_many :streams, dependent: :destroy
 
   validates :role, presence: true
   validates :name, presence: true
@@ -31,6 +34,10 @@ class User < ApplicationRecord
 
   def avatar_url
     Rails.application.routes.url_helpers.url_for(avatar) if avatar.attached?
+  end
+
+  def cover_url
+    Rails.application.routes.url_helpers.url_for(cover) if cover.attached?
   end
 
   def self.from_omniauth(auth)

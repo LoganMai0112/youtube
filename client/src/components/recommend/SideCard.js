@@ -17,7 +17,11 @@ export default function SideCard({ id, title, channel, createdAt, thumbnail }) {
             <p className="text-ellipsis overflow-hidden text-white text-xl font-bold max-h-14">
               {title}
             </p>
-            <p className="text-text-color text-sm">{channel.name}</p>
+            <Link to={`/users/${channel.id}`}>
+              <p className="text-text-color hover:text-white text-sm">
+                {channel.name}
+              </p>
+            </Link>
             <div className="flex items-center text-text-color text-sm">
               <p>view</p>
               <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />

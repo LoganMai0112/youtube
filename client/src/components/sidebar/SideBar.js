@@ -23,7 +23,9 @@ function SideBar({ setDropdownOpen }) {
   return (
     <div className="bg-sec h-full 2xl:min-w-[320px] xl:min-w-[240px] min-w-[240px] flex flex-col [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted">
       <div className="py-4 2xl:py-8 px-10 flex flex-row items-center justify-between">
-        <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
+        <Link to="/">
+          <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
+        </Link>
         <div className="h-3/4 w-1 border-l border-icon-color" />
         <div
           onClick={() => dropdownToggle()}
@@ -72,7 +74,9 @@ function SideBar({ setDropdownOpen }) {
           <SideBarButton avatar="logo.png" text="User3" />
         </section>
         <section>
-          <SideBarButton icon={<RiSettingsFill />} text="Settings" />
+          <Link to="/settings">
+            <SideBarButton icon={<RiSettingsFill />} text="Settings" />
+          </Link>
         </section>
       </div>
     </div>

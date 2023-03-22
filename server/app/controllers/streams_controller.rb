@@ -46,7 +46,7 @@ class StreamsController < ApplicationController
   def set_stream
     @stream = Stream.find(params[:id])
   end
-  
+
   def stream_params
     params.require(:stream).permit(:user_id, :title, :description, :source, :streaming, :thumbnail)
   end

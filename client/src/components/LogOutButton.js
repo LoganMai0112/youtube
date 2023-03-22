@@ -17,7 +17,7 @@ function LogOutButton() {
       .then(async (res) => {
         if (res.data.code === '200') {
           useUserUpdate({});
-          localStorage.removeItem('token');
+          localStorage.clear();
           logOutToastify();
         }
       })

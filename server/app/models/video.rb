@@ -1,6 +1,6 @@
 class Video < ApplicationRecord
   searchkick
-  
+
   enum status: { only_me: 0, published: 1 }
   has_one_attached :source
   has_one_attached :thumbnail

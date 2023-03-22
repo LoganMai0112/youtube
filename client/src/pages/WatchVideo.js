@@ -3,7 +3,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Player } from 'video-react';
@@ -11,7 +11,7 @@ import { BiShare } from 'react-icons/bi';
 import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
 import parse from 'html-react-parser';
-import RecommendSide from '../components/RecommendSide/RecommendSide';
+import RecommendSide from '../components/recommend/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
 import LikeVideoButton from '../components/LikeVideoButton';
 import Comment from '../components/Comment';
@@ -73,7 +73,7 @@ function WatchVideo() {
     <div className="flex h-full w-full">
       <div className="flex-1 px-5 h-fit">
         {videoSource && (
-          <Player ref={player}>
+          <Player ref={player} autoPlay>
             <source src={videoSource} />
           </Player>
         )}
@@ -82,15 +82,23 @@ function WatchVideo() {
           <div className="flex justify-between items-center w-full pt-3">
             <div className="flex flex-row items-center">
               <div className="p-1 min-w-[48px] rounded-full border-dashed border-2 border-main-color mr-3">
-                <img
-                  src={channel.avatarUrl}
-                  alt="avatar"
-                  className="w-9 h-9 rounded-full"
-                />
+                <Link to={`/users/${channel.id}`}>
+                  <img
+                    src={channel.avatarUrl}
+                    alt="avatar"
+                    className="w-9 h-9 rounded-full"
+                  />
+                </Link>
               </div>
               <div>
-                <p className="text-white text-xl">{channel.name}</p>
-                <p className="text-text-color text-sm">subscriber</p>
+                <Link to={`/users/${channel.id}`}>
+                  <p className="text-white text-xl">{channel.name}</p>
+                  <p className="text-text-color text-sm">
+                    {channel.subscribersCount > 0
+                      ? `${channel.subscribersCount} subscribers`
+                      : 'No subscribers'}
+                  </p>
+                </Link>
               </div>
               {channel.id !== currentUser.id && (
                 <SubscribeButton

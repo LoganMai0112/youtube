@@ -1,7 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import Login from './pages/Login';
@@ -16,8 +22,26 @@ import Search from './pages/Search';
 import 'video-react/dist/video-react.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Stream from './components/Stream';
+import User from './pages/User';
+import Featured from './components/user/Featured';
+import Videos from './components/user/Videos';
+import Playlists from './components/user/Playlists';
+import Live from './components/user/Live';
+import SettingLayout from './components/layout/SettingLayout';
+import Dashboard from './pages/Dashboard';
+import Setting from './pages/Setting';
+
+function ProtectedRoute({ signedIn }) {
+  if (!signedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;
+}
 
 function App() {
+  const currentUser = JSON.parse(localStorage.getItem('current_user'));
+  const signedIn = currentUser ? Object.keys(currentUser).length !== 0 : false;
+
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <UserProvider>
@@ -29,11 +53,29 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="/result" element={<Search />} />
+              <Route path="/users/:userId" element={<User />}>
+                <Route index element={<Featured />} />
+                <Route path="/users/:userId/featured" element={<Featured />} />
+                <Route path="/users/:userId/videos" element={<Videos />} />
+                <Route path="/users/:userId/live" element={<Live />} />
+                <Route
+                  path="/users/:userId/playlists"
+                  element={<Playlists />}
+                />
+              </Route>
             </Route>
             <Route element={<WatchLayout />}>
               <Route path="/streams/:streamId" element={<Stream />} />
               <Route path="/videos/:videoId" element={<WatchVideo />} />
-              <Route path="/videos/:videoId/edit" element={<EditVideo />} />
+              <Route element={<ProtectedRoute signedIn={signedIn} />}>
+                <Route path="/videos/:videoId/edit" element={<EditVideo />} />
+              </Route>
+            </Route>
+            <Route element={<ProtectedRoute signedIn={signedIn} />}>
+              <Route element={<SettingLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/settings" element={<Setting />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
