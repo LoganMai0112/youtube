@@ -43,7 +43,6 @@ function App() {
   const currentUser = useLocalStorage('current_user');
   const [signedIn, setSignedIn] = useState();
   useEffect(() => {
-    console.log(currentUser);
     setSignedIn(currentUser ? Object.keys(currentUser).length !== 0 : false);
   }, [currentUser]);
 

@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
 import SubscribeButton from '../components/SubscribeButton';
 
@@ -21,7 +22,6 @@ function User() {
       await axios
         .get(`/users/${params.userId}`)
         .then((res) => {
-          console.log(res.data);
           setUser(res.data.user.data.attributes);
           setVideos(res.data.videos.data);
           setStreams(res.data.streams.data);
@@ -31,7 +31,7 @@ function User() {
             setSubscribed(false);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => toast(err.message));
     };
 
     getUser();
