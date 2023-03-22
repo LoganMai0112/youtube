@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import {
   BrowserRouter,
@@ -30,6 +30,7 @@ import Live from './components/user/Live';
 import SettingLayout from './components/layout/SettingLayout';
 import Dashboard from './pages/Dashboard';
 import Setting from './pages/Setting';
+import useLocalStorage from './hooks/useLocalStorage';
 
 function ProtectedRoute({ signedIn }) {
   if (!signedIn) {
@@ -39,8 +40,12 @@ function ProtectedRoute({ signedIn }) {
 }
 
 function App() {
-  const currentUser = JSON.parse(localStorage.getItem('current_user'));
-  const signedIn = currentUser ? Object.keys(currentUser).length !== 0 : false;
+  const currentUser = useLocalStorage('current_user');
+  const [signedIn, setSignedIn] = useState();
+  useEffect(() => {
+    console.log(currentUser);
+    setSignedIn(currentUser ? Object.keys(currentUser).length !== 0 : false);
+  }, [currentUser]);
 
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>

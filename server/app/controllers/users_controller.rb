@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update edit]
-  before_action :authenticate_user!, only: %i[update edit]
+  before_action :set_user, only: %i[show update edit destroy]
+  before_action :authenticate_user!, only: %i[update edit destroy]
 
   def show
     videos = @user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob })
@@ -24,6 +24,15 @@ class UsersController < ApplicationController
   def edit
     authorize @user
     render json: UserSerializer.new(@user).serializable_hash, status: :ok
+  end
+
+  def destroy
+    authorize @user
+    if @user.destroy
+      render json: { message: 'Deleted account' }, status: :ok
+    else
+      render json: { message: "Some thing went wrong, can't remove account" }, status: :internal_server_error
+    end
   end
 
   private

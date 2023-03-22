@@ -10,8 +10,9 @@ import React, {
 } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
-import { UserContext } from '../contexts/UserContext';
+import { UserContext, UserUpdateContext } from '../contexts/UserContext';
 
 const baseStyle = {
   flex: 1,
@@ -42,10 +43,12 @@ const rejectStyle = {
 };
 
 function Setting() {
+  const useUserUpdate = useContext(UserUpdateContext);
   const currentUser = useContext(UserContext);
   const [user, setUser] = useState({});
   const [avatarPreview, setAvatarPreview] = useState();
   const [coverPreview, setCoverPreview] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = () => {
@@ -133,6 +136,19 @@ function Setting() {
     await submitToAPI(data);
   };
 
+  const deleteAccount = async () => {
+    await axios
+      .delete(`/users/${currentUser.id}`)
+      .then((res) => {
+        if (res) {
+          localStorage.clear();
+          useUserUpdate({});
+          navigate('/');
+        }
+      })
+      .catch((err) => toast(err.message));
+  };
+
   return (
     <div className="p-5">
       <form className="flex flex-col gap-10" onSubmit={(e) => handelSubmit(e)}>
@@ -173,6 +189,13 @@ function Setting() {
           className="px-4 py-2 bg-main-color rounded-xl cursor-pointer hover:bg-yellow-600"
         />
       </form>
+      <button
+        type="button"
+        className="px-4 py-2 bg-red-600 rounded-xl cursor-pointer hover:bg-red-500 w-full mt-2"
+        onClick={() => deleteAccount()}
+      >
+        Delete Account
+      </button>
     </div>
   );
 }

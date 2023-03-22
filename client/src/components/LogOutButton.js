@@ -19,6 +19,7 @@ function LogOutButton() {
           useUserUpdate({});
           localStorage.clear();
           logOutToastify();
+          navigate('/');
         }
       })
       .catch((err) => {

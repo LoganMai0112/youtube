@@ -1,6 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
 import SubscribeButton from '../components/SubscribeButton';
@@ -39,6 +39,13 @@ function User() {
 
   return (
     <div>
+      {user && user.coverUrl && (
+        <img
+          className="w-full h-24 mb-5 object-cover"
+          src={user.coverUrl}
+          alt="cover"
+        />
+      )}
       {user && (
         <div className="w-full flex justify-between px-5 pb-1">
           <div className="flex justify-between gap-5">
@@ -58,7 +65,11 @@ function User() {
             </div>
           </div>
           {currentUser.id === user.id ? (
-            <div>edit profile</div>
+            <Link to="/settings">
+              <div className="px-4 py-2 bg-main-color hover:bg-yellow-600 rounded-2xl">
+                Manage channel
+              </div>
+            </Link>
           ) : (
             <div className="flex items-center">
               <SubscribeButton
