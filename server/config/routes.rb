@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :streams
 
+  get '/users/:id/edit', to: 'users#edit'
+
   get '/search', to: 'searchs#search'
 
   resources :users do

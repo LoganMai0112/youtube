@@ -10,6 +10,7 @@ import {
 import { RiSettingsFill } from 'react-icons/ri';
 import { BsMusicPlayerFill } from 'react-icons/bs';
 import { MdSubscriptions } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import SubSideBarButton from './SubSideBarButton';
 
 function SubSideBar({ setDropdownOpen }) {
@@ -33,7 +34,9 @@ function SubSideBar({ setDropdownOpen }) {
         <SubSideBarButton icon={<AiFillStar />} />
         <SubSideBarButton icon={<BsMusicPlayerFill />} />
         <SubSideBarButton icon={<MdSubscriptions />} />
-        <SubSideBarButton icon={<RiSettingsFill />} />
+        <Link to="/settings">
+          <SubSideBarButton icon={<RiSettingsFill />} />
+        </Link>
       </section>
     </div>
   );

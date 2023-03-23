@@ -5,7 +5,7 @@ import React, { useState, useContext } from 'react';
 import { BiShare } from 'react-icons/bi';
 import moment from 'moment';
 import parse from 'html-react-parser';
-import RecommendSide from './RecommendSide/RecommendSide';
+import RecommendSide from './recommend/RecommendSide';
 import { UserContext } from '../contexts/UserContext';
 import ShareVideoPortal from './ShareVideoPortal';
 import SubscribeButton from './SubscribeButton';
