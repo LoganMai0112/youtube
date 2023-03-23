@@ -4,7 +4,7 @@ class UserSerializer
   attributes :id, :email, :created_at, :name, :avatar_url, :cover_url
 
   attribute :subscribers_count do |object|
-    object.subscribers.count
+    object.subscribers.size
   end
 
   attribute :subscribed_yet, if: proc { |_user, params|
