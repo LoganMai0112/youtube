@@ -5,15 +5,14 @@ class UsersController < ApplicationController
   def show
     videos = @user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob })
     streams = @user.streams.where(streaming: true).includes({ thumbnail_attachment: :blob })
-    authorize @user
     options = { params: { current_user: current_user } }
+
     render json: { videos: VideoSerializer.new(videos).serializable_hash,
                    user: UserSerializer.new(@user, options).serializable_hash,
                    streams: StreamSerializer.new(streams).serializable_hash }, status: :ok
   end
 
   def update
-    authorize @user
     if @user.update(user_params)
       render json: UserSerializer.new(@user).serializable_hash, status: :ok
     else
@@ -22,12 +21,10 @@ class UsersController < ApplicationController
   end
 
   def edit
-    authorize @user
     render json: UserSerializer.new(@user).serializable_hash, status: :ok
   end
 
   def destroy
-    authorize @user
     if @user.destroy
       render json: { message: 'Deleted account' }, status: :ok
     else
@@ -39,6 +36,7 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+    authorize @user
   end
 
   def user_params
