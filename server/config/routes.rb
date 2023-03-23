@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'playlist_items/create'
+  get 'playlist_items/destroy'
   devise_for :users, path: '',
                      path_names: {
                        sign_in: 'login',

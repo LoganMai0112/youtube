@@ -22,6 +22,8 @@ class User < ApplicationRecord
   has_many :subscribers, through: :received_subscriptions, source: :subscriber
   has_many :subscription_channels, through: :subscriptions, source: :subscribed_user
   has_many :streams, dependent: :destroy
+  has_many :user_playlists, dependent: :destroy
+  has_many :playlists, through: :user_playlists
 
   validates :role, presence: true
   validates :name, presence: true

@@ -22,7 +22,7 @@ class VideoPolicy < ApplicationPolicy
   end
 
   def show?
-    if record.only_me?
+    if record.privated?
       user.admin? or record.user == user
     else
       record

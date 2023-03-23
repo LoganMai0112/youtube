@@ -244,8 +244,8 @@ function EditVideo() {
               <label>
                 <input
                   type="checkbox"
-                  checked={checkValue === 'only_me'}
-                  onClick={() => setCheckValue('only_me')}
+                  checked={checkValue === 'privated'}
+                  onClick={() => setCheckValue('privated')}
                 />
                 <span className="text-white ml-3">Private</span>
               </label>
