@@ -41,7 +41,7 @@ function User() {
     <div>
       {user && user.coverUrl && (
         <img
-          className="w-full h-24 mb-5 object-cover"
+          className="w-full h-48 mb-5 object-cover"
           src={user.coverUrl}
           alt="cover"
         />
@@ -50,7 +50,7 @@ function User() {
         <div className="w-full flex justify-between px-5 pb-1">
           <div className="flex justify-between gap-5">
             <img
-              className="rounded-full w-20 h-20"
+              className="rounded-full w-20 h-20 object-cover"
               src={user.avatarUrl}
               alt="avatar"
             />

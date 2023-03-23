@@ -27,7 +27,7 @@ function SearchCard({ id, title, channel, createdAt, thumbnail, description }) {
                 <img
                   src={channel.attributes.avatarUrl}
                   alt="avatar"
-                  className="rounded-full w-5 h-5"
+                  className="rounded-full w-5 h-5 object-cover"
                 />
                 <p className="text-text-color hover:text-white text-sm">
                   {channel.attributes.name}

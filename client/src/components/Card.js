@@ -19,7 +19,7 @@ function Card({ id, title, channel, createdAt, thumbnailUrl, type }) {
                 <img
                   src={channel.avatarUrl}
                   alt="avatar"
-                  className="w-9 h-9 rounded-full"
+                  className="w-9 h-9 rounded-full object-cover"
                 />
               </div>
             </Link>

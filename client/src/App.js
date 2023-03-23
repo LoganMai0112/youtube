@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './App.css';
 import {
   BrowserRouter,
@@ -32,20 +32,15 @@ import Dashboard from './pages/Dashboard';
 import Setting from './pages/Setting';
 import useLocalStorage from './hooks/useLocalStorage';
 
-function ProtectedRoute({ signedIn }) {
-  if (!signedIn) {
+function ProtectedRoute() {
+  const currentUser = useLocalStorage('current_user')[0];
+  if (Object.keys(currentUser).length === 0) {
     return <Navigate to="/login" replace />;
   }
   return <Outlet />;
 }
 
 function App() {
-  const currentUser = useLocalStorage('current_user');
-  const [signedIn, setSignedIn] = useState();
-  useEffect(() => {
-    setSignedIn(currentUser ? Object.keys(currentUser).length !== 0 : false);
-  }, [currentUser]);
-
   return (
     <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <UserProvider>
@@ -71,11 +66,11 @@ function App() {
             <Route element={<WatchLayout />}>
               <Route path="/streams/:streamId" element={<Stream />} />
               <Route path="/videos/:videoId" element={<WatchVideo />} />
-              <Route element={<ProtectedRoute signedIn={signedIn} />}>
+              <Route element={<ProtectedRoute />}>
                 <Route path="/videos/:videoId/edit" element={<EditVideo />} />
               </Route>
             </Route>
-            <Route element={<ProtectedRoute signedIn={signedIn} />}>
+            <Route element={<ProtectedRoute />}>
               <Route element={<SettingLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/settings" element={<Setting />} />
