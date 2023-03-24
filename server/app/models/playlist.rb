@@ -7,5 +7,5 @@ class Playlist < ApplicationRecord
   has_many :users, through: :user_playlists
 
   validates :title, presence: true
-  validated :status, presence: true
+  validates :status, presence: true
 end

@@ -12,11 +12,12 @@ import { RiPlayListAddFill } from 'react-icons/ri';
 import moment from 'moment';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/recommend/RecommendSide';
-import { UserContext } from '../contexts/UserContext';
+import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import LikeVideoButton from '../components/LikeVideoButton';
 import Comment from '../components/Comment';
 import ShareVideoPortal from '../components/ShareVideoPortal';
 import SubscribeButton from '../components/SubscribeButton';
+import SaveVideoPortal from '../components/SaveVideoPortal';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -32,6 +33,8 @@ function WatchVideo() {
   const currentUser = useContext(UserContext);
   const params = useParams();
   const navigate = useNavigate();
+  const [saveBox, setSaveBox] = useState(false);
+  const signedIn = useContext(UserSignedInContext);
 
   const findChannel = (channelId, includedData) => {
     const videoCreator = includedData.find(
@@ -136,6 +139,13 @@ function WatchVideo() {
               <button
                 type="button"
                 className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
+                onClick={() => {
+                  if (signedIn) {
+                    setSaveBox(true);
+                  } else {
+                    navigate('/login');
+                  }
+                }}
               >
                 <RiPlayListAddFill className="w-5 h-5" />
                 Save
@@ -182,6 +192,9 @@ function WatchVideo() {
         <RecommendSide />
       </div>
       {shareBox && <ShareVideoPortal setShareBox={setShareBox} />}
+      {saveBox && (
+        <SaveVideoPortal setSaveBox={setSaveBox} videoId={params.videoId} />
+      )}
     </div>
   );
 }

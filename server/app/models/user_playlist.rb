@@ -4,5 +4,5 @@ class UserPlaylist < ApplicationRecord
   belongs_to :user
   belongs_to :playlist
 
-  validated :action, presence: true
+  validates :action, presence: true
 end

@@ -19,6 +19,11 @@ Rails.application.routes.draw do
 
   resources :streams
 
+  resources :playlists do
+    resource :playlist_item, only: %i[create destroy]
+    resource :user_playlist, only: %i[create destroy]
+  end
+
   get '/users/:id/edit', to: 'users#edit'
 
   get '/search', to: 'searchs#search'
