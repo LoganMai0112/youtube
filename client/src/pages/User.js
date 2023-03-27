@@ -17,6 +17,7 @@ function User() {
   const [videos, setVideos] = useState();
   const [createdPlaylists, setCreatedPlaylists] = useState();
   const [savedPlaylists, setSavedPlaylists] = useState();
+  const [includedPlaylists, setIncludedPlaylists] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +25,9 @@ function User() {
       await axios
         .get(`/users/${params.userId}`)
         .then((res) => {
+          console.log(res);
           setCreatedPlaylists(res.data.createdPlaylists.data);
+          setIncludedPlaylists(res.data.createdPlaylists.included);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
           setVideos(res.data.videos.data);
@@ -135,7 +138,15 @@ function User() {
           VIDEOS
         </button>
       </div>
-      <Outlet context={{ videos, streams, createdPlaylists, savedPlaylists }} />
+      <Outlet
+        context={{
+          videos,
+          streams,
+          createdPlaylists,
+          savedPlaylists,
+          includedPlaylists,
+        }}
+      />
     </div>
   );
 }

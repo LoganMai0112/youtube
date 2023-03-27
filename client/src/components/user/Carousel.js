@@ -33,6 +33,7 @@ function Carousel({ listName, datas }) {
                 title={data.attributes.title}
                 createdAt={data.attributes.createdAt}
                 thumbnailUrl={data.attributes.thumbnailUrl}
+                status={data.attributes.status}
               />
             </SwiperSlide>
           ))}

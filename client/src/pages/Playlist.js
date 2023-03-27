@@ -45,7 +45,7 @@ function Playlist() {
   };
 
   useEffect(() => {
-    if (videos) {
+    if (videos && imgRef.current) {
       fac.getColorAsync(imgRef.current).then((color) => {
         const container = document.querySelector('#container');
         container.style.background = `linear-gradient(180deg, ${color.rgba} 0%, rgba(21,20,27,1) 100%)`;
