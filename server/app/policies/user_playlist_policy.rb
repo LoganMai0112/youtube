@@ -6,11 +6,15 @@ class UserPlaylistPolicy < ApplicationPolicy
     end
   end
 
-  def create?
+  def owner?
     user && record.user == user
   end
 
+  def create?
+    owner?
+  end
+
   def destroy?
-    user && record.user == user
+    owner?
   end
 end

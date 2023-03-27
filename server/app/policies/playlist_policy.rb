@@ -10,21 +10,25 @@ class PlaylistPolicy < ApplicationPolicy
     end
   end
 
+  def owner?
+    user && record.user_playlists.find_by(action: 'created').user == user
+  end
+
   def create?
     user
   end
 
   def update?
-    user && record.user_playlists.find_by(action: 'created').user == user
+    owner?
   end
 
   def destroy?
-    user && record.user_playlists.find_by(action: 'created').user == user
+    owner?
   end
 
   def show?
     if record.privated?
-      user.admin? or record.user_playlists.find_by(action: 'created').user == user
+      user.admin? || owner?
     else
       record
     end

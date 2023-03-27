@@ -6,12 +6,15 @@ class PlaylistItemPolicy < ApplicationPolicy
     end
   end
 
-  def create?
-    # UserPlaylist.find(..).created? is to check if current_user is the person who create this playlist to add video
+  def owner?
     user.admin? or (user && UserPlaylist.find_by(user: user, playlist: record.playlist).created? && record.video.published?)
   end
 
+  def create?
+    owner?
+  end
+
   def destroy?
-    user.admin? or (user && UserPlaylist.find_by(user: user, playlist: record.playlist).created? && record.video.published?)
+    owner?
   end
 end

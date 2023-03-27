@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, only: %i[update edit destroy]
 
   def show
-    videos = policy_scope(@user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob }))
+    videos = policy_scope(@user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: {blob: :preview_image_attachment} }))
     streams = @user.streams.where(streaming: true).includes({ thumbnail_attachment: :blob })
     created_playlists = if @user == current_user
                           policy_scope(Playlist).joins(user_playlists: :user).where(user_playlists: { action: 'created' },
