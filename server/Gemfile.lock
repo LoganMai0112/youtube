@@ -117,6 +117,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faker (3.1.1)
+      i18n (>= 1.8.11, < 2)
     faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
@@ -296,6 +298,8 @@ GEM
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
+    streamio-ffmpeg (3.0.2)
+      multi_json (~> 1.8)
     thor (1.2.1)
     timeout (0.3.2)
     tzinfo (2.0.6)
@@ -329,6 +333,7 @@ DEPENDENCIES
   dotenv-rails
   elasticsearch
   factory_bot_rails
+  faker
   image_processing (~> 1.2)
   jsonapi-serializer
   mini_magick
@@ -351,6 +356,7 @@ DEPENDENCIES
   sentry-rails
   sentry-ruby
   simplecov
+  streamio-ffmpeg
   tzinfo-data
 
 RUBY VERSION
