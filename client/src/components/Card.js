@@ -8,7 +8,7 @@ function Card({ id, title, channel, createdAt, thumbnailUrl, type }) {
     <Link className="h-fit" to={type ? `/${type}s/${id}` : `/videos/${id}`}>
       <div className="w-full h-fit flex flex-col cursor-pointer">
         <img
-          src={thumbnailUrl}
+          src={thumbnailUrl || '/logo.png'}
           alt="thumbnail"
           className="aspect-video rounded-3xl object-cover"
         />

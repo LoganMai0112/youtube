@@ -2,7 +2,11 @@ class PlaylistPolicy < ApplicationPolicy
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      scope.all
+      if user&.admin? || user
+        scope.all
+      else
+        scope.published
+      end
     end
   end
 
@@ -11,14 +15,18 @@ class PlaylistPolicy < ApplicationPolicy
   end
 
   def update?
-    user && record.user == user
+    user && record.user_playlists.find_by(action: 'created').user == user
   end
 
   def destroy?
-    user && record.user == user
+    user && record.user_playlists.find_by(action: 'created').user == user
   end
 
   def show?
-    user.admin? or record.user == user if record.privated?
+    if record.privated?
+      user.admin? or record.user_playlists.find_by(action: 'created').user == user
+    else
+      record
+    end
   end
 end

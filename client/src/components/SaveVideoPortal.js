@@ -12,14 +12,20 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
   const [isChecked, setIsChecked] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('/playlists', { params: { video_id: videoId } })
-      .then((res) => {
-        setPlaylists(res.data.data);
-        const checkedArray = res.data.data.map((item) => item.attributes.added);
-        setIsChecked(checkedArray);
-      })
-      .catch((err) => toast(err.response.data.message));
+    const getPlaylists = async () => {
+      await axios
+        .get('/playlists', { params: { video_id: videoId } })
+        .then((res) => {
+          setPlaylists(res.data.data);
+          const checkedArray = res.data.data.map(
+            (item) => item.attributes.added
+          );
+          setIsChecked(checkedArray);
+        })
+        .catch((err) => toast(err.response.data.message));
+    };
+
+    getPlaylists();
   }, []);
 
   const createPlaylist = async (e) => {

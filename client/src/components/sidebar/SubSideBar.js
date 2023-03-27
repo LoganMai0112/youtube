@@ -1,5 +1,6 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaStream } from 'react-icons/fa';
 import {
   AiFillHome,
@@ -12,8 +13,11 @@ import { BsMusicPlayerFill } from 'react-icons/bs';
 import { MdSubscriptions } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import SubSideBarButton from './SubSideBarButton';
+import { UserContext } from '../../contexts/UserContext';
 
 function SubSideBar({ setDropdownOpen }) {
+  const currentUser = useContext(UserContext);
+
   const dropdownToggle = () => {
     setDropdownOpen(true);
   };
@@ -32,8 +36,10 @@ function SubSideBar({ setDropdownOpen }) {
         <SubSideBarButton icon={<AiFillCompass />} />
         <SubSideBarButton icon={<AiFillVideoCamera />} />
         <SubSideBarButton icon={<AiFillStar />} />
-        <SubSideBarButton icon={<BsMusicPlayerFill />} />
-        <SubSideBarButton icon={<MdSubscriptions />} />
+        <Link to={`/users/${currentUser.id}/playlists`}>
+          <SubSideBarButton icon={<BsMusicPlayerFill />} />
+          <SubSideBarButton icon={<MdSubscriptions />} />
+        </Link>
         <Link to="/settings">
           <SubSideBarButton icon={<RiSettingsFill />} />
         </Link>

@@ -5,11 +5,22 @@ class UsersController < ApplicationController
   def show
     videos = @user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob })
     streams = @user.streams.where(streaming: true).includes({ thumbnail_attachment: :blob })
+    created_playlists = if @user == current_user
+                          policy_scope(Playlist).joins(user_playlists: :user).where(user_playlists: { action: 'created' },
+                                                                                    user: { id: @user.id })
+                        else
+                          policy_scope(Playlist).joins(user_playlists: :user).where(
+                            user_playlists: { action: 'created' }, user: { id: @user.id }
+                          ).published
+                        end
+    saved_playlists = policy_scope(Playlist).joins(user_playlists: :user).where(user_playlists: { action: 'saved' }, user: { id: @user.id })
     options = { params: { current_user: current_user } }
 
     render json: { videos: VideoSerializer.new(videos).serializable_hash,
                    user: UserSerializer.new(@user, options).serializable_hash,
-                   streams: StreamSerializer.new(streams).serializable_hash }, status: :ok
+                   streams: StreamSerializer.new(streams).serializable_hash,
+                   createdPlaylists: PlaylistSerializer.new(created_playlists).serializable_hash,
+                   savedPlaylists: PlaylistSerializer.new(saved_playlists).serializable_hash }, status: :ok
   end
 
   def update

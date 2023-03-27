@@ -1,6 +1,6 @@
 class PlaylistsController < ApplicationController
   before_action :authenticate_user!, only: %i[create update destroy]
-  before_action :set_playlist, only: %i[update destroy]
+  before_action :set_playlist, only: %i[update destroy show]
 
   def index
     playlists = policy_scope(current_user.playlists)
@@ -22,10 +22,19 @@ class PlaylistsController < ApplicationController
 
   def update
     if @playlist.update(playlist_params)
-      render json: playlist, status: :ok
+      render json: @playlist, status: :ok
     else
       render json: { message: "Can't not update playlist" }, status: :internal_server_error
     end
+  end
+
+  def show
+    videos_options = { include: [:user] }
+    playlist_options = { params: { current_user: current_user } }
+
+    render json: { playlist: PlaylistSerializer.new(@playlist, playlist_options).serializable_hash,
+                   videos: VideoSerializer.new(@playlist.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob }), videos_options).serializable_hash,
+                   creater: UserSerializer.new(@playlist.user_playlists.find_by(action: 'created').user).serializable_hash }, status: :ok
   end
 
   def destroy
@@ -43,7 +52,7 @@ class PlaylistsController < ApplicationController
   end
 
   def set_playlist
-    @playlist = Playlist.find(:id)
+    @playlist = Playlist.find(params[:id])
     authorize @playlist
   end
 end

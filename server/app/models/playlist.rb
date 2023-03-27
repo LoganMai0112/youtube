@@ -8,4 +8,10 @@ class Playlist < ApplicationRecord
 
   validates :title, presence: true
   validates :status, presence: true
+
+  def thumbnail_url
+    return Rails.application.routes.url_helpers.url_for(videos.first.thumbnail) if videos.first.thumbnail.attached?
+
+    Rails.application.routes.url_helpers.url_for(videos.first.source.preview(resize_to_limit: [300, 300]).processed)
+  end
 end

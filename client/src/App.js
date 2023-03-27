@@ -31,6 +31,8 @@ import SettingLayout from './components/layout/SettingLayout';
 import Dashboard from './pages/Dashboard';
 import Setting from './pages/Setting';
 import useLocalStorage from './hooks/useLocalStorage';
+import Playlist from './pages/Playlist';
+import Unavailable from './pages/Unavailable';
 
 function ProtectedRoute() {
   const currentUser = useLocalStorage('current_user')[0];
@@ -50,8 +52,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Layout />}>
+              <Route path="/unavailable" element={<Unavailable />} />
               <Route index element={<Home />} />
               <Route path="/result" element={<Search />} />
+              <Route path="/playlists/:playlistId" element={<Playlist />} />
               <Route path="/users/:userId" element={<User />}>
                 <Route index element={<Featured />} />
                 <Route path="/users/:userId/featured" element={<Featured />} />

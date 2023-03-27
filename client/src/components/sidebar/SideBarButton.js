@@ -8,7 +8,7 @@ function SideBarButton({ icon, avatar, text, option, endIcon, number }) {
           {icon}
           {avatar && <img src={avatar} alt="avatar" className="rounded-full" />}
         </div>
-        <p className="text-text-color group-hover:text-white text-sm whitespace-nowrap">
+        <p className="text-white group-hover:text-white text-sm whitespace-nowrap">
           {text}
         </p>
       </div>
