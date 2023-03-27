@@ -8,7 +8,7 @@ export default function SideCard({ id, title, channel, createdAt, thumbnail }) {
     <Link to={`/videos/${id}`} replace>
       <div className="w-full h-fit flex flex-row cursor-pointer">
         <img
-          src={thumbnail}
+          src={thumbnail || '/logo.png'}
           alt="thumbnail"
           className="aspect-video rounded-lg w-40 object-cover"
         />

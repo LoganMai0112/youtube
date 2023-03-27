@@ -36,18 +36,22 @@ function Carousel({ listName, datas }) {
               />
             </SwiperSlide>
           ))}
-        <div
-          className="cursor-pointer bg-hover hover:bg-text-color rounded-full p-2  w-fit absolute right-0 z-10 top-1/2"
-          ref={navigationNextRef}
-        >
-          <AiFillCaretRight className="w-5 h-5 fill-main-color" />
-        </div>
-        <div
-          className="cursor-pointer bg-hover hover:bg-text-color rounded-full p-2  w-fit absolute left-0 z-10 top-1/2"
-          ref={navigationPrevRef}
-        >
-          <AiFillCaretLeft className="w-5 h-5 fill-main-color" />
-        </div>
+        {datas && datas.length > 6 && (
+          <div
+            className="cursor-pointer bg-hover hover:bg-text-color rounded-full p-2  w-fit absolute right-0 z-10 top-1/2"
+            ref={navigationNextRef}
+          >
+            <AiFillCaretRight className="w-5 h-5 fill-main-color" />
+          </div>
+        )}
+        {datas && datas.length > 6 && (
+          <div
+            className="cursor-pointer bg-hover hover:bg-text-color rounded-full p-2  w-fit absolute left-0 z-10 top-1/2"
+            ref={navigationPrevRef}
+          >
+            <AiFillCaretLeft className="w-5 h-5 fill-main-color" />
+          </div>
+        )}
       </Swiper>
     </div>
   );

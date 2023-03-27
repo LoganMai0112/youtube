@@ -2,7 +2,7 @@ class VideoPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user && user.admin?
-        scope
+        scope.all
       else
         scope.where(status: 'published')
       end
@@ -22,7 +22,7 @@ class VideoPolicy < ApplicationPolicy
   end
 
   def show?
-    if record.only_me?
+    if record.privated?
       user.admin? or record.user == user
     else
       record

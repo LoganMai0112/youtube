@@ -4,6 +4,8 @@ class StreamsController < ApplicationController
 
   def index
     streams = Stream.where(streaming: true).limit(5)
+    streams = policy_scope(streams)
+
     render json: StreamSerializer.new(streams).serializable_hash
   end
 

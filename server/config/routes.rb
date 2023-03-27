@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'playlist_items/create'
+  get 'playlist_items/destroy'
   devise_for :users, path: '',
                      path_names: {
                        sign_in: 'login',
@@ -16,6 +18,11 @@ Rails.application.routes.draw do
   end
 
   resources :streams
+
+  resources :playlists do
+    resource :playlist_item, only: %i[create destroy]
+    resource :user_playlist, only: %i[create destroy]
+  end
 
   get '/users/:id/edit', to: 'users#edit'
 

@@ -1,11 +1,12 @@
 class Video < ApplicationRecord
   searchkick
 
-  enum status: { only_me: 0, published: 1 }
+  enum status: { privated: 0, published: 1 }
   has_one_attached :source
   has_one_attached :thumbnail
   has_many :likes, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :playlist_item, dependent: :destroy
   belongs_to :user
 
   validates :source, presence: true

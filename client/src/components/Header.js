@@ -17,7 +17,7 @@ function Header({ dropdownOpen }) {
   };
 
   return (
-    <div className="p-5 w-full h-fit flex justify-between items-center relative z-10">
+    <div className="p-5 pb-0 mb-5 w-full h-fit flex justify-between items-center sticky top-0 bg-main z-10">
       {!dropdownOpen && (
         <Link to="/">
           <AiFillYoutube className="fill-main-color h-14 w-14 cursor-pointer" />
@@ -31,7 +31,6 @@ function Header({ dropdownOpen }) {
             type="button"
             className="group rounded-full p-3 hover:bg-hover relative"
           >
-            {/* <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-main-color opacity-75" /> */}
             <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
           </button>
           <button
@@ -48,19 +47,21 @@ function Header({ dropdownOpen }) {
           {menuOpen && (
             <div className="absolute flex flex-col right-0 top-16 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
               <section>
-                <div className="flex flex-row px-3">
-                  <div className="w-10 h-10 mr-3">
-                    <img
-                      className="w-full h-full rounded-full"
-                      src={useUser.avatarUrl}
-                      alt="avatar"
-                    />
+                <Link to={`/users/${useUser.id}`}>
+                  <div className="flex flex-row px-3 items-center">
+                    <div className="w-10 h-10 mr-3">
+                      <img
+                        className="w-full h-full rounded-full object-cover"
+                        src={useUser.avatarUrl}
+                        alt="avatar"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <p className="text-white">{useUser.name}</p>
+                      <p className="text-text-color">{useUser.email}</p>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <p className="text-white">{useUser.name}</p>
-                    <p className="text-text-color">{useUser.email}</p>
-                  </div>
-                </div>
+                </Link>
               </section>
               <section>
                 <LogOutButton />

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_20_172332) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_23_042827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_172332) do
     t.index ["video_id"], name: "index_likes_on_video_id"
   end
 
+  create_table "playlist_items", force: :cascade do |t|
+    t.bigint "playlist_id", null: false
+    t.bigint "video_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_playlist_items_on_playlist_id"
+    t.index ["video_id"], name: "index_playlist_items_on_video_id"
+  end
+
+  create_table "playlists", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status"
+  end
+
   create_table "streams", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -76,6 +93,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_172332) do
     t.bigint "subscribed_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_playlists", force: :cascade do |t|
+    t.integer "action"
+    t.bigint "user_id", null: false
+    t.bigint "playlist_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["playlist_id"], name: "index_user_playlists_on_playlist_id"
+    t.index ["user_id"], name: "index_user_playlists_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -114,6 +141,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_20_172332) do
   add_foreign_key "comments", "videos"
   add_foreign_key "likes", "users"
   add_foreign_key "likes", "videos"
+  add_foreign_key "playlist_items", "playlists"
+  add_foreign_key "playlist_items", "videos"
   add_foreign_key "streams", "users"
+  add_foreign_key "user_playlists", "playlists"
+  add_foreign_key "user_playlists", "users"
   add_foreign_key "videos", "users"
 end
