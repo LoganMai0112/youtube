@@ -21,7 +21,7 @@ import { MdSubscriptions, MdPlaylistPlay } from 'react-icons/md';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import SideBarButton from './SideBarButton';
-import { UserContext } from '../../contexts/UserContext';
+import { UserContext, UserSignedInContext } from '../../contexts/UserContext';
 
 function SideBar({ setDropdownOpen }) {
   const dropdownToggle = () => {
@@ -30,6 +30,7 @@ function SideBar({ setDropdownOpen }) {
   const [playlists, setPlaylists] = useState();
   const [showPlaylists, setShowPlaylists] = useState(false);
   const currentUser = useContext(UserContext);
+  const signedIn = useContext(UserSignedInContext);
 
   useEffect(() => {
     const getPlaylists = async () => {
@@ -79,45 +80,47 @@ function SideBar({ setDropdownOpen }) {
             endIcon={<BsPlusCircleDotted />}
           />
         </section>
-        <section>
-          <Link to={`/users/${currentUser.id}/playlists`}>
-            <SideBarButton
-              icon={<BsMusicPlayerFill />}
-              text="Playlist"
-              number={playlists ? playlists.length : ''}
-            />
-          </Link>
-          <div
-            className={`overflow-hidden ${
-              showPlaylists ? 'max-h-fit' : 'max-h-[168px]'
-            }`}
-          >
-            {playlists &&
-              playlists.map((playlist) => (
-                <Link to={`/playlists/${playlist.id}`}>
-                  <SideBarButton
-                    icon={<MdPlaylistPlay />}
-                    text={playlist.attributes.title}
-                  />
-                </Link>
-              ))}
-            <SideBarButton
-              icon={<AiFillStar />}
-              text="Favorites"
-              number={playlists ? playlists.length : ''}
-            />
-          </div>
-          <button
-            type="button"
-            className="w-full"
-            onClick={() => setShowPlaylists(!showPlaylists)}
-          >
-            <SideBarButton
-              icon={showPlaylists ? <IoIosArrowUp /> : <IoIosArrowDown />}
-              text={showPlaylists ? 'Show less' : 'Show more'}
-            />
-          </button>
-        </section>
+        {signedIn && (
+          <section>
+            <Link to={`/users/${currentUser.id}/playlists`}>
+              <SideBarButton
+                icon={<BsMusicPlayerFill />}
+                text="Playlist"
+                number={playlists ? playlists.length : ''}
+              />
+            </Link>
+            <div
+              className={`overflow-hidden ${
+                showPlaylists ? 'max-h-fit' : 'max-h-[168px]'
+              }`}
+            >
+              {playlists &&
+                playlists.map((playlist) => (
+                  <Link to={`/playlists/${playlist.id}`}>
+                    <SideBarButton
+                      icon={<MdPlaylistPlay />}
+                      text={playlist.attributes.title}
+                    />
+                  </Link>
+                ))}
+              <SideBarButton
+                icon={<AiFillStar />}
+                text="Favorites"
+                number={playlists ? playlists.length : ''}
+              />
+            </div>
+            <button
+              type="button"
+              className="w-full"
+              onClick={() => setShowPlaylists(!showPlaylists)}
+            >
+              <SideBarButton
+                icon={showPlaylists ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                text={showPlaylists ? 'Show less' : 'Show more'}
+              />
+            </button>
+          </section>
+        )}
         <section>
           <SideBarButton
             icon={<MdSubscriptions />}

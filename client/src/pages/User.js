@@ -24,7 +24,6 @@ function User() {
       await axios
         .get(`/users/${params.userId}`)
         .then((res) => {
-          console.log(res);
           setCreatedPlaylists(res.data.createdPlaylists.data);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
