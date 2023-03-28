@@ -38,7 +38,7 @@ class PlaylistsController < ApplicationController
     playlist = PlaylistSerializer.new(@playlist, playlist_options).serializable_hash
     creater = UserSerializer.new(@playlist.user_playlists.find_by(action: 'created').user).serializable_hash
 
-    render json: { playlist: playlsit,
+    render json: { playlist: playlist,
                    videos: videos,
                    creater: creater }, status: :ok
   end
