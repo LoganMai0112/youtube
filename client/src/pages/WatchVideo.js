@@ -25,7 +25,6 @@ function WatchVideo() {
   const [channel, setChannel] = useState({});
   const [showDescription, setShowDescription] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [subscribed, setSubscribed] = useState();
   const [likeCount, setLikeCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
   const [shareBox, setShareBox] = useState(false);
@@ -58,11 +57,6 @@ function WatchVideo() {
         setLiked(true);
       } else {
         setLiked(false);
-      }
-      if (attributes.subscribedYet && attributes.subscribedYet !== null) {
-        setSubscribed(true);
-      } else {
-        setSubscribed(false);
       }
       if (player.current) {
         player.current.load();
@@ -105,8 +99,7 @@ function WatchVideo() {
               </div>
               {channel.id !== currentUser.id && (
                 <SubscribeButton
-                  subscribed={subscribed}
-                  setSubscribed={setSubscribed}
+                  subscribedYet={channel.subscribedYet !== null}
                   channelId={channel.id}
                 />
               )}

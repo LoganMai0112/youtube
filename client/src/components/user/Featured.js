@@ -20,12 +20,13 @@ function Featured() {
   return (
     <div>
       <Carousel listName="Videos" datas={outletContext.videos} />
-      {outletContext.createdPlaylists.map((playlist) => (
-        <Carousel
-          listName={playlist.attributes.title}
-          datas={findVideosOfPlaylist(playlist.relationships.videos.data)}
-        />
-      ))}
+      {outletContext.createdPlaylists &&
+        outletContext.createdPlaylists.map((playlist) => (
+          <Carousel
+            listName={playlist.attributes.title}
+            datas={findVideosOfPlaylist(playlist.relationships.videos.data)}
+          />
+        ))}
     </div>
   );
 }

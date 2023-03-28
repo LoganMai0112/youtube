@@ -1,6 +1,6 @@
 class Playlist < ApplicationRecord
   searchkick
-  
+
   enum status: { published: 0, privated: 1 }
 
   has_many :playlist_items, dependent: :destroy

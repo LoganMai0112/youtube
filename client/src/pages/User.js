@@ -10,7 +10,6 @@ function User() {
   const params = useParams();
   const lastSegment = window.location.pathname.split('/').pop();
   const [user, setUser] = useState();
-  const [subscribed, setSubscribed] = useState(false);
   const currentUser = useContext(UserContext);
   const [isActive, setIsActive] = useState(lastSegment);
   const [streams, setStreams] = useState();
@@ -25,18 +24,12 @@ function User() {
       await axios
         .get(`/users/${params.userId}`)
         .then((res) => {
-          console.log(res);
           setCreatedPlaylists(res.data.createdPlaylists.data);
           setIncludedPlaylists(res.data.createdPlaylists.included);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
           setVideos(res.data.videos.data);
           setStreams(res.data.streams.data);
-          if (res.data.user.data.attributes.subscribedYet) {
-            setSubscribed(true);
-          } else {
-            setSubscribed(false);
-          }
         })
         .catch((err) => toast(err.message));
     };
@@ -80,8 +73,7 @@ function User() {
           ) : (
             <div className="flex items-center">
               <SubscribeButton
-                subscribed={subscribed}
-                setSubscribed={setSubscribed}
+                subscribedYet={user.subscribedYet !== null}
                 channelId={user.id}
               />
             </div>
