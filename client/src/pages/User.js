@@ -10,13 +10,13 @@ function User() {
   const params = useParams();
   const lastSegment = window.location.pathname.split('/').pop();
   const [user, setUser] = useState();
-  const [subscribed, setSubscribed] = useState(false);
   const currentUser = useContext(UserContext);
   const [isActive, setIsActive] = useState(lastSegment);
   const [streams, setStreams] = useState();
   const [videos, setVideos] = useState();
   const [createdPlaylists, setCreatedPlaylists] = useState();
   const [savedPlaylists, setSavedPlaylists] = useState();
+  const [includedPlaylists, setIncludedPlaylists] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,15 +25,11 @@ function User() {
         .get(`/users/${params.userId}`)
         .then((res) => {
           setCreatedPlaylists(res.data.createdPlaylists.data);
+          setIncludedPlaylists(res.data.createdPlaylists.included);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
           setVideos(res.data.videos.data);
           setStreams(res.data.streams.data);
-          if (res.data.user.data.attributes.subscribedYet) {
-            setSubscribed(true);
-          } else {
-            setSubscribed(false);
-          }
         })
         .catch((err) => toast(err.message));
     };
@@ -77,8 +73,7 @@ function User() {
           ) : (
             <div className="flex items-center">
               <SubscribeButton
-                subscribed={subscribed}
-                setSubscribed={setSubscribed}
+                subscribedYet={user.subscribedYet !== null}
                 channelId={user.id}
               />
             </div>
@@ -135,7 +130,15 @@ function User() {
           VIDEOS
         </button>
       </div>
-      <Outlet context={{ videos, streams, createdPlaylists, savedPlaylists }} />
+      <Outlet
+        context={{
+          videos,
+          streams,
+          createdPlaylists,
+          savedPlaylists,
+          includedPlaylists,
+        }}
+      />
     </div>
   );
 }
