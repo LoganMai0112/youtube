@@ -13,7 +13,6 @@ import SubscribeButton from './SubscribeButton';
 function WatchStream({ streamRef, channel, streamInfo }) {
   const currentUser = useContext(UserContext);
   const [showDescription, setShowDescription] = useState(false);
-  const [subscribed, setSubscribed] = useState();
   const [shareBox, setShareBox] = useState(false);
 
   return (
@@ -39,8 +38,7 @@ function WatchStream({ streamRef, channel, streamInfo }) {
               </div>
               {channel.id !== currentUser.id && (
                 <SubscribeButton
-                  subscribed={subscribed}
-                  setSubscribed={setSubscribed}
+                  subscribedYet={channel.attributes.subscribedYet}
                   channelId={channel.id}
                 />
               )}

@@ -12,7 +12,23 @@ SwiperCore.use([Navigation]);
 
 function Featured() {
   const outletContext = useOutletContext();
-  return <Carousel listName="Videos" datas={outletContext.videos} />;
+  const findVideosOfPlaylist = (videos) =>
+    videos.map((video) =>
+      outletContext.includedPlaylists.find((c) => c.id === video.id)
+    );
+
+  return (
+    <div>
+      <Carousel listName="Videos" datas={outletContext.videos} />
+      {outletContext.createdPlaylists &&
+        outletContext.createdPlaylists.map((playlist) => (
+          <Carousel
+            listName={playlist.attributes.title}
+            datas={findVideosOfPlaylist(playlist.relationships.videos.data)}
+          />
+        ))}
+    </div>
+  );
 }
 
 export default Featured;

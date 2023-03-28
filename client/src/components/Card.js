@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-function Card({ id, title, channel, createdAt, thumbnailUrl, type }) {
+function Card({ id, title, channel, createdAt, thumbnailUrl, type, status }) {
   return (
     <Link className="h-fit" to={type ? `/${type}s/${id}` : `/videos/${id}`}>
       <div className="w-full h-fit flex flex-col cursor-pointer">
@@ -33,9 +33,18 @@ function Card({ id, title, channel, createdAt, thumbnailUrl, type }) {
                 </p>
               </Link>
             )}
+            {type === 'playlist' && status === 'privated' && (
+              <div className="p-[1px] bg-hover w-fit">
+                <p className="text-text-color">Private</p>
+              </div>
+            )}
             <div className="flex items-center text-text-color text-sm">
-              <p>view</p>
-              <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
+              {type !== 'playlist' && (
+                <>
+                  <p>view</p>
+                  <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
+                </>
+              )}
               <p>{moment(createdAt).fromNow()}</p>
             </div>
           </div>

@@ -3,6 +3,12 @@ class PlaylistSerializer
   set_key_transform :camel_lower
   attributes :title, :description, :status, :created_at, :updated_at, :thumbnail_url
 
+  has_many :videos
+
+  attribute :author do |playlist|
+    UserPlaylist.find_by(playlist: playlist, action: 'created').user
+  end
+
   attribute :added, if: proc { |_playlist, params|
                           params[:video_id].present?
                         } do |playlist, params|
