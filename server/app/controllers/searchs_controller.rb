@@ -21,6 +21,7 @@ class SearchsController < ApplicationController
               when 'playlist'
                 PlaylistSerializer.new(Playlist.search(params[:query], where: { status: 'published' }).to_a).serializable_hash
               end
+              
     if results
       render json: results, status: :ok
     else
