@@ -20,7 +20,7 @@ class SearchsController < ApplicationController
 
   def date_params
     if %w[hour day week month year].include?(params[:date])
-      send("1.#{params[:date]}.ago")
+      1.send(params[:date]).ago
     else
       1.month.ago
     end
