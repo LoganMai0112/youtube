@@ -3,6 +3,8 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  searchkick
+  
   enum role: { admin: 0, user: 1 }
 
   after_create :add_avatar_after_create
