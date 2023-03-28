@@ -33,7 +33,7 @@ function Card({ id, title, channel, createdAt, thumbnailUrl, type, status }) {
                 </p>
               </Link>
             )}
-            {type && type === 'playlist' && status && status === 'privated' && (
+            {type === 'playlist' && status === 'privated' && (
               <div className="p-[1px] bg-hover w-fit">
                 <p className="text-text-color">Private</p>
               </div>
