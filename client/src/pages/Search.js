@@ -26,7 +26,6 @@ function Search() {
           }`
         )
         .then((res) => {
-          console.log(res);
           setResults(res.data.data);
           if (type === 'video') setChannels(res.data.included);
           setIsLoading(false);
@@ -175,7 +174,7 @@ function Search() {
         results.map((channel) => (
           <div className="w-full flex">
             <Link to={`/users/${channel.id}`}>
-              <div className="px-32 flex-1">
+              <div className="px-32 flex-1 min-w-[400px]">
                 <img
                   className="rounded-full w-36 h-36 object-cover"
                   src={channel.attributes.avatarUrl}

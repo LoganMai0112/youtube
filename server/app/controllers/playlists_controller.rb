@@ -31,10 +31,16 @@ class PlaylistsController < ApplicationController
   def show
     videos_options = { include: [:user] }
     playlist_options = { params: { current_user: current_user } }
+    videos = VideoSerializer.new(
+      @playlist.videos.includes({ user: [{ cover_attachment: :blob }, { avatar_attachment: :blob }] }, { thumbnail_attachment: :blob },
+                                { source_attachment: { blob: { preview_image_attachment: :blob } } }), videos_options
+    ).serializable_hash
+    playlist = PlaylistSerializer.new(@playlist, playlist_options).serializable_hash
+    creater = UserSerializer.new(@playlist.user_playlists.find_by(action: 'created').user).serializable_hash
 
-    render json: { playlist: PlaylistSerializer.new(@playlist, playlist_options).serializable_hash,
-                   videos: VideoSerializer.new(@playlist.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: :blob }), videos_options).serializable_hash,
-                   creater: UserSerializer.new(@playlist.user_playlists.find_by(action: 'created').user).serializable_hash }, status: :ok
+    render json: { playlist: playlsit,
+                   videos: videos,
+                   creater: creater }, status: :ok
   end
 
   def destroy
