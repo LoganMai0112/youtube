@@ -15,12 +15,12 @@ class UsersController < ApplicationController
                         end
     saved_playlists = policy_scope(Playlist).joins(user_playlists: :user).where(user_playlists: { action: 'saved' }, user: { id: @user.id })
     options = { params: { current_user: current_user } }
-    playlist_options = { include: %i[videos 'videos.thumbnail_attachment' 'videos.source_attachment'] }
+    playlist_options = { include: [:videos] }
 
     render json: { videos: VideoSerializer.new(videos).serializable_hash,
                    user: UserSerializer.new(@user, options).serializable_hash,
                    streams: StreamSerializer.new(streams).serializable_hash,
-                   createdPlaylists: PlaylistSerializer.new(created_playlists.includes(:videos), playlist_options).serializable_hash,
+                   createdPlaylists: PlaylistSerializer.new(created_playlists.includes({ videos: [{ thumbnail_attachment: :blob }, { source_attachment: :blob }]}), playlist_options).serializable_hash,
                    savedPlaylists: PlaylistSerializer.new(saved_playlists).serializable_hash }, status: :ok
   end
 

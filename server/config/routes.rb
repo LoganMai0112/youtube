@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'reports/index'
+  get 'reports/create'
+  get 'reports/destroy'
   get 'playlist_items/create'
   get 'playlist_items/destroy'
   devise_for :users, path: '',
@@ -18,6 +21,8 @@ Rails.application.routes.draw do
   end
 
   resources :streams
+
+  resources :reports, only: %i[create destroy index]
 
   resources :playlists do
     resource :playlist_item, only: %i[create destroy]

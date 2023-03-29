@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :streams, dependent: :destroy
   has_many :user_playlists, dependent: :destroy
   has_many :playlists, through: :user_playlists
+  has_many :reports, as: :reportable, dependent: :destroy
 
   validates :role, presence: true
   validates :name, presence: true

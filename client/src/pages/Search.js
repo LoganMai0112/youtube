@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable eqeqeq */
+/* eslint-disable react/destructuring-assignment */
+import React, { useContext, useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -6,6 +8,7 @@ import { GoSettings } from 'react-icons/go';
 import SearchCard from '../components/SearchCard';
 import SideCard from '../components/recommend/SideCard';
 import SubscribeButton from '../components/SubscribeButton';
+import { UserContext } from '../contexts/UserContext';
 
 function Search() {
   const [searchParams] = useSearchParams();
@@ -15,6 +18,7 @@ function Search() {
   const [filterBox, setFilterBox] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [channels, setChannels] = useState();
+  const currentUser = useContext(UserContext);
 
   useEffect(() => {
     const getSearch = async () => {
@@ -163,7 +167,7 @@ function Search() {
             type={playlist.type}
             title={playlist.attributes.title}
             id={playlist.id}
-            thumbnailUrl={playlist.attributes.thumbnailUrl}
+            thumbnail={playlist.attributes.thumbnailUrl}
             channel={playlist.attributes.author}
             createdAt={playlist.attributes.createdAt}
           />
@@ -197,10 +201,12 @@ function Search() {
                   </p>
                 </div>
               </div>
-              <SubscribeButton
-                subscribedYet={channel.attributes.subscribedYet}
-                channelId={channel.id}
-              />
+              {currentUser.id != channel.id && (
+                <SubscribeButton
+                  subscribedYet={channel.attributes.subscribedYet}
+                  channelId={channel.id}
+                />
+              )}
             </div>
           </div>
         ))}

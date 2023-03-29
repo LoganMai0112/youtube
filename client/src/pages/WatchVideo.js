@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Player } from 'video-react';
 import { BiShare } from 'react-icons/bi';
 import { RiPlayListAddFill } from 'react-icons/ri';
+import { AiFillFlag } from 'react-icons/ai';
 import moment from 'moment';
 import parse from 'html-react-parser';
 import RecommendSide from '../components/recommend/RecommendSide';
@@ -18,6 +19,7 @@ import Comment from '../components/Comment';
 import ShareVideoPortal from '../components/ShareVideoPortal';
 import SubscribeButton from '../components/SubscribeButton';
 import SaveVideoPortal from '../components/SaveVideoPortal';
+import ReportPortal from '../components/ReportPortal';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -28,6 +30,7 @@ function WatchVideo() {
   const [likeCount, setLikeCount] = useState();
   const [commentsCount, setCommentsCount] = useState();
   const [shareBox, setShareBox] = useState(false);
+  const [reportBox, setReportBox] = useState(false);
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -143,6 +146,20 @@ function WatchVideo() {
                 <RiPlayListAddFill className="w-5 h-5" />
                 Save
               </button>
+              <button
+                type="button"
+                className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
+                onClick={() => {
+                  if (signedIn) {
+                    setReportBox(true);
+                  } else {
+                    navigate('/login');
+                  }
+                }}
+              >
+                <AiFillFlag className="w-5 h-5" />
+                Report
+              </button>
             </div>
           </div>
           <div
@@ -187,6 +204,13 @@ function WatchVideo() {
       {shareBox && <ShareVideoPortal setShareBox={setShareBox} />}
       {saveBox && (
         <SaveVideoPortal setSaveBox={setSaveBox} videoId={params.videoId} />
+      )}
+      {reportBox && (
+        <ReportPortal
+          setReportBox={setReportBox}
+          videoId={params.videoId}
+          channelId={channel.id}
+        />
       )}
     </div>
   );
