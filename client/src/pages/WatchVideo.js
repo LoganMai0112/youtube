@@ -12,6 +12,7 @@ import { RiPlayListAddFill } from 'react-icons/ri';
 import { AiFillFlag } from 'react-icons/ai';
 import moment from 'moment';
 import parse from 'html-react-parser';
+import { toast } from 'react-toastify';
 import RecommendSide from '../components/recommend/RecommendSide';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import LikeVideoButton from '../components/LikeVideoButton';
@@ -31,6 +32,7 @@ function WatchVideo() {
   const [commentsCount, setCommentsCount] = useState();
   const [shareBox, setShareBox] = useState(false);
   const [reportBox, setReportBox] = useState(false);
+  const [videoStatus, setVideoStatus] = useState();
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -47,27 +49,67 @@ function WatchVideo() {
 
   useEffect(() => {
     const getVideo = async () => {
-      const res = await axios.get(`/videos/${params.videoId}`);
-      const { attributes } = res.data.data;
-      setVideo(attributes);
-      setVideoSource(attributes.videoUrl);
-      setChannel(
-        findChannel(res.data.data.relationships.user.data.id, res.data.included)
-      );
-      setLikeCount(attributes.likesCount);
-      setCommentsCount(attributes.commentsCount);
-      if (attributes.likedYet && attributes.likedYet !== null) {
-        setLiked(true);
-      } else {
-        setLiked(false);
-      }
-      if (player.current) {
-        player.current.load();
-      }
+      await axios
+        .get(`/videos/${params.videoId}`)
+        .then((res) => {
+          const { attributes } = res.data.data;
+          setVideo(attributes);
+          setVideoStatus(attributes.status);
+          setVideoSource(attributes.videoUrl);
+          setChannel(
+            findChannel(
+              res.data.data.relationships.user.data.id,
+              res.data.included
+            )
+          );
+          setLikeCount(attributes.likesCount);
+          setCommentsCount(attributes.commentsCount);
+          if (attributes.likedYet && attributes.likedYet !== null) {
+            setLiked(true);
+          } else {
+            setLiked(false);
+          }
+          if (player.current) {
+            player.current.load();
+          }
+        })
+        .catch((err) => {
+          toast(err.response.data.message);
+          navigate('/unavailable');
+        });
     };
 
     getVideo();
   }, [params, videoSource]);
+
+  const softDelete = async () => {
+    await axios
+      .put(`/videos/${params.videoId}`, {
+        video: { status: 'deleted' },
+      })
+      .then((res) => {
+        if (res) {
+          toast('Deleted video');
+          setVideoStatus('deleted');
+          navigate('/admin/reports');
+        }
+      })
+      .catch((err) => toast(err.response.data.message));
+  };
+
+  const recover = async () => {
+    await axios
+      .put(`/videos/${params.videoId}`, {
+        video: { status: 'published' },
+      })
+      .then((res) => {
+        if (res) {
+          setVideoStatus('published');
+          toast('Recovery video');
+        }
+      })
+      .catch((err) => toast(err.response.data.message));
+  };
 
   return (
     <div className="flex h-full w-full">
@@ -78,6 +120,11 @@ function WatchVideo() {
           </Player>
         )}
         <div className="flex w-full flex-col mt-4">
+          {videoStatus === 'privated' && (
+            <div className="p-[1px] bg-hover w-fit">
+              <p className="text-text-color">Private</p>
+            </div>
+          )}
           <p className="text-white text-2xl font-bold">{video.title}</p>
           <div className="flex justify-between items-center w-full pt-3">
             <div className="flex flex-row items-center">
@@ -86,7 +133,7 @@ function WatchVideo() {
                   <img
                     src={channel.avatarUrl}
                     alt="avatar"
-                    className="w-9 h-9 rounded-full"
+                    className="w-9 h-9 rounded-full object-cover"
                   />
                 </Link>
               </div>
@@ -146,20 +193,40 @@ function WatchVideo() {
                 <RiPlayListAddFill className="w-5 h-5" />
                 Save
               </button>
-              <button
-                type="button"
-                className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
-                onClick={() => {
-                  if (signedIn) {
-                    setReportBox(true);
-                  } else {
-                    navigate('/login');
-                  }
-                }}
-              >
-                <AiFillFlag className="w-5 h-5" />
-                Report
-              </button>
+              {currentUser.role !== 'admin' && (
+                <button
+                  type="button"
+                  className="text-white bg-main-color/50 px-4 py-2 rounded-3xl hover:bg-main-color hover:text-black flex gap-2 items-center"
+                  onClick={() => {
+                    if (signedIn) {
+                      setReportBox(true);
+                    } else {
+                      navigate('/login');
+                    }
+                  }}
+                >
+                  <AiFillFlag className="w-5 h-5" />
+                  Report
+                </button>
+              )}
+              {currentUser.role === 'admin' && videoStatus === 'published' && (
+                <button
+                  type="button"
+                  className="text-white bg-red-500/50 px-4 py-2 rounded-3xl hover:text-black flex gap-2 items-center"
+                  onClick={() => softDelete()}
+                >
+                  Remove
+                </button>
+              )}
+              {currentUser.role === 'admin' && videoStatus === 'deleted' && (
+                <button
+                  type="button"
+                  className="text-white bg-red-500/50 px-4 py-2 rounded-3xl hover:text-black flex gap-2 items-center"
+                  onClick={() => recover()}
+                >
+                  Recover
+                </button>
+              )}
             </div>
           </div>
           <div
