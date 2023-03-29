@@ -7,11 +7,15 @@ class UserPolicy < ApplicationPolicy
   end
 
   def show?
-    record
+    if record.role == 'deleted'
+      user&.admin?
+    else
+      record
+    end
   end
 
   def update?
-    user && record == user
+    user&.admin? || record == user
   end
 
   def edit?
@@ -19,6 +23,6 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record == user
+    user&.admin? || record == user
   end
 end

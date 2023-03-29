@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   searchkick
 
-  enum role: { admin: 0, user: 1 }
+  enum role: { admin: 0, user: 1, deleted: 2 }
 
   after_create :add_avatar_after_create
 
