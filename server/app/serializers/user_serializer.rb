@@ -13,9 +13,9 @@ class UserSerializer
     Subscribe.find_by(subscriber_id: params[:current_user].id, subscribed_id: user.id)
   end
 
-  attribute :deleted_yet, if: proc { |_user, params| 
-                                    params[:current_user]&.admin?
-                                  } do |user, _|
+  attribute :deleted_yet, if: proc { |_user, params|
+                                params[:current_user]&.admin?
+                              } do |user, _|
     user&.deleted?
   end
 end

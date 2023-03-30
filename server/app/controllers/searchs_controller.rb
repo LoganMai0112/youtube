@@ -2,7 +2,8 @@ class SearchsController < ApplicationController
   def search
     results = case params[:type]
               when 'video'
-                VideoSerializer.new(Video.search(params[:query], where: { status: 'published', deleted_at: nil, created_at: { gte: date_params } }).includes(:user).to_a, { include: [:user] }).serializable_hash
+                VideoSerializer.new(Video.search(params[:query], where: { status: 'published', deleted_at: nil, created_at: { gte: date_params } }).includes(:user).to_a,
+                                    { include: [:user] }).serializable_hash
               when 'channel'
                 UserSerializer.new(User.search(params[:query], where: { deleted_at: nil }).to_a, params: { current_user: current_user }).serializable_hash
               when 'playlist'
