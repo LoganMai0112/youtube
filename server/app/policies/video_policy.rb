@@ -1,11 +1,7 @@
 class VideoPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
-      if user&.admin?
-        scope.where.not(status: 'deleted')
-      else
-        scope.where(status: 'published')
-      end
+      scope.without_deleted.where(status: 'published')
     end
   end
 
@@ -14,26 +10,22 @@ class VideoPolicy < ApplicationPolicy
   end
 
   def update?
-    if record.deleted?
-      user&.admin?
-    else
-      user.admin? or record.user == user
-    end
+    record.user == user or !record.deleted?
   end
 
   def destroy?
-    if record.deleted?
-      user&.admin?
-    else
-      user.admin? or record.user == user
-    end
+    user.admin? or record.user == user
+  end
+
+  def recover?
+    user.admin?
   end
 
   def show?
-    if record.privated?
+    if record.deleted?
+      user.admin?
+    elsif record.privated?
       user.admin? or record.user == user
-    elsif record.deleted?
-      user&.admin?
     else
       record
     end

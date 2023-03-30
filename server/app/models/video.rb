@@ -1,7 +1,9 @@
 class Video < ApplicationRecord
+  include SoftDeleteConcern
+
   searchkick
 
-  enum status: { privated: 0, published: 1, deleted: 2 }
+  enum status: { privated: 0, published: 1 }
   has_one_attached :source
   has_one_attached :thumbnail
   has_many :likes, dependent: :destroy

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :report do
     reportable { nil }
-    content { "MyString" }
+    content { 'MyString' }
   end
 end

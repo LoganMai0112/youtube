@@ -1,6 +1,6 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: %i[update create destroy]
-  before_action :set_video, only: %i[show update destroy]
+  before_action :authenticate_user!, only: %i[update create destroy recover]
+  before_action :set_video, only: %i[show update destroy recover]
 
   def index
     videos = policy_scope(Video).all.includes({ user: [{ avatar_attachment: :blob }, { cover_attachment: :blob }] }, { thumbnail_attachment: :blob },
@@ -20,13 +20,11 @@ class VideosController < ApplicationController
   end
 
   def show
-    authorize @video
     options = { include: [:user], params: { current_user: current_user } }
     render json: VideoSerializer.new(@video, options).serializable_hash
   end
 
   def update
-    authorize @video
     if @video.update(video_params)
       render json: VideoSerializer.new(@video).serializable_hash[:data][:attributes], status: :accepted
     else
@@ -35,11 +33,18 @@ class VideosController < ApplicationController
   end
 
   def destroy
-    authorize @video
-    if @video.destroy
-      render json: { message: 'successfully deleted' }, status: :ok
+    if (current_user.user? && @video.really_destroy!) || (current_user.admin? && @video.destroy)
+      render json: { message: 'Successfully deleted' }, status: :ok
     else
-      render json: { message: 'Unsuccessfully deleted' }, status: internal_server_error
+      render json: { message: 'Unsuccessfully deleted' }, status: :internal_server_error
+    end
+  end
+
+  def recover
+    if @video.restore
+      render json: { message: 'Successfully restored' }, status: :ok
+    else
+      render json: { message: 'Unsuccessfully restored' }, status: :internal_server_error
     end
   end
 
@@ -51,5 +56,6 @@ class VideosController < ApplicationController
 
   def set_video
     @video = Video.find(params[:id])
+    authorize @video
   end
 end

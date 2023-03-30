@@ -14,7 +14,7 @@ function User() {
   const [isActive, setIsActive] = useState(lastSegment);
   const [streams, setStreams] = useState();
   const [videos, setVideos] = useState();
-  const [role, setRole] = useState();
+  const [deletedYet, setDeletedYet] = useState();
   const [createdPlaylists, setCreatedPlaylists] = useState();
   const [savedPlaylists, setSavedPlaylists] = useState();
   const [includedPlaylists, setIncludedPlaylists] = useState();
@@ -29,11 +29,14 @@ function User() {
           setIncludedPlaylists(res.data.createdPlaylists.included);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
-          setRole(res.data.user.data.attributes.role);
+          setDeletedYet(res.data.user.data.attributes.deletedYet);
           setVideos(res.data.videos.data);
           setStreams(res.data.streams.data);
         })
-        .catch((err) => toast(err.message));
+        .catch((err) => {
+          toast(err.response.data.message);
+          navigate('/unavailable');
+        });
     };
 
     getUser();
@@ -41,15 +44,11 @@ function User() {
 
   const softDelete = async () => {
     await axios
-      .put(`/users/${params.userId}`, {
-        user: {
-          role: 'deleted',
-        },
-      })
+      .delete(`/users/${params.userId}`)
       .then((res) => {
         if (res) {
           toast('Baned user');
-          setRole('deleted');
+          setDeletedYet(true);
         }
       })
       .catch((err) => toast(err.response.data.message));
@@ -57,15 +56,11 @@ function User() {
 
   const recover = async () => {
     await axios
-      .put(`/users/${params.userId}`, {
-        user: {
-          role: 'user',
-        },
-      })
+      .put(`/users/${params.userId}/recover`)
       .then((res) => {
         if (res) {
           toast('Recover user');
-          setRole('user');
+          setDeletedYet(false);
         }
       })
       .catch((err) => toast(err.response.data.message));
@@ -110,7 +105,7 @@ function User() {
                 subscribedYet={user.subscribedYet !== null}
                 channelId={user.id}
               />
-              {currentUser.role === 'admin' && role === 'user' && (
+              {currentUser.role === 'admin' && !deletedYet && (
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-500 text-white rounded-2xl ml-3"
@@ -119,7 +114,7 @@ function User() {
                   Ban
                 </button>
               )}
-              {currentUser.role === 'admin' && role === 'deleted' && (
+              {currentUser.role === 'admin' && deletedYet && (
                 <button
                   type="button"
                   className="px-4 py-2 bg-red-500 text-white rounded-2xl ml-3"

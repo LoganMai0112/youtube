@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_28_103842) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_30_032615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,6 +127,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_103842) do
     t.string "uid"
     t.string "name", null: false
     t.integer "role", null: false
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -141,6 +143,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_28_103842) do
     t.integer "status", null: false
     t.integer "likes_count"
     t.integer "comments_count"
+    t.datetime "deleted_at"
+    t.index ["deleted_at"], name: "index_videos_on_deleted_at"
     t.index ["user_id"], name: "index_videos_on_user_id"
   end
 

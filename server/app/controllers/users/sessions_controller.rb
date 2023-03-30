@@ -16,12 +16,12 @@ class Users::SessionsController < Devise::SessionsController
   private
 
   def respond_with(resource, _opts = {})
-    if resource.persisted? && resource.role != 'deleted'
+    if resource.persisted? && !resource.deleted?
       render json: {
         status: { code: 200, message: 'Logged in sucessfully.' },
         data: UserSerializer.new(resource).serializable_hash[:data][:attributes]
       }, status: :ok
-    elsif resource.role == 'deleted'
+    elsif resource.deleted?
       render json: { message: 'Your account is banned' }, status: :unprocessable_entity
     else
       render json: { message: 'Fail to log in' }, status: :unprocessable_entity

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[show update edit destroy]
-  before_action :authenticate_user!, only: %i[update edit destroy]
+  before_action :set_user, only: %i[show update edit destroy recover]
+  before_action :authenticate_user!, only: %i[update edit destroy recover]
 
   def show
     videos = policy_scope(@user.videos.includes({ thumbnail_attachment: :blob }, { source_attachment: { blob: { preview_image_attachment: :blob } } }))
@@ -20,7 +20,8 @@ class UsersController < ApplicationController
     render json: { videos: VideoSerializer.new(videos).serializable_hash,
                    user: UserSerializer.new(@user, options).serializable_hash,
                    streams: StreamSerializer.new(streams).serializable_hash,
-                   createdPlaylists: PlaylistSerializer.new(created_playlists.includes({ videos: [{ thumbnail_attachment: :blob }, { source_attachment: :blob }]}), playlist_options).serializable_hash,
+                   createdPlaylists: PlaylistSerializer.new(created_playlists.includes({ videos: [{ thumbnail_attachment: :blob }, { source_attachment: :blob }] }),
+                                                            playlist_options).serializable_hash,
                    savedPlaylists: PlaylistSerializer.new(saved_playlists).serializable_hash }, status: :ok
   end
 
@@ -37,10 +38,18 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    if @user.destroy
+    if (current_user.user? && @user.really_destroy!) || (current_user.admin? && @user.destroy)
       render json: { message: 'Deleted account' }, status: :ok
     else
       render json: { message: "Some thing went wrong, can't remove account" }, status: :internal_server_error
+    end
+  end
+
+  def recover
+    if @user.restore
+      render json: { message: 'Succuessfully restored' }, status: :ok
+    else
+      render json: { message: 'Unsuccessfully restored' }, status: :internal_server_error
     end
   end
 
@@ -52,10 +61,8 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    if current_user.admin?
-      params.require(:user).permit(:role)
-    else
-      params.require(:user).permit(:cover, :avatar, :name)
-    end
+    return unless current_user.admin?
+
+    params.require(:user).permit(:cover, :avatar, :name)
   end
 end

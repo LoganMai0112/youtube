@@ -32,7 +32,7 @@ function WatchVideo() {
   const [commentsCount, setCommentsCount] = useState();
   const [shareBox, setShareBox] = useState(false);
   const [reportBox, setReportBox] = useState(false);
-  const [videoStatus, setVideoStatus] = useState();
+  const [deletedYet, setDeletedYet] = useState();
   const player = useRef();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -54,7 +54,7 @@ function WatchVideo() {
         .then((res) => {
           const { attributes } = res.data.data;
           setVideo(attributes);
-          setVideoStatus(attributes.status);
+          setDeletedYet(attributes.deletedYet);
           setVideoSource(attributes.videoUrl);
           setChannel(
             findChannel(
@@ -84,13 +84,11 @@ function WatchVideo() {
 
   const softDelete = async () => {
     await axios
-      .put(`/videos/${params.videoId}`, {
-        video: { status: 'deleted' },
-      })
+      .delete(`/videos/${params.videoId}`)
       .then((res) => {
         if (res) {
           toast('Deleted video');
-          setVideoStatus('deleted');
+          setDeletedYet(true);
           navigate('/admin/reports');
         }
       })
@@ -99,12 +97,10 @@ function WatchVideo() {
 
   const recover = async () => {
     await axios
-      .put(`/videos/${params.videoId}`, {
-        video: { status: 'published' },
-      })
+      .put(`/videos/${params.videoId}/recover`)
       .then((res) => {
         if (res) {
-          setVideoStatus('published');
+          setDeletedYet(false);
           toast('Recovery video');
         }
       })
@@ -120,7 +116,7 @@ function WatchVideo() {
           </Player>
         )}
         <div className="flex w-full flex-col mt-4">
-          {videoStatus === 'privated' && (
+          {video && video.status === 'privated' && (
             <div className="p-[1px] bg-hover w-fit">
               <p className="text-text-color">Private</p>
             </div>
@@ -209,7 +205,7 @@ function WatchVideo() {
                   Report
                 </button>
               )}
-              {currentUser.role === 'admin' && videoStatus === 'published' && (
+              {currentUser.role === 'admin' && !deletedYet && (
                 <button
                   type="button"
                   className="text-white bg-red-500/50 px-4 py-2 rounded-3xl hover:text-black flex gap-2 items-center"
@@ -218,7 +214,7 @@ function WatchVideo() {
                   Remove
                 </button>
               )}
-              {currentUser.role === 'admin' && videoStatus === 'deleted' && (
+              {currentUser.role === 'admin' && deletedYet && (
                 <button
                   type="button"
                   className="text-white bg-red-500/50 px-4 py-2 rounded-3xl hover:text-black flex gap-2 items-center"
