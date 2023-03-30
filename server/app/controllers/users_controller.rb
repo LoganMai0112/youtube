@@ -61,8 +61,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    return unless current_user.admin?
-
     params.require(:user).permit(:cover, :avatar, :name)
   end
 end
