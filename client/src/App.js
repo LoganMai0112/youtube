@@ -19,6 +19,7 @@ import WatchLayout from './components/layout/WatchLayout';
 import WatchVideo from './pages/WatchVideo';
 import EditVideo from './pages/EditVideo';
 import Search from './pages/Search';
+import Analytic from './pages/Analytic';
 import 'video-react/dist/video-react.css';
 import 'react-toastify/dist/ReactToastify.css';
 import Stream from './components/Stream';
@@ -77,6 +78,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<SettingLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/analytics" element={<Analytic />} />
                 <Route path="/settings" element={<Setting />} />
               </Route>
             </Route>
