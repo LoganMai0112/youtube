@@ -24,7 +24,7 @@ function LogOutButton() {
       })
       .catch((err) => {
         localStorage.clear();
-        toast(err.message);
+        toast(err.response.data.message);
         navigate('/login');
       });
   };

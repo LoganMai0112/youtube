@@ -1,11 +1,14 @@
-import React from 'react';
+/* eslint-disable react/destructuring-assignment */
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AiFillYoutube } from 'react-icons/ai';
+import { AiFillYoutube, AiFillFlag } from 'react-icons/ai';
 import { FaStream } from 'react-icons/fa';
 import { RiSettingsFill, RiDashboardFill } from 'react-icons/ri';
 import SideBarButton from './SideBarButton';
+import { UserContext } from '../../contexts/UserContext';
 
 function SettingSideBar() {
+  const currentUser = useContext(UserContext);
   return (
     <div className="bg-sec h-full 2xl:min-w-[320px] xl:min-w-[240px] min-w-[240px] flex flex-col [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted">
       <div className="py-4 2xl:py-8 px-10 flex flex-row items-center justify-between">
@@ -23,6 +26,13 @@ function SettingSideBar() {
             <SideBarButton icon={<RiDashboardFill />} text="Dashboard" />
           </Link>
         </section>
+        {currentUser.role === 'admin' && (
+          <section>
+            <Link to="/admin/reports">
+              <SideBarButton icon={<AiFillFlag />} text="Report" />
+            </Link>
+          </section>
+        )}
         <section>
           <Link to="/settings">
             <SideBarButton icon={<RiSettingsFill />} text="Settings" />

@@ -1,8 +1,10 @@
 require 'open-uri'
 class User < ApplicationRecord
+  include SoftDeleteConcern
   include Devise::JWT::RevocationStrategies::JTIMatcher
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+
   searchkick
 
   enum role: { admin: 0, user: 1 }
@@ -26,6 +28,7 @@ class User < ApplicationRecord
   has_many :streams, dependent: :destroy
   has_many :user_playlists, dependent: :destroy
   has_many :playlists, through: :user_playlists
+  has_many :reports, as: :reportable, dependent: :destroy
 
   validates :role, presence: true
   validates :name, presence: true

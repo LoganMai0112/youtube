@@ -14,6 +14,7 @@ function User() {
   const [isActive, setIsActive] = useState(lastSegment);
   const [streams, setStreams] = useState();
   const [videos, setVideos] = useState();
+  const [deletedYet, setDeletedYet] = useState();
   const [createdPlaylists, setCreatedPlaylists] = useState();
   const [savedPlaylists, setSavedPlaylists] = useState();
   const [includedPlaylists, setIncludedPlaylists] = useState();
@@ -28,14 +29,42 @@ function User() {
           setIncludedPlaylists(res.data.createdPlaylists.included);
           setSavedPlaylists(res.data.savedPlaylists.data);
           setUser(res.data.user.data.attributes);
+          setDeletedYet(res.data.user.data.attributes.deletedYet);
           setVideos(res.data.videos.data);
           setStreams(res.data.streams.data);
         })
-        .catch((err) => toast(err.message));
+        .catch((err) => {
+          toast(err.response.data.message);
+          navigate('/unavailable');
+        });
     };
 
     getUser();
   }, []);
+
+  const softDelete = async () => {
+    await axios
+      .delete(`/users/${params.userId}`)
+      .then((res) => {
+        if (res) {
+          toast('Baned user');
+          setDeletedYet(true);
+        }
+      })
+      .catch((err) => toast(err.response.data.message));
+  };
+
+  const recover = async () => {
+    await axios
+      .put(`/users/${params.userId}/recover`)
+      .then((res) => {
+        if (res) {
+          toast('Recover user');
+          setDeletedYet(false);
+        }
+      })
+      .catch((err) => toast(err.response.data.message));
+  };
 
   return (
     <div>
@@ -64,7 +93,7 @@ function User() {
               )}
             </div>
           </div>
-          {currentUser.id === user.id ? (
+          {currentUser.id === user.id && currentUser.role !== 'admin' ? (
             <Link to="/settings">
               <div className="px-4 py-2 bg-main-color hover:bg-yellow-600 rounded-2xl">
                 Manage channel
@@ -76,6 +105,24 @@ function User() {
                 subscribedYet={user.subscribedYet !== null}
                 channelId={user.id}
               />
+              {currentUser.role === 'admin' && !deletedYet && (
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white rounded-2xl ml-3"
+                  onClick={() => softDelete()}
+                >
+                  Ban
+                </button>
+              )}
+              {currentUser.role === 'admin' && deletedYet && (
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 text-white rounded-2xl ml-3"
+                  onClick={() => recover()}
+                >
+                  Recover
+                </button>
+              )}
             </div>
           )}
         </div>

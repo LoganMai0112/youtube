@@ -33,12 +33,22 @@ import Setting from './pages/Setting';
 import useLocalStorage from './hooks/useLocalStorage';
 import Playlist from './pages/Playlist';
 import Unavailable from './pages/Unavailable';
+import Report from './components/Report';
 
 function ProtectedRoute() {
   const currentUser = useLocalStorage('current_user')[0];
   if (Object.keys(currentUser).length === 0) {
     return <Navigate to="/login" replace />;
   }
+  return <Outlet />;
+}
+
+function AdminRoute() {
+  const currentUser = useLocalStorage('current_user')[0];
+  if (currentUser.role !== 'admin') {
+    return <Navigate to="/" replace />;
+  }
+
   return <Outlet />;
 }
 
@@ -78,6 +88,9 @@ function App() {
               <Route element={<SettingLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/settings" element={<Setting />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="/admin/reports" element={<Report />} />
+                </Route>
               </Route>
             </Route>
           </Routes>
