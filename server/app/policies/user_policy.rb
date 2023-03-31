@@ -2,16 +2,20 @@ class UserPolicy < ApplicationPolicy
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
     def resolve
-      scope.all
+      scope.without_deleted
     end
   end
 
   def show?
-    record
+    if record.deleted?
+      user&.admin?
+    else
+      record
+    end
   end
 
   def update?
-    user && record == user
+    record == user
   end
 
   def edit?
@@ -19,6 +23,10 @@ class UserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record == user
+    user&.admin? || record == user
+  end
+
+  def recover?
+    user&.admin?
   end
 end

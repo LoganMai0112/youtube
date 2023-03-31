@@ -16,6 +16,12 @@ class VideoSerializer
     Subscribe.find_by(subscriber_id: params[:current_user].id, subscribed_id: video.user.id)
   end
 
+  attribute :deleted_yet, if: proc { |_video, params|
+                                params[:current_user]&.admin?
+                              } do |video, _|
+    video&.deleted?
+  end
+
   attribute :sum_like_count, if: proc { |_video, params|
                                    params[:current_user].present?
                                  } do |video, _|
