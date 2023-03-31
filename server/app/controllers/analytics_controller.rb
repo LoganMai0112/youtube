@@ -1,2 +1,0 @@
-class AnalyticsController < ApplicationController
-end

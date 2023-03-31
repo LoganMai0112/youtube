@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   end
 
   get '/users/:id/edit', to: 'users#edit'
+  get '/analytics', to: 'users#analytic'
 
   get '/search', to: 'searchs#search'
 
