@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { AiTwotoneBell, AiFillYoutube } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
@@ -11,10 +11,24 @@ function Header({ dropdownOpen }) {
   const useUser = useContext(UserContext);
   const useUserSignedIn = useContext(UserSignedInContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
 
   return (
     <div className="p-5 pb-0 mb-5 w-full h-fit flex justify-between items-center sticky top-0 bg-main z-10">
@@ -45,7 +59,10 @@ function Header({ dropdownOpen }) {
             />
           </button>
           {menuOpen && (
-            <div className="absolute flex flex-col right-0 top-16 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
+            <div
+              ref={menuRef}
+              className="absolute flex flex-col right-0 top-16 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl"
+            >
               <section>
                 <Link to={`/users/${useUser.id}`}>
                   <div className="flex flex-row px-3 items-center">
