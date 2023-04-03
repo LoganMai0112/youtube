@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
@@ -34,6 +35,7 @@ function WatchVideo() {
   const [reportBox, setReportBox] = useState(false);
   const [deletedYet, setDeletedYet] = useState();
   const player = useRef();
+  const [playerState, setPlayerState] = useState();
   const currentUser = useContext(UserContext);
   const params = useParams();
   const navigate = useNavigate();
@@ -82,6 +84,23 @@ function WatchVideo() {
     getVideo();
   }, [params, videoSource]);
 
+  const countView = async () => {
+    await axios
+      .put(`/videos/${params.videoId}/view`)
+      .then(() => {})
+      .catch((err) => toast(err.message));
+  };
+
+  useEffect(() => {
+    if (
+      playerState &&
+      (playerState.getState().player.hasStarted ||
+        playerState.getState().player.autoplay)
+    ) {
+      countView();
+    }
+  }, [playerState && playerState.getState()]);
+
   const softDelete = async () => {
     await axios
       .delete(`/videos/${params.videoId}`)
@@ -111,7 +130,7 @@ function WatchVideo() {
     <div className="flex h-full w-full">
       <div className="flex-1 px-5 h-fit">
         {videoSource && (
-          <Player ref={player} autoPlay>
+          <Player ref={(player) => setPlayerState(player)} autoPlay>
             <source src={videoSource} />
           </Player>
         )}
@@ -238,7 +257,9 @@ function WatchVideo() {
                 setShowDescription(true);
               }}
             >
-              <span>view - {moment(video.createdAt).fromNow()}</span>
+              <span>
+                {video.views || 0} views - {moment(video.createdAt).fromNow()}
+              </span>
               <br />
               {parse(video.description ? video.description : '')}
             </p>

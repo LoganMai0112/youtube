@@ -31,6 +31,7 @@ function RecommendSide() {
           title={video.attributes.title}
           channel={findChannel(video.relationships.user.data.id)}
           createdAt={video.attributes.createdAt}
+          view={video.attributes.views}
         />
       ))}
     </div>

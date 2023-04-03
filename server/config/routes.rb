@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'views/update'
+  get 'views/show'
   devise_for :users, path: '',
                      path_names: {
                        sign_in: 'login',
@@ -11,7 +13,8 @@ Rails.application.routes.draw do
                        omniauth_callbacks: 'users/omniauth_callbacks'
                      }
   resources :videos do
-    resource :like
+    resource :like, only: %i[create destroy]
+    resource :view, only: %i[update]
     resources :comments, only: %i[create destroy update index]
   end
 

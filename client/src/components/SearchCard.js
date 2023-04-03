@@ -3,7 +3,15 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import parse from 'html-react-parser';
 
-function SearchCard({ id, title, channel, createdAt, thumbnail, description }) {
+function SearchCard({
+  id,
+  title,
+  channel,
+  createdAt,
+  thumbnail,
+  description,
+  view,
+}) {
   return (
     <Link to={`/videos/${id}`} replace>
       <div className="w-full h-fit flex flex-row cursor-pointer">
@@ -18,7 +26,7 @@ function SearchCard({ id, title, channel, createdAt, thumbnail, description }) {
               {title}
             </p>
             <div className="flex items-center text-text-color text-sm">
-              <p>view</p>
+              <p>{view || 0} view</p>
               <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
               <p>{moment(createdAt).fromNow()}</p>
             </div>

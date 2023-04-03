@@ -16,6 +16,10 @@ class VideoSerializer
     Subscribe.find_by(subscriber_id: params[:current_user].id, subscribed_id: video.user.id)
   end
 
+  attribute :views do |video|
+    video.view&.number
+  end
+
   attribute :deleted_yet, if: proc { |_video, params|
                                 params[:current_user]&.admin?
                               } do |video, _|

@@ -157,6 +157,7 @@ function Search() {
             createdAt={video.attributes.createdAt}
             thumbnail={video.attributes.thumbnailUrl}
             description={video.attributes.description}
+            view={video.attributes.views}
           />
         ))}
       {!isLoading &&

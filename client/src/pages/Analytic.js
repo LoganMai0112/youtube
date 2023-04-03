@@ -20,20 +20,20 @@ function Analytic() {
         id: 'basic-bar',
       },
       xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+        categories: [],
       },
     },
     series: [
       {
         name: 'series-1',
-        data: [30, 40, 45, 50, 49, 60, 70, 91],
+        data: [],
       },
     ],
   });
 
   useEffect(() => {
-    const getAnalytic = () => {
-      axios
+    const getAnalytic = async () => {
+      await axios
         .get('/analytics')
         .then((res) => {
           setDataChannel(res.data.channelAnalytics);
@@ -68,7 +68,7 @@ function Analytic() {
   };
 
   useEffect(() => {
-    if (dataAnalytics) {
+    if (Object.keys(dataAnalytics).length !== 0) {
       if (type === 'subscriber') {
         setChartValue(type, dataAnalytics.subscribers_sum);
       } else if (type === 'like') {
@@ -145,6 +145,7 @@ function Analytic() {
       <div className="w-1/3 right-0 h-full overflow-scroll">
         {videos.map((video) => (
           <div
+            key={video.id}
             onClick={() => {
               setDataAnalytics({
                 ...dataAnalytics,
