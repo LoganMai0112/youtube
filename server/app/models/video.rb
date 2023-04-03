@@ -10,8 +10,7 @@ class Video < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :playlist_item, dependent: :destroy
   has_many :reports, as: :reportable, dependent: :destroy
-
-  has_one :view
+  has_many :views, dependent: :destroy
 
   belongs_to :user
 

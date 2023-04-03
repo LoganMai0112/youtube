@@ -75,7 +75,7 @@ function Home() {
             thumbnailUrl={video.attributes.thumbnailUrl}
             channel={findChannel(video.relationships.user.data.id)}
             createdAt={video.attributes.createdAt}
-            view={video.attributes.views}
+            view={video.attributes.viewsCount}
           />
         ))}
       </div>

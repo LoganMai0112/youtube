@@ -86,7 +86,7 @@ function WatchVideo() {
 
   const countView = async () => {
     await axios
-      .put(`/videos/${params.videoId}/view`)
+      .post(`/videos/${params.videoId}/view`)
       .then(() => {})
       .catch((err) => toast(err.message));
   };
@@ -258,7 +258,7 @@ function WatchVideo() {
               }}
             >
               <span>
-                {video.views || 0} views - {moment(video.createdAt).fromNow()}
+                {video.viewsCount} views - {moment(video.createdAt).fromNow()}
               </span>
               <br />
               {parse(video.description ? video.description : '')}

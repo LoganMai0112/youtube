@@ -390,7 +390,7 @@ function Playlist() {
                   video.relationships.user.data.id,
                   includedVideo
                 )}
-                view={video.attributes.views}
+                view={video.attributes.viewsCount}
               />
               <div className="relative h-fit">
                 <button

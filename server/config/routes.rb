@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'views/update'
-  get 'views/show'
   devise_for :users, path: '',
                      path_names: {
                        sign_in: 'login',
@@ -14,7 +12,7 @@ Rails.application.routes.draw do
                      }
   resources :videos do
     resource :like, only: %i[create destroy]
-    resource :view, only: %i[update]
+    resource :view, only: %i[create]
     resources :comments, only: %i[create destroy update index]
   end
 

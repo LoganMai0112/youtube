@@ -57,10 +57,11 @@ class UsersController < ApplicationController
     subscribers_channel = current_user.subscribers.group_by_day(:created_at).count
     likes_channel = Like.joins(video: :user).where(video: { user: current_user }).group_by_day(:created_at).count
     comments_channel = Comment.joins(video: :user).where(video: { user: current_user }).group_by_day(:created_at).count
+    views_channel = View.joins(video: :user).where(video: { user: current_user }).group_by_day(:created_at).count
     options = { params: { current_user: current_user } }
     videos = VideoSerializer.new(Video.without_deleted.where(user: current_user).includes(:user, { thumbnail_attachment: :blob }, { source_attachment: { blob: { preview_image_attachment: :blob } } }), options).serializable_hash
 
-    render json: { channelAnalytics: { subscribers_sum: subscribers_channel, likes_sum: likes_channel, comments_sum: comments_channel },
+    render json: { channelAnalytics: { subscribers_sum: subscribers_channel, likes_sum: likes_channel, comments_sum: comments_channel, views_sum: views_channel },
                    videos: videos }, status: :ok
   end
 

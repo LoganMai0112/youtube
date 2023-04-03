@@ -6,13 +6,16 @@ import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import axios from 'axios';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 function Analytic() {
   const [type, setType] = useState('view');
   const [videos, setVideos] = useState([]);
+  const [viewing, setViewing] = useState(null);
   const [dataAnalytics, setDataAnalytics] = useState({});
   const [dataChannel, setDataChannel] = useState();
   const [likesCount, setLikesCount] = useState(0);
+  const [viewsCount, setViewsCount] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
   const [chart, setChart] = useState({
     options: {
@@ -31,6 +34,18 @@ function Analytic() {
     ],
   });
 
+  const setCount = (data) => {
+    let arr = Object.values(data.likes_sum);
+    let sum = arr.reduce((acc, curr) => acc + curr, 0);
+    setLikesCount(sum);
+    arr = Object.values(data.comments_sum);
+    sum = arr.reduce((acc, curr) => acc + curr, 0);
+    setCommentsCount(sum);
+    arr = Object.values(data.views_sum);
+    sum = arr.reduce((acc, curr) => acc + curr, 0);
+    setViewsCount(sum);
+  };
+
   useEffect(() => {
     const getAnalytic = async () => {
       await axios
@@ -39,14 +54,9 @@ function Analytic() {
           setDataChannel(res.data.channelAnalytics);
           setDataAnalytics(res.data.channelAnalytics);
           setVideos(res.data.videos.data);
-          setLikesCount(
-            Object.keys(res.data.channelAnalytics.likes_sum).length
-          );
-          setCommentsCount(
-            Object.keys(res.data.channelAnalytics.comments_sum).length
-          );
+          setCount(res.data.channelAnalytics);
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => toast(err.message));
     };
 
     getAnalytic();
@@ -75,6 +85,8 @@ function Analytic() {
         setChartValue(type, dataAnalytics.likes_sum);
       } else if (type === 'comment') {
         setChartValue(type, dataAnalytics.comments_sum);
+      } else if (type === 'view') {
+        setChartValue(type, dataAnalytics.views_sum);
       }
     }
   }, [type, dataAnalytics]);
@@ -88,9 +100,10 @@ function Analytic() {
               likes_sum: dataChannel.likes_sum,
               comments_sum: dataChannel.comments_sum,
               subscribers_sum: dataChannel.subscribers_sum,
+              views_sum: dataChannel.views_sum,
             });
-            setLikesCount(Object.keys(dataChannel.likes_sum).length);
-            setCommentsCount(Object.keys(dataChannel.comments_sum).length);
+            setCount(dataChannel);
+            setViewing(null);
           }}
           className="text-white text-2xl mb-5 cursor-pointer"
         >
@@ -105,7 +118,7 @@ function Analytic() {
                 type === 'view' ? 'bg-slate-700' : ''
               }`}
             >
-              Views
+              Views {viewsCount || 0}
             </button>
             <button
               type="button"
@@ -151,11 +164,16 @@ function Analytic() {
                 ...dataAnalytics,
                 likes_sum: video.attributes.likeData,
                 comments_sum: video.attributes.commentData,
+                views_sum: video.attributes.viewData,
               });
+              setViewsCount(video.attributes.viewsCount);
               setLikesCount(video.attributes.likesCount);
               setCommentsCount(video.attributes.commentsCount);
+              setViewing(video.id);
             }}
-            className="flex py-3 border-b border-text-color cursor-pointer hover:bg-slate-600"
+            className={`flex py-3 border-b border-text-color cursor-pointer hover:bg-slate-600 ${
+              viewing === video.id ? 'bg-slate-600' : ''
+            }`}
           >
             <img
               className="w-[140px] px-3"
