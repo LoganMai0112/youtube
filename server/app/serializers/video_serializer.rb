@@ -27,8 +27,8 @@ class VideoSerializer
   end
 
   attribute :like_data, if: proc { |_video, params|
-                                   params[:current_user].present?
-                                 } do |video, _|
+                              params[:current_user].present?
+                            } do |video, _|
     video.likes.group_by_day(:created_at).count
   end
 
@@ -38,7 +38,7 @@ class VideoSerializer
     video.comments.group_by_day(:created_at).count
   end
 
-  attribute :view_data, if: proc { |_video, params| 
+  attribute :view_data, if: proc { |_video, params|
     params[:current_user].present?
   } do |video, _|
     video.views.group_by_day(:created_at).count
