@@ -189,6 +189,11 @@ function Header({ dropdownOpen }) {
                         </div>
                       </Link>
                     ))}
+                  {notifications.length <= 0 && (
+                    <div className="text-white flex justify-center items-center h-32">
+                      There is no notification
+                    </div>
+                  )}
                 </div>
               </div>
             )}
