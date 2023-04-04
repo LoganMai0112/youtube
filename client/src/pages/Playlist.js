@@ -302,7 +302,7 @@ function Playlist() {
                 <SlActionRedo className="w-6 h-6 text-white" />
               </button>
             )}
-            <div className="relative">
+            <div ref={menuRef} className="relative">
               {playlist && createdOrSaved && (
                 <button
                   type="button"
@@ -314,10 +314,7 @@ function Playlist() {
               )}
 
               {dropMenu && (
-                <div
-                  ref={menuRef}
-                  className="absolute flex flex-col left-0 top-full bg-main w-fit h-fit [&>section]:py-2 [&>section]:hover:bg-neutral-500 py-4 rounded-xl"
-                >
+                <div className="absolute flex flex-col left-0 top-full bg-main w-fit h-fit [&>section]:py-2 [&>section]:hover:bg-neutral-500 py-4 rounded-xl">
                   <section>
                     <button
                       type="button"
@@ -425,16 +422,15 @@ function Playlist() {
                   includedVideo
                 )}
               />
-              <div className="relative h-fit">
+              <div ref={multipleDropdownRef} className="relative h-fit">
                 <button
                   type="button"
                   onClick={() =>
                     setMultipleDropdown((prevState) => {
                       if (prevState === video.id) {
-                        setMultipleDropdown(null);
-                      } else {
-                        setMultipleDropdown(video.id);
+                        return null;
                       }
+                      return video.id;
                     })
                   }
                   className={`p-2 rounded-full hover:bg-white/25 bg-white/10 group-hover:block ${
@@ -444,10 +440,7 @@ function Playlist() {
                   <BsThreeDotsVertical className="w-6 h-6 text-white" />
                 </button>
                 {multipleDropdown === video.id && (
-                  <div
-                    ref={multipleDropdownRef}
-                    className="absolute flex flex-col right-0 top-full bg-main w-fit h-fit [&>section]:py-2 py-4 rounded-xl z-10"
-                  >
+                  <div className="absolute flex flex-col right-0 top-full bg-main w-fit h-fit [&>section]:py-2 py-4 rounded-xl z-10">
                     {createdOrSaved && createdOrSaved === 'created' && (
                       <section className="hover:bg-neutral-500">
                         <button

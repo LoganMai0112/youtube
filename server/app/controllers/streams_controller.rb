@@ -14,6 +14,7 @@ class StreamsController < ApplicationController
     authorize stream
 
     if stream.save
+      CreateNotificationsJob.perform_later(stream: stream, sender: current_user)
       render json: StreamSerializer.new(stream).serializable_hash[:data][:attributes], status: :created
     else
       render json: { message: "Can't create stream" }, status: :internal_server_error

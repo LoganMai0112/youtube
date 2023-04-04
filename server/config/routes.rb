@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   devise_for :users, path: '',
                      path_names: {
@@ -24,6 +26,8 @@ Rails.application.routes.draw do
     resource :user_playlist, only: %i[create destroy]
   end
 
+  resources :notifications, only: [:index]
+
   get '/users/:id/edit', to: 'users#edit'
 
   get '/search', to: 'searchs#search'
@@ -36,6 +40,7 @@ Rails.application.routes.draw do
   end
 
   mount ActionCable.server, at: '/cable'
+  mount Sidekiq::Web => '/sidekiq'
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

@@ -13,6 +13,7 @@ class VideosController < ApplicationController
     video = Video.new(video_params)
     authorize video
     if video.save
+      CreateNotificationsJob.perform_later(video: video, sender: current_user) if video.published?
       render json: VideoSerializer.new(video).serializable_hash[:data][:attributes], status: :created
     else
       render json: { message: 'Unsuccessfully created' }, status: :internal_server_error
