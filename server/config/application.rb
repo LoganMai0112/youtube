@@ -11,6 +11,8 @@ module Server
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    config.active_job.queue_adapter = :sidekiq
+
     # This also configures session_options for use below
     config.session_store :cookie_store, key: '_interslice_session'
 

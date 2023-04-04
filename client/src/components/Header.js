@@ -1,7 +1,13 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { AiTwotoneBell, AiFillYoutube } from 'react-icons/ai';
+import { createConsumer } from '@rails/actioncable';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import LogOutButton from './LogOutButton';
 import CreateVideoButton from './CreateVideoButton';
@@ -11,7 +17,10 @@ function Header({ dropdownOpen }) {
   const useUser = useContext(UserContext);
   const useUserSignedIn = useContext(UserSignedInContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notiBox, setNotiBox] = useState(false);
   const menuRef = useRef();
+  const notiRef = useRef();
+  const [notifications, setNotifications] = useState([]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -30,6 +39,46 @@ function Header({ dropdownOpen }) {
     };
   }, [menuRef]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notiRef.current && !notiRef.current.contains(event.target)) {
+        setNotiBox(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [notiRef]);
+
+  useEffect(() => {
+    const getNotifications = async () => {
+      await axios
+        .get('/notifications')
+        .then((res) => setNotifications(res.data.data))
+        .catch((err) => toast(err.message));
+    };
+
+    getNotifications();
+  }, []);
+
+  useEffect(() => {
+    const cable = createConsumer('ws://localhost:3001/cable');
+    const notificationChannel = cable.subscriptions.create(
+      'NotificationsChannel',
+      {
+        received: (data) => {
+          setNotifications((prev) => [data.notification.data, ...prev]);
+        },
+      }
+    );
+
+    return () => {
+      cable.subscriptions.remove(notificationChannel);
+    };
+  }, []);
+
   return (
     <div className="p-5 pb-0 mb-5 w-full h-fit flex justify-between items-center sticky top-0 bg-main z-10">
       {!dropdownOpen && (
@@ -41,12 +90,66 @@ function Header({ dropdownOpen }) {
       {useUserSignedIn && (
         <div className="flex items-center gap-2 relative">
           <CreateVideoButton />
-          <button
-            type="button"
-            className="group rounded-full p-3 hover:bg-hover relative"
-          >
-            <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
-          </button>
+          <div ref={notiRef} className="relative">
+            <span className="absolute flex h-3 w-3 right-2 top-2 z-10">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500" />
+            </span>
+            <button
+              type="button"
+              onClick={() => setNotiBox(!notiBox)}
+              className="group rounded-full p-3 hover:bg-hover relative"
+            >
+              <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
+            </button>
+            {notiBox && (
+              <div className="absolute top-full right-0 w-[500px] rounded-2xl pb-5 bg-slate-600">
+                <div className="py-2 px-5 text-xl text-white w-full">
+                  Notifications
+                </div>
+                <div className="overflow-y-scroll max-h-96">
+                  {notifications.length > 0 &&
+                    notifications.map((notification) => (
+                      <Link
+                        onClick={() => setNotiBox(false)}
+                        to={`/${notification.attributes.notifiableType.toLowerCase()}s/${
+                          notification.attributes.notifiableId
+                        }`}
+                      >
+                        <div className="px-5 w-full py-3 hover:bg-gray-500 cursor-pointer">
+                          <div className="flex justify-between">
+                            <div className="flex items-center">
+                              <Link
+                                to={`/users/${notification.attributes.userId}`}
+                              >
+                                <img
+                                  className="rounded-full w-14 h-14 object-cover"
+                                  src={notification.attributes.avatarUrl}
+                                  alt="avatar"
+                                />
+                              </Link>
+                              <div className="text-white ml-4">
+                                <p>{notification.attributes.content}</p>
+                                <p>
+                                  {moment(
+                                    notification.attributes.createAt
+                                  ).fromNow()}
+                                </p>
+                              </div>
+                            </div>
+                            <img
+                              className="w-24"
+                              src={notification.attributes.thumbnailUrl}
+                              alt="thumbnail"
+                            />
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => toggleMenu()}

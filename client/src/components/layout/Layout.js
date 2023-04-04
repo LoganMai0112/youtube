@@ -13,6 +13,7 @@ function Layout() {
   useEffect(() => {
     function handleClickOutside(event) {
       if (
+        modalRef.current &&
         modalRef.current.contains(event.target) &&
         !sidebarRef.current.contains(event.target)
       ) {
