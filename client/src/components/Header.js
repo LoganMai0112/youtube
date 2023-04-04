@@ -21,6 +21,7 @@ function Header({ dropdownOpen }) {
   const menuRef = useRef();
   const notiRef = useRef();
   const [notifications, setNotifications] = useState([]);
+  const [haveUnread, setHaveUnread] = useState(false);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -79,6 +80,37 @@ function Header({ dropdownOpen }) {
     };
   }, []);
 
+  useEffect(() => {
+    const havingUnread = notifications.some((notification) => {
+      if (notification.attributes.read === false) {
+        return true;
+      }
+      return false;
+    });
+
+    setHaveUnread(havingUnread);
+  }, [notifications]);
+
+  const readNotification = (notificationId, index) => {
+    axios
+      .put(`/notifications/${notificationId}`, {
+        notification: { read: true },
+      })
+      .then((res) => {
+        if (res) {
+          setNotifications((prevState) => [
+            ...prevState.slice(0, index),
+            {
+              ...notifications[index],
+              attributes: { ...notifications[index].attributes, read: true },
+            },
+            ...prevState.slice(index + 1),
+          ]);
+        }
+      })
+      .catch((err) => toast(err.message));
+  };
+
   return (
     <div className="p-5 pb-0 mb-5 w-full h-fit flex justify-between items-center sticky top-0 bg-main z-10">
       {!dropdownOpen && (
@@ -91,10 +123,12 @@ function Header({ dropdownOpen }) {
         <div className="flex items-center gap-2 relative">
           <CreateVideoButton />
           <div ref={notiRef} className="relative">
-            <span className="absolute flex h-3 w-3 right-2 top-2 z-10">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500" />
-            </span>
+            {haveUnread && (
+              <span className="absolute flex h-3 w-3 right-2 top-2 z-10">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500" />
+              </span>
+            )}
             <button
               type="button"
               onClick={() => setNotiBox(!notiBox)}
@@ -103,20 +137,29 @@ function Header({ dropdownOpen }) {
               <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
             </button>
             {notiBox && (
-              <div className="absolute top-full right-0 w-[500px] rounded-2xl pb-5 bg-slate-600">
+              <div className="absolute top-full right-0 w-[500px] rounded-2xl pb-5 bg-gray-900">
                 <div className="py-2 px-5 text-xl text-white w-full">
                   Notifications
                 </div>
                 <div className="overflow-y-scroll max-h-96">
                   {notifications.length > 0 &&
-                    notifications.map((notification) => (
+                    notifications.map((notification, index) => (
                       <Link
-                        onClick={() => setNotiBox(false)}
+                        onClick={() => {
+                          setNotiBox(false);
+                          readNotification(notification.id, index);
+                        }}
                         to={`/${notification.attributes.notifiableType.toLowerCase()}s/${
                           notification.attributes.notifiableId
                         }`}
                       >
-                        <div className="px-5 w-full py-3 hover:bg-gray-500 cursor-pointer">
+                        <div
+                          className={`px-5 w-full py-3 cursor-pointer ${
+                            notification.attributes.read === false
+                              ? 'bg-gray-500'
+                              : ''
+                          }`}
+                        >
                           <div className="flex justify-between">
                             <div className="flex items-center">
                               <Link
@@ -132,7 +175,7 @@ function Header({ dropdownOpen }) {
                                 <p>{notification.attributes.content}</p>
                                 <p>
                                   {moment(
-                                    notification.attributes.createAt
+                                    notification.attributes.createdAt
                                   ).fromNow()}
                                 </p>
                               </div>

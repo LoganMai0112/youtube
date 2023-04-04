@@ -1,7 +1,7 @@
 class NotificationSerializer
   include JSONAPI::Serializer
   set_key_transform :camel_lower
-  attributes :content, :notifiable_id, :notifiable_type, :user_id, :created_at
+  attributes :content, :notifiable_id, :notifiable_type, :user_id, :created_at, :read
 
   attribute :avatar_url do |notification|
     notification.user.avatar_url

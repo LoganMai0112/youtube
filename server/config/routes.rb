@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     resource :user_playlist, only: %i[create destroy]
   end
 
-  resources :notifications, only: [:index]
+  resources :notifications, only: %i[index update]
 
   get '/users/:id/edit', to: 'users#edit'
 
