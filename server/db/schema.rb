@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_30_032615) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_03_043516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -144,8 +144,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_032615) do
     t.integer "likes_count"
     t.integer "comments_count"
     t.datetime "deleted_at"
+    t.integer "views_count"
     t.index ["deleted_at"], name: "index_videos_on_deleted_at"
     t.index ["user_id"], name: "index_videos_on_user_id"
+  end
+
+  create_table "views", force: :cascade do |t|
+    t.bigint "video_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_views_on_user_id"
+    t.index ["video_id"], name: "index_views_on_video_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -160,4 +170,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_30_032615) do
   add_foreign_key "user_playlists", "playlists"
   add_foreign_key "user_playlists", "users"
   add_foreign_key "videos", "users"
+  add_foreign_key "views", "users"
+  add_foreign_key "views", "videos"
 end

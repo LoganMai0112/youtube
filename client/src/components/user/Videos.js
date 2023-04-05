@@ -15,6 +15,7 @@ function Videos() {
             title={video.attributes.title}
             thumbnailUrl={video.attributes.thumbnailUrl}
             createdAt={video.attributes.createdAt}
+            view={video.attributes.viewsCount}
           />
         ))}
     </div>

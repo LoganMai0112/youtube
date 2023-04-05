@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { AiFillYoutube, AiFillFlag } from 'react-icons/ai';
 import { FaStream } from 'react-icons/fa';
 import { RiSettingsFill, RiDashboardFill } from 'react-icons/ri';
+import { IoMdAnalytics } from 'react-icons/io';
 import SideBarButton from './SideBarButton';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -33,6 +34,11 @@ function SettingSideBar() {
             </Link>
           </section>
         )}
+        <section>
+          <Link to="/analytics">
+            <SideBarButton icon={<IoMdAnalytics />} text="Analytics" />
+          </Link>
+        </section>
         <section>
           <Link to="/settings">
             <SideBarButton icon={<RiSettingsFill />} text="Settings" />

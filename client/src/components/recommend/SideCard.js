@@ -10,6 +10,7 @@ export default function SideCard({
   createdAt,
   thumbnail,
   type,
+  view,
 }) {
   return (
     <Link to={type ? `/${type}s/${id}` : `/videos/${id}`} replace>
@@ -34,7 +35,7 @@ export default function SideCard({
             <div className="flex items-center text-text-color text-sm">
               {type !== 'playlist' && (
                 <>
-                  <p>view</p>
+                  <p>{view || 0} views</p>
                   <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
                 </>
               )}

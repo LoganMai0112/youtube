@@ -11,7 +11,8 @@ Rails.application.routes.draw do
                        omniauth_callbacks: 'users/omniauth_callbacks'
                      }
   resources :videos do
-    resource :like
+    resource :like, only: %i[create destroy]
+    resource :view, only: %i[create]
     resources :comments, only: %i[create destroy update index]
   end
 
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
   end
 
   get '/users/:id/edit', to: 'users#edit'
+  get '/analytics', to: 'users#analytic'
 
   get '/search', to: 'searchs#search'
 
