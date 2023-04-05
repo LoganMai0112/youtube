@@ -60,9 +60,10 @@ function Header({ dropdownOpen }) {
         .then((res) => setNotifications(res.data.data))
         .catch((err) => toast(err.message));
     };
-
-    getNotifications();
-  }, []);
+    if (useUserSignedIn) {
+      getNotifications();
+    }
+  }, [useUserSignedIn]);
 
   useEffect(() => {
     const cable = createConsumer('ws://localhost:3001/cable');
