@@ -78,7 +78,6 @@ function WatchVideo() {
             setLiked(false);
           }
           playerState.load();
-          countView();
         })
         .catch((err) => {
           toast(err.response.data.message);
@@ -86,6 +85,7 @@ function WatchVideo() {
         });
     };
 
+    countView();
     getVideo();
   }, [params]);
 
