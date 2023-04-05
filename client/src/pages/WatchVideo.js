@@ -3,7 +3,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -34,7 +34,6 @@ function WatchVideo() {
   const [shareBox, setShareBox] = useState(false);
   const [reportBox, setReportBox] = useState(false);
   const [deletedYet, setDeletedYet] = useState();
-  const player = useRef();
   const [playerState, setPlayerState] = useState();
   const currentUser = useContext(UserContext);
   const params = useParams();
@@ -47,6 +46,13 @@ function WatchVideo() {
       (c) => c.id === channelId && c.type === 'user'
     );
     return videoCreator.attributes;
+  };
+
+  const countView = async () => {
+    await axios
+      .post(`/videos/${params.videoId}/view`)
+      .then(() => {})
+      .catch((err) => toast(err.message));
   };
 
   useEffect(() => {
@@ -71,9 +77,8 @@ function WatchVideo() {
           } else {
             setLiked(false);
           }
-          if (player.current) {
-            player.current.load();
-          }
+          playerState.load();
+          countView();
         })
         .catch((err) => {
           toast(err.response.data.message);
@@ -82,24 +87,7 @@ function WatchVideo() {
     };
 
     getVideo();
-  }, [params, videoSource]);
-
-  const countView = async () => {
-    await axios
-      .post(`/videos/${params.videoId}/view`)
-      .then(() => {})
-      .catch((err) => toast(err.message));
-  };
-
-  useEffect(() => {
-    if (
-      playerState &&
-      (playerState.getState().player.hasStarted ||
-        playerState.getState().player.autoplay)
-    ) {
-      countView();
-    }
-  }, [playerState && playerState.getState()]);
+  }, [params]);
 
   const softDelete = async () => {
     await axios
@@ -130,7 +118,12 @@ function WatchVideo() {
     <div className="flex h-full w-full">
       <div className="flex-1 px-5 h-fit">
         {videoSource && (
-          <Player ref={(player) => setPlayerState(player)} autoPlay>
+          <Player
+            ref={(player) => {
+              setPlayerState(player);
+            }}
+            autoPlay
+          >
             <source src={videoSource} />
           </Player>
         )}
@@ -258,7 +251,8 @@ function WatchVideo() {
               }}
             >
               <span>
-                {video.viewsCount} views - {moment(video.createdAt).fromNow()}
+                {video.viewsCount || 0} views -{' '}
+                {moment(video.createdAt).fromNow()}
               </span>
               <br />
               {parse(video.description ? video.description : '')}

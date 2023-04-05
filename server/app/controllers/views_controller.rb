@@ -1,6 +1,6 @@
 class ViewsController < ApplicationController
   def create
-    view = View.new(video_id: params[:video_id], user_id: current_user.id)
+    view = View.new(video_id: params[:video_id])
     if view.save
       render json: view, status: :ok
     else
