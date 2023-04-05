@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../Header';
 import Modal from '../Modal';
@@ -7,6 +7,26 @@ import SubSideBar from '../sidebar/SubSideBar';
 
 function Layout() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const modalRef = useRef();
+  const sidebarRef = useRef();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        modalRef.current &&
+        modalRef.current.contains(event.target) &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [modalRef, sidebarRef]);
+
   return (
     <div className="flex flex-row h-screen w-full">
       <div className="hidden xl:block">
@@ -20,8 +40,10 @@ function Layout() {
       )}
       {dropdownOpen && (
         <div className="xl:hidden">
-          <Modal>
-            <SideBar setDropdownOpen={setDropdownOpen} />
+          <Modal modalRef={modalRef} setDropdownOpen={setDropdownOpen}>
+            <div ref={sidebarRef}>
+              <SideBar setDropdownOpen={setDropdownOpen} />
+            </div>
           </Modal>
         </div>
       )}

@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai';
 import { RiFileUploadFill } from 'react-icons/ri';
 import { CiStreamOn } from 'react-icons/ci';
@@ -14,6 +14,7 @@ function CreateVideoButton() {
   const [createStream, setCreateStream] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const useUserSignedIn = useContext(UserSignedInContext);
+  const menuRef = useRef();
   const navigate = useNavigate();
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -35,6 +36,19 @@ function CreateVideoButton() {
     }
   };
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuRef]);
+
   return (
     <>
       <button
@@ -47,7 +61,10 @@ function CreateVideoButton() {
         </div>
         <p className="text-white">Create</p>
         {menuOpen && (
-          <div className="absolute flex flex-col right-0 top-14 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
+          <div
+            ref={menuRef}
+            className="absolute flex flex-col right-0 top-14 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl"
+          >
             <section>
               <button
                 type="button"

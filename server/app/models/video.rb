@@ -12,6 +12,7 @@ class Video < ApplicationRecord
   has_many :reports, as: :reportable, dependent: :destroy
   has_many :views, dependent: :destroy
 
+  has_many :notifications, as: :notifiable, dependent: :destroy
   belongs_to :user
 
   validates :source, presence: true

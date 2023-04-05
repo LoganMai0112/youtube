@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/destructuring-assignment */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import axios from 'axios';
@@ -20,6 +20,7 @@ function CommentSentence({
   const [editing, setEditing] = useState();
   const [commentInput, setCommentInput] = useState();
   const signedIn = useContext(UserSignedInContext);
+  const boxRef = useRef();
   const [commentContent, setCommentContent] = useState(
     comment.attributes.content
   );
@@ -66,6 +67,19 @@ function CommentSentence({
       });
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (boxRef.current && !boxRef.current.contains(event.target)) {
+        setOpenBox(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [boxRef]);
+
   return (
     <div className="flex items-start">
       <div className="min-w-[48px] mr-3">
@@ -85,12 +99,13 @@ function CommentSentence({
           </div>
           {commenter.id == currentUser.id && signedIn && (
             <div
+              ref={boxRef}
               className="relative cursor-pointer p-2 active:bg-hover rounded-full"
               onClick={() => setOpenBox(!openBox)}
             >
               <BsThreeDotsVertical className="w-5 h-5 fill-text-color hover:fill-white" />
               {openBox && (
-                <div className="absolute top-0 right-full bg-sec py-3 rounded-xl">
+                <div className="absolute top-full right-0 bg-sec py-3 rounded-xl z-10">
                   <button
                     type="button"
                     onClick={() => {

@@ -36,6 +36,8 @@ function Playlist() {
   const signedIn = useContext(UserSignedInContext);
   const fac = new FastAverageColor();
   const imgRef = useRef();
+  const menuRef = useRef();
+  const multipleDropdownRef = useRef();
 
   const findChannel = (channelId, includedData) => {
     const videoCreator = includedData.find(
@@ -72,6 +74,35 @@ function Playlist() {
       })
       .catch((err) => toast(err.response.data.message));
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setDropMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [menuRef]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        multipleDropdownRef.current &&
+        !multipleDropdownRef.current.contains(event.target)
+      ) {
+        setMultipleDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [multipleDropdownRef]);
 
   const updatePrivacy = (status) => {
     axios
@@ -234,7 +265,7 @@ function Playlist() {
             )}
           </div>
           {author && (
-            <Link className="text-white w-full" to={`/users/${author.id}`}>
+            <Link className="text-white w-fit" to={`/users/${author.id}`}>
               {author.attributes.name}
             </Link>
           )}
@@ -271,7 +302,7 @@ function Playlist() {
                 <SlActionRedo className="w-6 h-6 text-white" />
               </button>
             )}
-            <div className="relative">
+            <div ref={menuRef} className="relative">
               {playlist && createdOrSaved && (
                 <button
                   type="button"
@@ -392,16 +423,15 @@ function Playlist() {
                 )}
                 view={video.attributes.viewsCount}
               />
-              <div className="relative h-fit">
+              <div ref={multipleDropdownRef} className="relative h-fit">
                 <button
                   type="button"
                   onClick={() =>
                     setMultipleDropdown((prevState) => {
                       if (prevState === video.id) {
-                        setMultipleDropdown(null);
-                      } else {
-                        setMultipleDropdown(video.id);
+                        return null;
                       }
+                      return video.id;
                     })
                   }
                   className={`p-2 rounded-full hover:bg-white/25 bg-white/10 group-hover:block ${
@@ -411,7 +441,7 @@ function Playlist() {
                   <BsThreeDotsVertical className="w-6 h-6 text-white" />
                 </button>
                 {multipleDropdown === video.id && (
-                  <div className="absolute flex flex-col right-0 top-full bg-main w-fit h-fit [&>section]:py-2 py-4 rounded-xl">
+                  <div className="absolute flex flex-col right-0 top-full bg-main w-fit h-fit [&>section]:py-2 py-4 rounded-xl z-10">
                     {createdOrSaved && createdOrSaved === 'created' && (
                       <section className="hover:bg-neutral-500">
                         <button
