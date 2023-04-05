@@ -173,7 +173,7 @@ function Header({ dropdownOpen }) {
                               </Link>
                               <div className="text-white ml-4">
                                 <p>{notification.attributes.content}</p>
-                                <p>
+                                <p className="text-text-color">
                                   {moment(
                                     notification.attributes.createdAt
                                   ).fromNow()}
