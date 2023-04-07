@@ -1,12 +1,13 @@
 class VideosController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate_user!, only: %i[update create destroy recover]
   before_action :set_video, only: %i[show update destroy recover]
 
   def index
-    videos = policy_scope(Video).all.includes({ user: [{ avatar_attachment: :blob }, { cover_attachment: :blob }] }, { thumbnail_attachment: :blob },
-                                              { source_attachment: { blob: { preview_image_attachment: :blob } } })
+    pagy, videos = pagy(policy_scope(Video).all.includes({ user: [{ avatar_attachment: :blob }, { cover_attachment: :blob }] }, { thumbnail_attachment: :blob },
+                                                         { source_attachment: { blob: { preview_image_attachment: :blob } } }), page: params[:page], items: 12)
     options = { include: [:user] }
-    render json: VideoSerializer.new(videos, options).serializable_hash
+    render json: { videos: VideoSerializer.new(videos.to_a, options).serializable_hash, pagy: pagy }
   end
 
   def create

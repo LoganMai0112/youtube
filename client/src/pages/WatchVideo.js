@@ -78,14 +78,16 @@ function WatchVideo() {
             setLiked(false);
           }
           playerState.load();
-          countView();
         })
         .catch((err) => {
-          toast(err.response.data.message);
-          navigate('/unavailable');
+          if (err.response) {
+            toast(err.response.data.message);
+            navigate('/unavailable');
+          }
         });
     };
 
+    countView();
     getVideo();
   }, [params]);
 

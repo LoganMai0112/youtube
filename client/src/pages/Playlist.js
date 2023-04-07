@@ -209,12 +209,12 @@ function Playlist() {
     <div className="px-2 flex h-full">
       <div
         id="container"
-        className="mt-3 ml-3 h-full w-96 bg-gradient-to-b rounded-3xl fixed"
+        className="mt-3 ml-3 h-full w-96 bg-gradient-to-b rounded-xl fixed"
       >
         <div className="p-6 flex flex-col">
           {videos && videos[0] && (
             <img
-              className="rounded-2xl w-full"
+              className="rounded-xl w-full"
               crossOrigin="anonymous"
               src={videos[0].attributes.thumbnailUrl}
               alt="thumbnail"

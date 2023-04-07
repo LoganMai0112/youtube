@@ -30,6 +30,7 @@
     "react-toastify": "^9.1.1",
     "swiper": "^6.8.4",
     "video-react": "^0.16.0",
+    "vn-badwords": "^1.1.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

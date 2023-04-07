@@ -6,6 +6,7 @@ import moment from 'moment';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { badWords } from 'vn-badwords';
 import { useNavigate } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 
@@ -128,7 +129,11 @@ function CommentSentence({
             </div>
           )}
         </div>
-        {!editing && <p className="text-white font-light">{commentContent}</p>}
+        {!editing && (
+          <p className="text-white font-light">
+            {badWords(commentContent, '*')}
+          </p>
+        )}
         {editing && (
           <form className="flex flex-col w-full items-end">
             <textarea

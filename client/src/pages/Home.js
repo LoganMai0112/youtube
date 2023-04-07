@@ -1,5 +1,7 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -12,20 +14,59 @@ function Home() {
   const [videos, setVideos] = useState([]);
   const [channels, setChannels] = useState([]);
   const [streams, setStreams] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const containerRef = useRef(null);
+  const [maxPages, setMaxPages] = useState(1);
+
+  const handleObserver = (entries) => {
+    const target = entries[0];
+    if (target.isIntersecting) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    };
+
+    const observer = new IntersectionObserver(handleObserver, options);
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const getVideos = async () => {
-      const response = await axios.get('/videos');
-      setVideos(response.data.data);
-      setChannels(response.data.included);
+      setLoading(true);
+      await axios
+        .get(`/videos?page=${page}`)
+        .then((res) => {
+          setMaxPages(res.data.pagy.pages);
+          setVideos((data) => [...data, ...res.data.videos.data]);
+          setChannels((data) => [...data, ...res.data.videos.included]);
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response) {
+            toast(err.response.data.message);
+          }
+        });
     };
-
-    try {
+    if (page <= maxPages) {
       getVideos();
-    } catch (err) {
-      toast('Something went wrong');
     }
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     const getStreams = async () => {
@@ -66,18 +107,42 @@ function Home() {
           ))}
         </Swiper>
       </div>
-      <div className="w-full h-fit px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 overflow-y-scroll">
-        {videos.map((video) => (
-          <Card
-            key={video.id}
-            id={video.id}
-            title={video.attributes.title}
-            thumbnailUrl={video.attributes.thumbnailUrl}
-            channel={findChannel(video.relationships.user.data.id)}
-            createdAt={video.attributes.createdAt}
-            view={video.attributes.viewsCount}
-          />
-        ))}
+      <div className="w-full mb-5 h-fit px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 overflow-y-scroll">
+        {videos &&
+          videos.map((video) => (
+            <Card
+              key={video.id}
+              id={video.id}
+              title={video.attributes.title}
+              thumbnailUrl={video.attributes.thumbnailUrl}
+              channel={findChannel(video.relationships.user.data.id)}
+              createdAt={video.attributes.createdAt}
+              view={video.attributes.viewsCount}
+            />
+          ))}
+      </div>
+      <div ref={containerRef}>
+        {loading && (
+          <div className="w-full h-fit px-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-5 overflow-y-scroll">
+            {Array.from({ length: 12 }).map((_, index) => (
+              <div
+                key={index}
+                role="status"
+                className="w-full rounded shadow animate-pulse"
+              >
+                <div className="flex items-center justify-center w-full aspect-video mb-4 bg-gray-300 rounded dark:bg-gray-700" />
+                <div className="flex items-center mt-4 space-x-3">
+                  <div className="rounded-full w-9 h-9 bg-gray-300" />
+                  <div>
+                    <div className="h-5 bg-gray-200 rounded-md dark:bg-gray-700 w-48 mb-2" />
+                    <div className="w-32 h-2 bg-gray-200 rounded-sm dark:bg-gray-700" />
+                  </div>
+                </div>
+                <span className="sr-only">Loading...</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

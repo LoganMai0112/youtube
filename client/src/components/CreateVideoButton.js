@@ -53,6 +53,7 @@ function CreateVideoButton() {
     <>
       <button
         type="button"
+        ref={menuRef}
         onClick={() => toggleMenu()}
         className="relative rounded-full p-3 bg-sec-color flex items-center w-fit h-fit hover:bg-hover"
       >
@@ -61,10 +62,7 @@ function CreateVideoButton() {
         </div>
         <p className="text-white">Create</p>
         {menuOpen && (
-          <div
-            ref={menuRef}
-            className="absolute flex flex-col right-0 top-14 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl"
-          >
+          <div className="absolute flex flex-col right-0 top-14 bg-sec w-fit h-fit [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted rounded-xl">
             <section>
               <button
                 type="button"

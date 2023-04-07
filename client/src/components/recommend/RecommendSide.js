@@ -23,17 +23,18 @@ function RecommendSide() {
 
   return (
     <div className="w-[420px] flex flex-col gap-2 pr-4">
-      {videos.map((video) => (
-        <SideCard
-          key={video.id}
-          id={video.id}
-          thumbnail={video.attributes.thumbnailUrl}
-          title={video.attributes.title}
-          channel={findChannel(video.relationships.user.data.id)}
-          createdAt={video.attributes.createdAt}
-          view={video.attributes.viewsCount}
-        />
-      ))}
+      {videos &&
+        videos.map((video) => (
+          <SideCard
+            key={video.id}
+            id={video.id}
+            thumbnail={video.attributes.thumbnailUrl}
+            title={video.attributes.title}
+            channel={findChannel(video.relationships.user.data.id)}
+            createdAt={video.attributes.createdAt}
+            view={video.attributes.viewsCount}
+          />
+        ))}
     </div>
   );
 }

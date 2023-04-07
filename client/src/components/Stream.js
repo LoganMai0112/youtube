@@ -55,7 +55,7 @@ export default function Stream() {
         };
       };
     };
-  }, []);
+  }, [streamRef]);
 
   const start = () => {
     const streamingTrue = () => {

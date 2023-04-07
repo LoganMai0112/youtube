@@ -1,6 +1,6 @@
 class Video < ApplicationRecord
+  extend Pagy::Searchkick
   include SoftDeleteConcern
-
   searchkick
 
   enum status: { privated: 0, published: 1 }

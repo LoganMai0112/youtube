@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';

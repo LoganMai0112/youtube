@@ -7286,6 +7286,11 @@ video-react@^0.16.0:
     prop-types "^15.7.2"
     redux "^4.0.1"
 
+vn-badwords@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.npmjs.org/vn-badwords/-/vn-badwords-1.1.9.tgz"
+  integrity sha512-WSx1PFfrT0uHA3iTP+8SW/DxYRS9iBazbNAZhrxPP5ZlFN4T0QgwLXd0S//Fh+JnqlHR6holRlzj/0uWY+7xAA==
+
 w3c-hr-time@^1.0.2:
   version "1.0.2"
   dependencies:

@@ -1,14 +1,6 @@
 class SearchsController < ApplicationController
   def search
-    results = case params[:type]
-              when 'video'
-                VideoSerializer.new(Video.search(params[:query], where: { status: 'published', deleted_at: nil, created_at: { gte: date_params } }).includes(:user).to_a,
-                                    { include: [:user] }).serializable_hash
-              when 'channel'
-                UserSerializer.new(User.search(params[:query], where: { deleted_at: nil }).to_a, params: { current_user: current_user }).serializable_hash
-              when 'playlist'
-                PlaylistSerializer.new(Playlist.search(params[:query], where: { status: 'published' }).to_a).serializable_hash
-              end
+    results = SearchService.call(params[:type], params[:query], date_params, params[:page], current_user, params: params)
 
     if results
       render json: results, status: :ok
