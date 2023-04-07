@@ -23,7 +23,7 @@ class SearchService < ApplicationService
     when 'channel'
       results = User.pagy_search(@query, where: { deleted_at: nil })
       pagy, response = pagy_searchkick(results, items: 10)
-      { data: UserSerializer.new(response.to_a, params: { current_user: current_user }).serializable_hash, pagy: pagy }
+      { data: UserSerializer.new(response.to_a, params: { current_user: @current_user }).serializable_hash, pagy: pagy }
     when 'playlist'
       results = Playlist.pagy_search(@query, where: { status: 'published' })
       pagy, response = pagy_searchkick(results, items: 10)

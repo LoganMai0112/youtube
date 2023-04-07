@@ -1,6 +1,4 @@
 class SearchsController < ApplicationController
-  include Pagy::Backend
-
   def search
     results = SearchService.call(params[:type], params[:query], date_params, params[:page], current_user, params: params)
 
