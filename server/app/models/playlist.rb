@@ -1,4 +1,5 @@
 class Playlist < ApplicationRecord
+  extend Pagy::Searchkick
   searchkick
 
   enum status: { published: 0, privated: 1 }

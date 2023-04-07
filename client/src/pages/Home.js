@@ -51,8 +51,9 @@ function Home() {
       await axios
         .get(`/videos?page=${page}`)
         .then((res) => {
-          setVideos((data) => [...data, ...res.data.data]);
-          setChannels((data) => [...data, ...res.data.included]);
+          console.log(res);
+          setVideos((data) => [...data, ...res.data.videos.data]);
+          setChannels((data) => [...data, ...res.data.videos.included]);
           setLoading(false);
         })
         .catch((err) => {

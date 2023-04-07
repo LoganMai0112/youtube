@@ -1,5 +1,6 @@
 require 'open-uri'
 class User < ApplicationRecord
+  extend Pagy::Searchkick
   include SoftDeleteConcern
   include Devise::JWT::RevocationStrategies::JTIMatcher
   # Include default devise modules. Others available are:
