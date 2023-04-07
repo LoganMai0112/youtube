@@ -5,7 +5,7 @@ class VideosController < ApplicationController
 
   def index
     pagy, videos = pagy(policy_scope(Video).all.includes({ user: [{ avatar_attachment: :blob }, { cover_attachment: :blob }] }, { thumbnail_attachment: :blob },
-                                              { source_attachment: { blob: { preview_image_attachment: :blob } } }), page: params[:page], items: 12)
+                                                         { source_attachment: { blob: { preview_image_attachment: :blob } } }), page: params[:page], items: 12)
     options = { include: [:user] }
     render json: { videos: VideoSerializer.new(videos.to_a, options).serializable_hash, pagy: pagy }
   end
