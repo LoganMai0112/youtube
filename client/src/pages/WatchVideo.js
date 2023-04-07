@@ -60,7 +60,6 @@ function WatchVideo() {
       await axios
         .get(`/videos/${params.videoId}`)
         .then((res) => {
-          console.log(res);
           const { attributes } = res.data.data;
           setVideo(attributes);
           setDeletedYet(attributes.deletedYet);
