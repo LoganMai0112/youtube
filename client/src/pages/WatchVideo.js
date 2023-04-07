@@ -60,6 +60,7 @@ function WatchVideo() {
       await axios
         .get(`/videos/${params.videoId}`)
         .then((res) => {
+          console.log(res);
           const { attributes } = res.data.data;
           setVideo(attributes);
           setDeletedYet(attributes.deletedYet);
@@ -80,8 +81,10 @@ function WatchVideo() {
           playerState.load();
         })
         .catch((err) => {
-          toast(err.response.data.message);
-          navigate('/unavailable');
+          if (err.response) {
+            toast(err.response.data.message);
+            navigate('/unavailable');
+          }
         });
     };
 

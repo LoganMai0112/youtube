@@ -4,17 +4,17 @@ class SearchsController < ApplicationController
   def search
     results = case params[:type]
               when 'video'
-                results = Video.pagy_search(params[:query], where: { status: 'published', deleted_at: nil, created_at: { gte: date_params } }).includes(:user)
-                byebug
-                VideoSerializer.new(results, { include: [:user] }).serializable_hash
+                results = Video.pagy_search(params[:query], where: { status: 'published', deleted_at: nil, created_at: { gte: date_params } })
+                pagy, response = pagy_searchkick(results, items: 10)
+                { data: VideoSerializer.new(response.to_a, { include: [:user] }).serializable_hash, pagy: pagy }
               when 'channel'
-                results = User.pagy_search(params[:query], where: { deleted_at: nil }, page: params[:page], per_page: 10)
-                _, response = pagy_searchkick(results)
-                UserSerializer.new(response.to_a, params: { current_user: current_user }).serializable_hash
+                results = User.pagy_search(params[:query], where: { deleted_at: nil })
+                pagy, response = pagy_searchkick(results, items: 10)
+                { data: UserSerializer.new(response.to_a, params: { current_user: current_user }).serializable_hash, pagy: pagy }
               when 'playlist'
                 results = Playlist.pagy_search(params[:query], where: { status: 'published' }, page: params[:page], per_page: 10)
-                _, response = pagy_searchkick(results)
-                PlaylistSerializer.new(response.to_a).serializable_hash
+                pagy, response = pagy_searchkick(results)
+                { data: PlaylistSerializer.new(response.to_a).serializable_hash, pagy: pagy }
               end
 
     if results

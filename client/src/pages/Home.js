@@ -17,6 +17,7 @@ function Home() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
+  const [maxPages, setMaxPages] = useState(1);
 
   const handleObserver = (entries) => {
     const target = entries[0];
@@ -51,7 +52,7 @@ function Home() {
       await axios
         .get(`/videos?page=${page}`)
         .then((res) => {
-          console.log(res);
+          setMaxPages(res.data.pagy.pages);
           setVideos((data) => [...data, ...res.data.videos.data]);
           setChannels((data) => [...data, ...res.data.videos.included]);
           setLoading(false);
@@ -62,8 +63,9 @@ function Home() {
           }
         });
     };
-
-    getVideos();
+    if (page <= maxPages) {
+      getVideos();
+    }
   }, [page]);
 
   useEffect(() => {

@@ -4,7 +4,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { badWords } from 'vn-badwords';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import CommentSentence from './CommentSentence';
 
@@ -32,10 +31,9 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   }, [commentsCount]);
 
   const submitComment = async () => {
-    const comment = badWords(commentInput, '*');
     await axios
       .post(`/videos/${videoId}/comments`, {
-        comment: { content: comment },
+        comment: { content: commentInput },
       })
       .then((res) => {
         if (res) {
