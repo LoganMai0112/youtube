@@ -1,23 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe 'Comments', type: :request do
-  describe 'GET /create' do
+  describe 'POST /create' do
+    let(:user) { create(:user) }
+    let(:video) { create(:video, user: user) }
+
     it 'returns http success' do
-      get '/comments/create'
+      sign_in user
+      post "/videos/#{video.id}/comments", params: { comment: { content: 'comment' } }
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /destroy' do
+  describe 'DELETE /destroy' do
+    let(:user) { create(:user) }
+    let(:video) { create(:video, user: user) }
+    let(:comment) { create(:comment, user: user, video: video) }
+
     it 'returns http success' do
-      get '/comments/destroy'
+      sign_in user
+      delete "/videos/#{video.id}/comments/#{comment.id}"
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /update' do
+  describe 'PUT /update' do
+    let(:user) { create(:user) }
+    let(:video) { create(:video, user: user) }
+    let(:comment) { create(:comment, user: user, video: video) }
+
     it 'returns http success' do
-      get '/comments/update'
+      sign_in user
+      put "/videos/#{video.id}/comments/#{comment.id}", params: { comment: { content: 'new comment' } }
       expect(response).to have_http_status(:success)
     end
   end
