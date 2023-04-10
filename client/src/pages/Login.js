@@ -92,6 +92,7 @@ function Login() {
             </p>
             <form onSubmit={handleSubmit(onSubmit)}>
               <input
+                id="email"
                 className="mb-6 rounded-md border-2 text-md w-full border-main-color bg-sec-color px-2 h-10 focus:outline-none focus:border-main-color placeholder-text-color  text-main-color focus:invalid:border-red-800 focus:invalid:text-red-600"
                 placeholder="Enter your email"
                 type="email"
@@ -107,6 +108,7 @@ function Login() {
                 })}
               />
               <input
+                id="password"
                 className="mb-2 rounded-md border-2 text-md w-full border-main-color bg-sec-color px-2 h-10 focus:outline-none focus:border-main-color placeholder-text-color  text-main-color focus:invalid:border-red-800 focus:invalid:text-red-600"
                 type="password"
                 placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"

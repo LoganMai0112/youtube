@@ -29,8 +29,8 @@ function Home() {
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '0px',
-      threshold: 0.5,
+      rootMargin: '500px',
+      threshold: 0.01,
     };
 
     const observer = new IntersectionObserver(handleObserver, options);

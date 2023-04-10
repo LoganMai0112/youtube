@@ -82,7 +82,7 @@ function CommentSentence({
   }, [boxRef]);
 
   return (
-    <div className="flex items-start">
+    <div className="comment flex items-start">
       <div className="min-w-[48px] mr-3">
         <img
           className="w-10 h-10 rounded-full"

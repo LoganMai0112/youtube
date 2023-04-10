@@ -42,7 +42,6 @@ function RecommendSide() {
     const channel = channels.find((c) => c.id === channelId);
     return channel.attributes;
   };
-  console.log(videos);
 
   return (
     <div className="w-[420px] flex flex-col gap-2 pr-4">
