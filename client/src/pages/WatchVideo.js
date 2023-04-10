@@ -23,6 +23,8 @@ import SubscribeButton from '../components/SubscribeButton';
 import SaveVideoPortal from '../components/SaveVideoPortal';
 import ReportPortal from '../components/ReportPortal';
 
+import 'video-react/dist/video-react.full';
+
 function WatchVideo() {
   const [video, setVideo] = useState({});
   const [videoSource, setVideoSource] = useState('');
@@ -87,9 +89,12 @@ function WatchVideo() {
         });
     };
 
-    countView();
     getVideo();
   }, [params]);
+
+  useEffect(() => {
+    countView();
+  }, []);
 
   const softDelete = async () => {
     await axios
@@ -120,14 +125,19 @@ function WatchVideo() {
     <div className="flex h-full w-full">
       <div className="flex-1 px-5 h-fit">
         {videoSource && (
-          <Player
-            ref={(player) => {
-              setPlayerState(player);
-            }}
-            autoPlay
-          >
-            <source src={videoSource} />
-          </Player>
+          <div className="max-h-[600px]">
+            <Player
+              fluid={false}
+              height={600}
+              width="100%"
+              ref={(player) => {
+                setPlayerState(player);
+              }}
+              autoPlay
+            >
+              <source src={videoSource} />
+            </Player>
+          </div>
         )}
         <div className="flex w-full flex-col mt-4">
           {video && video.status === 'privated' && (
@@ -253,7 +263,7 @@ function WatchVideo() {
               }}
             >
               <span>
-                {video.viewsCount || 0} views -{' '}
+                <div id="view">{video.viewsCount || 0} views - </div>
                 {moment(video.createdAt).fromNow()}
               </span>
               <br />

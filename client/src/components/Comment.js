@@ -75,6 +75,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
               className="bg-main w-full outline-none border-b border-main-color text-white"
               placeholder="Add a comment..."
               value={commentInput}
+              id="comment_input"
               onChange={(e) => setCommentInput(e.target.value)}
               onFocus={() => {
                 if (signedIn) {
@@ -88,6 +89,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
             {commenting && (
               <div className="mt-4 flex gap-3">
                 <button
+                  id="submit_comment"
                   type="button"
                   disabled={!commentInput}
                   className={`py-2 px-3 rounded-3xl ${
