@@ -16,7 +16,7 @@ RSpec.describe 'Streams', type: :request do
       before { sign_in user }
 
       it 'response :created status' do
-        post '/streams', params: { stream: {user_id: user.id, title: 'title stream'}}
+        post '/streams', params: { stream: { user_id: user.id, title: 'title stream' } }
         expect(response).to have_http_status(:created)
       end
     end

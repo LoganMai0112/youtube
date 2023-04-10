@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Videos', type: :request do
   describe 'GET /index' do
-    let(:videos) { create_list(:video, 20)}
+    let(:videos) { create_list(:video, 20) }
 
     it 'response :success status' do
       get '/videos'
@@ -16,7 +16,8 @@ RSpec.describe 'Videos', type: :request do
 
       it 'response :success status' do
         sign_in user
-        post '/videos', params: { video: { title: 'title', user_id: user.id, source: Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/attachments/output.mp4", 'video/mp4'), status: 'published' } }
+        post '/videos',
+             params: { video: { title: 'title', user_id: user.id, source: Rack::Test::UploadedFile.new("#{Rails.root}/spec/support/attachments/output.mp4", 'video/mp4'), status: 'published' } }
         expect(response).to have_http_status(:created)
       end
     end
@@ -78,7 +79,7 @@ RSpec.describe 'Videos', type: :request do
     end
   end
 
-  describe "GET /show" do
+  describe 'GET /show' do
     let(:user) { create(:user) }
     let(:video) { create(:video, user: user) }
 

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Video, type: :model do
   describe 'enumeration' do
-    it { is_expected.to define_enum_for(:status).with_values(%i[privated published])}
+    it { is_expected.to define_enum_for(:status).with_values(%i[privated published]) }
   end
 
   describe 'validations' do
