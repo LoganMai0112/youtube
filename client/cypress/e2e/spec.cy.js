@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 
 const url = Cypress.env('localhost_url');
-console.log(url);
 describe('Increase view when watch video', () => {
   it('Visits the MyTube', () => {
     cy.visit(url);
