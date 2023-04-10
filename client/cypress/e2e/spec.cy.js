@@ -1,8 +1,11 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-undef */
+
+const url = Cypress.env('localhost_url');
+console.log(url);
 describe('Increase view when watch video', () => {
   it('Visits the MyTube', () => {
-    cy.visit('http://localhost:3000');
+    cy.visit(url);
     cy.wait(3000);
     cy.get('.aspect-video').first().click();
     cy.wait(3000);
@@ -24,13 +27,13 @@ describe('Increase view when watch video', () => {
 
 describe('Censor bad words in comment', () => {
   it("Replace bad words by '*'", () => {
-    cy.visit('http://localhost:3000/login');
+    cy.visit(`${url}/login`);
     cy.get('#email').type('mailam123@gmail.com');
     cy.get('#password').type('mailam123');
     cy.get('input[type="submit"]').click();
 
     cy.wait(5000);
-    cy.visit('http://localhost:3000');
+    cy.visit(url);
 
     cy.get('.aspect-video').first().click();
     cy.wait(3000);
