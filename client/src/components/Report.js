@@ -9,7 +9,7 @@ function Report() {
   useEffect(() => {
     const getReports = async () => {
       await axios
-        .get('/reports')
+        .get(`${process.env.REACT_APP_SERVER_URL}/reports`)
         .then((res) => setReports(res.data))
         .catch((err) => toast(err.response.data.message));
     };
@@ -19,7 +19,7 @@ function Report() {
 
   const deleteReport = async (reportId) => {
     await axios
-      .delete(`/reports/${reportId}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/reports/${reportId}`)
       .then((res) => {
         toast(res.data.message);
         setReports(reports.filter((report) => report.id !== reportId));

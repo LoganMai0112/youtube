@@ -61,11 +61,14 @@ function Playlist() {
     }
 
     axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          title: titleInput,
-        },
-      })
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            title: titleInput,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setTitleInput(res.data.title);
@@ -106,11 +109,14 @@ function Playlist() {
 
   const updatePrivacy = (status) => {
     axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          status,
-        },
-      })
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            status,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setPrivacy(res.data.status);
@@ -121,11 +127,14 @@ function Playlist() {
 
   const updateDescription = () => {
     axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          description: descriptionInput,
-        },
-      })
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            description: descriptionInput,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setDescriptionInput(res.data.description);
@@ -138,7 +147,9 @@ function Playlist() {
   const deletePlaylist = (savedOrCreated) => {
     if (savedOrCreated === 'created') {
       axios
-        .delete(`/playlists/${params.playlistId}`)
+        .delete(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`
+        )
         .then((res) => {
           if (res) {
             toast('Playlist deleted');
@@ -148,7 +159,9 @@ function Playlist() {
         .catch((err) => toast(err.message));
     } else if (savedOrCreated === 'saved') {
       axios
-        .delete(`/playlists/${params.playlistId}/user_playlist`)
+        .delete(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
+        )
         .then((res) => {
           if (res) {
             toast('Removed playlist from your Library');
@@ -162,9 +175,12 @@ function Playlist() {
 
   const removeVideoFromPlaylist = (videoId) => {
     axios
-      .delete(`/playlists/${params.playlistId}/playlist_item`, {
-        data: { video_id: videoId },
-      })
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/playlist_item`,
+        {
+          data: { video_id: videoId },
+        }
+      )
       .then((res) => {
         if (res) {
           toast(`Removed from ${playlist.attributes.title}`);
@@ -176,7 +192,9 @@ function Playlist() {
 
   const savePlaylist = () => {
     axios
-      .post(`/playlists/${params.playlistId}/user_playlist`)
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
+      )
       .then((res) => {
         if (res) {
           toast('Saved this playlist to your library');
@@ -188,7 +206,7 @@ function Playlist() {
 
   useEffect(() => {
     axios
-      .get(`/playlists/${params.playlistId}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`)
       .then((res) => {
         setCreatedOrSaved(res.data.playlist.data.attributes.createdOrSaved);
         setPlaylist(res.data.playlist.data);

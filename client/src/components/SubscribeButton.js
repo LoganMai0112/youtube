@@ -10,7 +10,7 @@ function SubscribeButton({ subscribedYet, channelId }) {
   const signedIn = useContext(UserSignedInContext);
   const subscribe = async () => {
     await axios
-      .post(`/users/${channelId}/subscribe`)
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/${channelId}/subscribe`)
       .then((res) => {
         if (res) {
           setSubscribed(true);
@@ -28,7 +28,9 @@ function SubscribeButton({ subscribedYet, channelId }) {
   };
   const unsubscribe = async () => {
     await axios
-      .delete(`/users/${channelId}/subscribe`)
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/users/${channelId}/subscribe`
+      )
       .then((res) => {
         if (res) {
           setSubscribed(false);

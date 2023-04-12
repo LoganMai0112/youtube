@@ -50,7 +50,7 @@ function Home() {
     const getVideos = async () => {
       setLoading(true);
       await axios
-        .get(`/videos?page=${page}`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/videos?page=${page}`)
         .then((res) => {
           setMaxPages(res.data.pagy.pages);
           setVideos((data) => [...data, ...res.data.videos.data]);
@@ -71,7 +71,7 @@ function Home() {
   useEffect(() => {
     const getStreams = async () => {
       axios
-        .get('/streams')
+        .get(`${process.env.REACT_APP_SERVER_URL}/streams`)
         .then((res) => {
           setStreams(res.data.data);
         })

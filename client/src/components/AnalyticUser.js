@@ -50,7 +50,7 @@ function AnalyticUser() {
   useEffect(() => {
     const getAnalytic = async () => {
       await axios
-        .get('/analytics')
+        .get(`${process.env.REACT_APP_SERVER_URL}/analytics`)
         .then((res) => {
           setDataChannel(res.data.channelAnalytics);
           setDataAnalytics(res.data.channelAnalytics);

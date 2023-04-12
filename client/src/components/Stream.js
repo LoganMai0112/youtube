@@ -35,7 +35,7 @@ export default function Stream() {
   useEffect(() => {
     const getStream = async () => {
       await axios
-        .get(`/streams/${params.streamId}`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/streams/${params.streamId}`)
         .then((res) => {
           setChannel(res.data.included[0]);
           setStreamInfo(res.data.data);
@@ -60,7 +60,9 @@ export default function Stream() {
   const start = () => {
     const streamingTrue = () => {
       axios
-        .put(`/streams/${params.streamId}`, { stream: { streaming: true } })
+        .put(`${process.env.REACT_APP_SERVER_URL}/streams/${params.streamId}`, {
+          stream: { streaming: true },
+        })
         .then((res) => {
           if (res) {
             toast('Start stream');
@@ -91,7 +93,7 @@ export default function Stream() {
 
   const closeStream = () => {
     axios
-      .delete(`/streams/${params.streamId}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/streams/${params.streamId}`)
       .then(() => {
         toast('Close Stream');
         setIsStreaming(false);

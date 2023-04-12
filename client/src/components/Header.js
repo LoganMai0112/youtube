@@ -56,7 +56,7 @@ function Header({ dropdownOpen }) {
   useEffect(() => {
     const getNotifications = async () => {
       await axios
-        .get('/notifications')
+        .get(`${process.env.REACT_APP_SERVER_URL}/notifications`)
         .then((res) => setNotifications(res.data.data))
         .catch((err) => toast(err.message));
     };
@@ -94,9 +94,12 @@ function Header({ dropdownOpen }) {
 
   const readNotification = (notificationId, index) => {
     axios
-      .put(`/notifications/${notificationId}`, {
-        notification: { read: true },
-      })
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/notifications/${notificationId}`,
+        {
+          notification: { read: true },
+        }
+      )
       .then((res) => {
         if (res) {
           setNotifications((prevState) => [

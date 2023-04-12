@@ -16,7 +16,9 @@ function LikeVideoButton({
   const signedIn = useContext(UserSignedInContext);
   const like = async () => {
     try {
-      const res = await axios.post(`/videos/${videoId}/like`);
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/like`
+      );
       if (res) {
         setLiked(true);
         setLikeCount(likeCount + 1);
@@ -34,7 +36,9 @@ function LikeVideoButton({
 
   const unLike = async () => {
     try {
-      const res = await axios.delete(`/videos/${videoId}/like`);
+      const res = await axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/like`
+      );
       if (res) {
         setLiked(false);
         setLikeCount(likeCount - 1);

@@ -14,7 +14,9 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
   useEffect(() => {
     const getPlaylists = async () => {
       await axios
-        .get('/playlists', { params: { video_id: videoId } })
+        .get(`${process.env.REACT_APP_SERVER_URL}/playlists`, {
+          params: { video_id: videoId },
+        })
         .then((res) => {
           setPlaylists(res.data.data);
           const checkedArray = res.data.data.map(
@@ -32,7 +34,7 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
     e.preventDefault();
 
     await axios
-      .post('/playlists', {
+      .post(`${process.env.REACT_APP_SERVER_URL}/playlists`, {
         playlist: {
           title: e.target.title.value,
           status: e.target.status.value,
@@ -40,9 +42,12 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
       })
       .then(async (res) => {
         axios
-          .post(`/playlists/${res.data.id}/playlist_item`, {
-            video_id: videoId,
-          })
+          .post(
+            `${process.env.REACT_APP_SERVER_URL}/playlists/${res.data.id}/playlist_item`,
+            {
+              video_id: videoId,
+            }
+          )
           .then((response) => {
             if (response) {
               toast(`Added this video to ${res.data.title}`);
@@ -62,9 +67,12 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
     ]);
     if (event.target.checked) {
       axios
-        .post(`/playlists/${event.target.value}/playlist_item`, {
-          video_id: videoId,
-        })
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${event.target.value}/playlist_item`,
+          {
+            video_id: videoId,
+          }
+        )
         .then((res) => {
           if (res) {
             toast(`Added this video to ${event.target.name}`);
@@ -73,9 +81,12 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
         .catch((err) => toast(err.response.data.message));
     } else {
       axios
-        .delete(`/playlists/${event.target.value}/playlist_item`, {
-          data: { video_id: videoId },
-        })
+        .delete(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${event.target.value}/playlist_item`,
+          {
+            data: { video_id: videoId },
+          }
+        )
         .then((res) => {
           if (res) {
             toast(`Removed from ${event.target.name}`);

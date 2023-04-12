@@ -69,7 +69,9 @@ function EditVideo() {
 
   useEffect(() => {
     const getVideo = async () => {
-      const res = await axios.get(`/videos/${params.videoId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`
+      );
       setUserOfVideo(
         currentUser.id == res.data.data.relationships.user.data.id
       );
@@ -123,7 +125,7 @@ function EditVideo() {
 
   const handleDelete = async () => {
     await axios
-      .delete(`/videos/${params.videoId}`, {
+      .delete(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         },

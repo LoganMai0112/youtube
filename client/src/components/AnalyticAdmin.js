@@ -12,7 +12,9 @@ function AnalyticAdmin() {
   useEffect(() => {
     const getAnalytic = async () => {
       await axios
-        .get('/analytics', { params: { date } })
+        .get(`${process.env.REACT_APP_SERVER_URL}/analytics`, {
+          params: { date },
+        })
         .then((res) => {
           setLineChart({
             options: {

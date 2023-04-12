@@ -53,7 +53,7 @@ function Setting() {
   useEffect(() => {
     const getUser = () => {
       axios
-        .get(`/users/${currentUser.id}/edit`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}/edit`)
         .then((res) => {
           setUser(res.data.data.attributes);
           setAvatarPreview(res.data.data.attributes.avatarUrl);
@@ -138,7 +138,7 @@ function Setting() {
 
   const deleteAccount = async () => {
     await axios
-      .delete(`/users/${currentUser.id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}`)
       .then((res) => {
         if (res) {
           localStorage.clear();

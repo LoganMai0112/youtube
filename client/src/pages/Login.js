@@ -26,7 +26,7 @@ function Login() {
 
   const onSubmit = async (user) => {
     await axios
-      .post('login', { user })
+      .post(`${process.env.REACT_APP_SERVER_URL}/login`, { user })
       .then(async (res) => {
         if (res.status === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
@@ -43,7 +43,9 @@ function Login() {
 
   const responseFacebook = async (res) => {
     await axios
-      .post('/auth/facebook/callback', { res })
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/facebook/callback`, {
+        res,
+      })
       .then(async (response) => {
         if (response.data.code === '200') {
           await localStorage.setItem(
@@ -63,9 +65,12 @@ function Login() {
   const responseGoogle = useGoogleLogin({
     onSuccess: (codeResponse) => {
       axios
-        .post('/auth/google_oauth2/callback', {
-          code: codeResponse.code,
-        })
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/auth/google_oauth2/callback`,
+          {
+            code: codeResponse.code,
+          }
+        )
         .then(async (res) => {
           if (res.data.code === '200') {
             await localStorage.setItem(

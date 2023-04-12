@@ -28,7 +28,9 @@ function CommentSentence({
   const navigate = useNavigate();
   const deleteComment = () => {
     axios
-      .delete(`/videos/${comment.attributes.videoId}/comments/${comment.id}`)
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${comment.attributes.videoId}/comments/${comment.id}`
+      )
       .then((res) => {
         if (res) {
           toast(res.data.message);
@@ -48,9 +50,12 @@ function CommentSentence({
 
   const updateComment = async () => {
     await axios
-      .put(`/videos/${comment.attributes.videoId}/comments/${comment.id}`, {
-        comment: { content: commentInput },
-      })
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${comment.attributes.videoId}/comments/${comment.id}`,
+        {
+          comment: { content: commentInput },
+        }
+      )
       .then((res) => {
         if (res) {
           setCommentContent(commentInput);

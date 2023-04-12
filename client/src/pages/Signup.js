@@ -24,7 +24,7 @@ function Signup() {
 
   const onSubmit = async (user) => {
     await axios
-      .post('signup', { user })
+      .post(`${process.env.REACT_APP_SERVER_URL}/signup`, { user })
       .then(async (res) => {
         if (res.data.status.code === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
