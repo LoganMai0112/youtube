@@ -74,7 +74,7 @@ function CreateStreamPortal({ setCreateStream }) {
   });
 
   const submitToAPI = async (data) => {
-    await fetch('/streams', {
+    await fetch(`${process.env.REACT_APP_SERVER_URL}/streams`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },

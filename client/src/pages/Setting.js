@@ -107,7 +107,7 @@ function Setting() {
   );
 
   const submitToAPI = async (data) => {
-    await fetch(`/users/${currentUser.id}`, {
+    await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },

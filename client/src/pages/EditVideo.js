@@ -109,7 +109,7 @@ function EditVideo() {
   });
 
   const submitToAPI = (data) => {
-    fetch(`/videos/${params.videoId}`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
