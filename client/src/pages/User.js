@@ -23,7 +23,7 @@ function User() {
   useEffect(() => {
     const getUser = async () => {
       await axios
-        .get(`/users/${params.userId}`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}`)
         .then((res) => {
           setCreatedPlaylists(res.data.createdPlaylists.data);
           setIncludedPlaylists(res.data.createdPlaylists.included);
@@ -44,7 +44,7 @@ function User() {
 
   const softDelete = async () => {
     await axios
-      .delete(`/users/${params.userId}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}`)
       .then((res) => {
         if (res) {
           toast('Baned user');
@@ -56,7 +56,7 @@ function User() {
 
   const recover = async () => {
     await axios
-      .put(`/users/${params.userId}/recover`)
+      .put(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}/recover`)
       .then((res) => {
         if (res) {
           toast('Recover user');

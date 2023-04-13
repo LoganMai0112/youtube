@@ -36,9 +36,9 @@ function Search() {
       setIsLoading(true);
       await axios
         .get(
-          `/search?query=${searchParams.get('search_query')}&type=${type}${
-            date ? `&date=${date}` : ''
-          }&page=${page}`
+          `${process.env.REACT_APP_SERVER_URL}/search?query=${searchParams.get(
+            'search_query'
+          )}&type=${type}${date ? `&date=${date}` : ''}&page=${page}`
         )
         .then((res) => {
           setMaxPages(res.data.pagy.pages);

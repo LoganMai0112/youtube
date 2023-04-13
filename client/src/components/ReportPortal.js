@@ -9,7 +9,7 @@ function ReportPortal({ setReportBox, videoId, channelId }) {
 
   const report = () => {
     axios
-      .post('/reports', {
+      .post(`${process.env.REACT_APP_SERVER_URL}/reports`, {
         report: {
           content: reportContent,
           reportable_id: reportType === 'video' ? videoId : channelId,

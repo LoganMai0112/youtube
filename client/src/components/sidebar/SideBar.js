@@ -35,7 +35,7 @@ function SideBar({ setDropdownOpen }) {
   useEffect(() => {
     const getPlaylists = async () => {
       await axios
-        .get('/playlists')
+        .get(`${process.env.REACT_APP_SERVER_URL}/playlists`)
         .then((res) => {
           setPlaylists(res.data.data);
         })

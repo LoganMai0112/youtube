@@ -13,7 +13,7 @@ function LogOutButton() {
   const useUserUpdate = useContext(UserUpdateContext);
   const logOut = async () => {
     await axios
-      .delete('/logout')
+      .delete(`${process.env.REACT_APP_SERVER_URL}/logout`)
       .then(async (res) => {
         if (res.data.code === '200') {
           useUserUpdate({});

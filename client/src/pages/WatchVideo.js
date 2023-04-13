@@ -52,7 +52,7 @@ function WatchVideo() {
 
   const countView = async () => {
     await axios
-      .post(`/videos/${params.videoId}/view`)
+      .post(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}/view`)
       .then(() => {})
       .catch((err) => toast(err.message));
   };
@@ -60,7 +60,7 @@ function WatchVideo() {
   useEffect(() => {
     const getVideo = async () => {
       await axios
-        .get(`/videos/${params.videoId}`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`)
         .then((res) => {
           const { attributes } = res.data.data;
           setVideo(attributes);
@@ -98,7 +98,7 @@ function WatchVideo() {
 
   const softDelete = async () => {
     await axios
-      .delete(`/videos/${params.videoId}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`)
       .then((res) => {
         if (res) {
           toast('Deleted video');
@@ -111,7 +111,9 @@ function WatchVideo() {
 
   const recover = async () => {
     await axios
-      .put(`/videos/${params.videoId}/recover`)
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}/recover`
+      )
       .then((res) => {
         if (res) {
           setDeletedYet(false);

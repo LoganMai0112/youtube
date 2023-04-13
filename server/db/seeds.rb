@@ -11,14 +11,21 @@ require 'open-uri'
 require 'streamio-ffmpeg'
 
 # Seed user
-# 100.times.each do |_id|
-#   User.create!(
-#     name: Faker::Name.name,
-#     role: :user,
-#     email: Faker::Internet.email,
-#     password: Faker::Internet.password
-#   )
-# end
+100.times.each do |_id|
+  User.create!(
+    name: Faker::Name.name,
+    role: :user,
+    email: Faker::Internet.email,
+    password: Faker::Internet.password
+  )
+end
+
+User.create(
+  name: 'admin',
+  role: :admin,
+  email: 'admin@gmail.com',
+  password: 'admin123'
+)
 
 user_ids = User.pluck(:id)
 100.times do
@@ -40,3 +47,6 @@ user_ids = User.pluck(:id)
   video.save!
   video_file.close
 end
+
+
+

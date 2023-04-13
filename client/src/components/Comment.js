@@ -19,7 +19,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   useEffect(() => {
     const getComments = () => {
       axios
-        .get(`/videos/${videoId}/comments`)
+        .get(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`)
         .then((res) => {
           setComments(res.data.data);
           setCommenters(res.data.included);
@@ -32,7 +32,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
 
   const submitComment = async () => {
     await axios
-      .post(`/videos/${videoId}/comments`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`, {
         comment: { content: commentInput },
       })
       .then((res) => {
