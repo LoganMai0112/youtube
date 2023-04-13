@@ -72,8 +72,8 @@ services:
       REACT_APP_STUN_SERVER: stun:stun.l.google.com:19320
       REACT_APP_SIGNAL_SERVER: ws://localhost:7000/ws\
     command: npm start
-    # volumes:
-    #   - ./client:/client
+    volumes:
+      - ./client:/client
     ports:
       - "3000:3000"
     depends_on:
