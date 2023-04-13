@@ -1,15 +1,15 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { toast } from 'react-toastify';
+import axiosClient from '../axios/axiosConfig';
 
 function ReportPortal({ setReportBox, videoId, channelId }) {
   const [reportContent, setReportContent] = useState();
   const [reportType, setReportType] = useState('video');
 
-  const report = () => {
-    axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/reports`, {
+  const report = async () => {
+    await axiosClient
+      .post(`/reports`, {
         report: {
           content: reportContent,
           reportable_id: reportType === 'video' ? videoId : channelId,

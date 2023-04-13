@@ -12,6 +12,7 @@ import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { UserUpdateContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function Login() {
   const useUserUpdate = useContext(UserUpdateContext);
@@ -25,7 +26,7 @@ function Login() {
   } = useForm();
 
   const onSubmit = async (user) => {
-    await axios
+    await axiosClient
       .post(`${process.env.REACT_APP_SERVER_URL}/login`, { user })
       .then(async (res) => {
         if (res.status === 200) {
@@ -42,7 +43,7 @@ function Login() {
   };
 
   const responseFacebook = async (res) => {
-    await axios
+    await axiosClient
       .post(`${process.env.REACT_APP_SERVER_URL}/auth/facebook/callback`, {
         res,
       })
@@ -64,7 +65,7 @@ function Login() {
 
   const responseGoogle = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      axios
+      axiosClient
         .post(
           `${process.env.REACT_APP_SERVER_URL}/auth/google_oauth2/callback`,
           {

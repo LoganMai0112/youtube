@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import CommentSentence from './CommentSentence';
+import axiosClient from '../axios/axiosConfig';
 
 function Comment({ videoId, commentsCount, setCommentsCount }) {
   const currentUser = useContext(UserContext);
@@ -17,8 +17,8 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getComments = () => {
-      axios
+    const getComments = async () => {
+      await axiosClient
         .get(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`)
         .then((res) => {
           setComments(res.data.data);
@@ -31,7 +31,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   }, [commentsCount]);
 
   const submitComment = async () => {
-    await axios
+    await axiosClient
       .post(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`, {
         comment: { content: commentInput },
       })

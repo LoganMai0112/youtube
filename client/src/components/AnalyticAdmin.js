@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Chart from 'react-apexcharts';
 import { toast } from 'react-toastify';
+import axiosClient from '../axios/axiosConfig';
 
 function AnalyticAdmin() {
   const [lineChart, setLineChart] = useState();
@@ -11,7 +11,7 @@ function AnalyticAdmin() {
   const [filterBox, setFilterBox] = useState(false);
   useEffect(() => {
     const getAnalytic = async () => {
-      await axios
+      await axiosClient
         .get(`${process.env.REACT_APP_SERVER_URL}/analytics`, {
           params: { date },
         })

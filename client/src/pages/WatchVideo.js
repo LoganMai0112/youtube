@@ -5,7 +5,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Player } from 'video-react';
 import { BiShare } from 'react-icons/bi';
@@ -24,6 +23,7 @@ import SaveVideoPortal from '../components/SaveVideoPortal';
 import ReportPortal from '../components/ReportPortal';
 
 import 'video-react/dist/video-react.full';
+import axiosClient from '../axios/axiosConfig';
 
 function WatchVideo() {
   const [video, setVideo] = useState({});
@@ -51,7 +51,7 @@ function WatchVideo() {
   };
 
   const countView = async () => {
-    await axios
+    await axiosClient
       .post(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}/view`)
       .then(() => {})
       .catch((err) => toast(err.message));
@@ -59,7 +59,7 @@ function WatchVideo() {
 
   useEffect(() => {
     const getVideo = async () => {
-      await axios
+      await axiosClient
         .get(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`)
         .then((res) => {
           const { attributes } = res.data.data;
@@ -97,7 +97,7 @@ function WatchVideo() {
   }, []);
 
   const softDelete = async () => {
-    await axios
+    await axiosClient
       .delete(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`)
       .then((res) => {
         if (res) {
@@ -110,7 +110,7 @@ function WatchVideo() {
   };
 
   const recover = async () => {
-    await axios
+    await axiosClient
       .put(
         `${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}/recover`
       )

@@ -14,7 +14,8 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
   redis:
-    image: redis:5.0.7-alpine
+    image: redis
+    command: redis-server
     ports:
       - "6379:6379"
     volumes:
@@ -42,6 +43,7 @@ services:
       ELASTICSEARCH_URL: http://elasticsearch:9200
       RAILS_ENV: development
       REDIS_URL: redis://redis:6379/0
+      REDIS_CABLE_URL: redis://redis:6379/1
       SECRET_KEY_BASE: 6c4598821c6ae3aea45cfe17bd8db947b8e1789aa7b256c9e394ed036dba8c1a03f4a8103dc8dc86c656286eac18cca5c675b2513bbc93ebf4e824c3d7e5647f
       SENTRY_KEY: https://feb34adf883f467c8a39d9220732af4b@o4504637936107520.ingest.sentry.io/4504716081889280
       GITHUB_OAUTH_ID: b5c6428b4e5ac65de3d8
@@ -58,6 +60,15 @@ services:
     depends_on:
       - db
       - elasticsearch
+      - redis
+  sidekiq:
+    build: ./server
+    command: bundle exec sidekiq
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    # volumes:
+    #   - ./server:/server
+    depends_on:
       - redis
   client:
     build:

@@ -1,10 +1,10 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams, Link } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
 import SubscribeButton from '../components/SubscribeButton';
+import axiosClient from '../axios/axiosConfig';
 
 function User() {
   const params = useParams();
@@ -22,7 +22,7 @@ function User() {
 
   useEffect(() => {
     const getUser = async () => {
-      await axios
+      await axiosClient
         .get(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}`)
         .then((res) => {
           setCreatedPlaylists(res.data.createdPlaylists.data);
@@ -43,7 +43,7 @@ function User() {
   }, []);
 
   const softDelete = async () => {
-    await axios
+    await axiosClient
       .delete(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}`)
       .then((res) => {
         if (res) {
@@ -55,7 +55,7 @@ function User() {
   };
 
   const recover = async () => {
-    await axios
+    await axiosClient
       .put(`${process.env.REACT_APP_SERVER_URL}/users/${params.userId}/recover`)
       .then((res) => {
         if (res) {

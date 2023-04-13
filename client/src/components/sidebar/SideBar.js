@@ -18,10 +18,10 @@ import {
   IoIosArrowDown,
 } from 'react-icons/io';
 import { MdSubscriptions, MdPlaylistPlay } from 'react-icons/md';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import SideBarButton from './SideBarButton';
 import { UserContext, UserSignedInContext } from '../../contexts/UserContext';
+import axiosClient from '../../axios/axiosConfig';
 
 function SideBar({ setDropdownOpen }) {
   const dropdownToggle = () => {
@@ -34,8 +34,8 @@ function SideBar({ setDropdownOpen }) {
 
   useEffect(() => {
     const getPlaylists = async () => {
-      await axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/playlists`)
+      await axiosClient
+        .get(`/playlists`)
         .then((res) => {
           setPlaylists(res.data.data);
         })

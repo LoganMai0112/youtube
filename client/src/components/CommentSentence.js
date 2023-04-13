@@ -4,11 +4,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { badWords } from 'vn-badwords';
 import { useNavigate } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function CommentSentence({
   comment,
@@ -26,8 +26,8 @@ function CommentSentence({
     comment.attributes.content
   );
   const navigate = useNavigate();
-  const deleteComment = () => {
-    axios
+  const deleteComment = async () => {
+    await axiosClient
       .delete(
         `${process.env.REACT_APP_SERVER_URL}/videos/${comment.attributes.videoId}/comments/${comment.id}`
       )
@@ -49,7 +49,7 @@ function CommentSentence({
   };
 
   const updateComment = async () => {
-    await axios
+    await axiosClient
       .put(
         `${process.env.REACT_APP_SERVER_URL}/videos/${comment.attributes.videoId}/comments/${comment.id}`,
         {

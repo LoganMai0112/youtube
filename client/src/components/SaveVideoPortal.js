@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineClose, AiOutlinePlus, AiFillLock } from 'react-icons/ai';
 import { GiEarthAmerica } from 'react-icons/gi';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import axiosClient from '../axios/axiosConfig';
 
 function SaveVideoPortal({ setSaveBox, videoId }) {
   const [createPlaylistInput, setCreatePlaylistInput] = useState(false);
@@ -13,8 +13,8 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
 
   useEffect(() => {
     const getPlaylists = async () => {
-      await axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/playlists`, {
+      await axiosClient
+        .get(`/playlists`, {
           params: { video_id: videoId },
         })
         .then((res) => {
@@ -33,21 +33,18 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
   const createPlaylist = async (e) => {
     e.preventDefault();
 
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/playlists`, {
+    await axiosClient
+      .post(`/playlists`, {
         playlist: {
           title: e.target.title.value,
           status: e.target.status.value,
         },
       })
       .then(async (res) => {
-        axios
-          .post(
-            `${process.env.REACT_APP_SERVER_URL}/playlists/${res.data.id}/playlist_item`,
-            {
-              video_id: videoId,
-            }
-          )
+        await axiosClient
+          .post(`/playlists/${res.data.id}/playlist_item`, {
+            video_id: videoId,
+          })
           .then((response) => {
             if (response) {
               toast(`Added this video to ${res.data.title}`);
@@ -59,20 +56,17 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
       .catch((err) => toast(err.response.data.message));
   };
 
-  const handleCheck = (event, index) => {
+  const handleCheck = async (event, index) => {
     setIsChecked((prevIsChecked) => [
       ...prevIsChecked.slice(0, index),
       !prevIsChecked[index],
       ...prevIsChecked.slice(index + 1),
     ]);
     if (event.target.checked) {
-      axios
-        .post(
-          `${process.env.REACT_APP_SERVER_URL}/playlists/${event.target.value}/playlist_item`,
-          {
-            video_id: videoId,
-          }
-        )
+      await axiosClient
+        .post(`/playlist_item`, {
+          video_id: videoId,
+        })
         .then((res) => {
           if (res) {
             toast(`Added this video to ${event.target.name}`);
@@ -80,13 +74,10 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
         })
         .catch((err) => toast(err.response.data.message));
     } else {
-      axios
-        .delete(
-          `${process.env.REACT_APP_SERVER_URL}/playlists/${event.target.value}/playlist_item`,
-          {
-            data: { video_id: videoId },
-          }
-        )
+      await axiosClient
+        .delete(`/playlists/${event.target.value}/playlist_item`, {
+          data: { video_id: videoId },
+        })
         .then((res) => {
           if (res) {
             toast(`Removed from ${event.target.name}`);

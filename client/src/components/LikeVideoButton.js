@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AiFillLike } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { UserSignedInContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function LikeVideoButton({
   liked,
@@ -16,9 +16,7 @@ function LikeVideoButton({
   const signedIn = useContext(UserSignedInContext);
   const like = async () => {
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/like`
-      );
+      const res = await axiosClient.post(`/videos/${videoId}/like`);
       if (res) {
         setLiked(true);
         setLikeCount(likeCount + 1);
@@ -36,9 +34,7 @@ function LikeVideoButton({
 
   const unLike = async () => {
     try {
-      const res = await axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/like`
-      );
+      const res = await axiosClient.delete(`/videos/${videoId}/like`);
       if (res) {
         setLiked(false);
         setLikeCount(likeCount - 1);

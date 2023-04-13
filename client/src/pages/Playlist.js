@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -13,6 +12,7 @@ import ShareVideoPortal from '../components/ShareVideoPortal';
 import SaveVideoPortal from '../components/SaveVideoPortal';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import SideCard from '../components/recommend/SideCard';
+import axiosClient from '../axios/axiosConfig';
 
 function Playlist() {
   const params = useParams();
@@ -60,7 +60,7 @@ function Playlist() {
       event.preventDefault();
     }
 
-    axios
+    axiosClient
       .put(
         `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
         {
@@ -108,7 +108,7 @@ function Playlist() {
   }, [multipleDropdownRef]);
 
   const updatePrivacy = (status) => {
-    axios
+    axiosClient
       .put(
         `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
         {
@@ -126,7 +126,7 @@ function Playlist() {
   };
 
   const updateDescription = () => {
-    axios
+    axiosClient
       .put(
         `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
         {
@@ -146,7 +146,7 @@ function Playlist() {
 
   const deletePlaylist = (savedOrCreated) => {
     if (savedOrCreated === 'created') {
-      axios
+      axiosClient
         .delete(
           `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`
         )
@@ -158,7 +158,7 @@ function Playlist() {
         })
         .catch((err) => toast(err.message));
     } else if (savedOrCreated === 'saved') {
-      axios
+      axiosClient
         .delete(
           `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
         )
@@ -174,7 +174,7 @@ function Playlist() {
   };
 
   const removeVideoFromPlaylist = (videoId) => {
-    axios
+    axiosClient
       .delete(
         `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/playlist_item`,
         {
@@ -191,7 +191,7 @@ function Playlist() {
   };
 
   const savePlaylist = () => {
-    axios
+    axiosClient
       .post(
         `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
       )
@@ -205,7 +205,7 @@ function Playlist() {
   };
 
   useEffect(() => {
-    axios
+    axiosClient
       .get(`${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`)
       .then((res) => {
         setCreatedOrSaved(res.data.playlist.data.attributes.createdOrSaved);
