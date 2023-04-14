@@ -1,24 +1,119 @@
-# README
+# Dev-to clone
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
+This is my project to learn how to build a app using Ruby on Rails framework. Watch demo [here](http://137.184.91.249/)
 
-* System dependencies
 
-* Configuration
 
-* Database creation
+- Ruby [3.2.1](https://github.com/rbenv/rbenv)
 
-* Database initialization
+- Rails [7.0.4](https://github.com/rails/rails)
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+<!-- ## Features
 
-* ...
+
+
+- View and edit profile user
+
+- Realtime notification when user upload video or stream
+
+- Upload video, like and comment video
+
+- Streaming
+
+- Share video to facebook
+
+- Create playlist, add video to playlist, remove playlist, set public or private for playlist, share playlist -->
+
+
+
+## Installation
+
+
+
+Install the dependencies and devDependencies and start the server.
+
+
+### 1. Installing necessary gem and setup the database
+
+
+
+- Installing gem in Gemfile:
+
+
+
+```
+
+$ bundle install # or bundle
+
+```
+
+
+
+- Migrating database:
+
+
+
+```
+
+rails db:migrate
+
+```
+
+
+
+- If you want to create fake data, run:
+
+
+
+```
+
+rails db:seed
+
+```
+
+
+
+### 4. Start server
+
+
+
+- Open a terminal and run:
+
+
+
+```
+
+rails s
+
+```
+
+- Run sidekiq service:
+
+
+
+```
+
+bundle exec sidekiq
+
+```
+
+
+
+
+
+
+
+
+
+## License
+
+
+
+MIT
+
+
+
