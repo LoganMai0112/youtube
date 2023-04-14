@@ -11,25 +11,6 @@ This is my project to learn how to build a app using Ruby on Rails framework. Wa
 - Rails [7.0.4](https://github.com/rails/rails)
 
 
-
-<!-- ## Features
-
-
-
-- View and edit profile user
-
-- Realtime notification when user upload video or stream
-
-- Upload video, like and comment video
-
-- Streaming
-
-- Share video to facebook
-
-- Create playlist, add video to playlist, remove playlist, set public or private for playlist, share playlist -->
-
-
-
 ## Installation
 
 
