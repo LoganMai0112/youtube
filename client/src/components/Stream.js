@@ -13,9 +13,19 @@ import axiosClient from '../axios/axiosConfig';
 
 export default function Stream() {
   const config = {
-    iceSevers: [
+    iceServers: [
       {
         urls: process.env.REACT_APP_STUN_SERVER,
+      },
+      {
+        urls: "turn:a.relay.metered.ca:80",
+        username: "db09dfd8775fb87fcee6cc6a",
+        credential: "zRNk2w2bovawrLb6",
+      },
+      {
+        urls: "turn:a.relay.metered.ca:80?transport=tcp",
+        username: "db09dfd8775fb87fcee6cc6a",
+        credential: "zRNk2w2bovawrLb6",
       },
     ],
   };
@@ -44,8 +54,15 @@ export default function Stream() {
     };
     getStream();
 
+   
+  }, [params.streamId]);
+
+  useEffect(() => {
     client.ontrack = (track, stream) => {
+      console.log(track.readyState)
+
       track.onunmute = () => {
+        console.log("haha")
         streamRef.current.srcObject = stream;
         streamRef.current.autoplay = true;
         streamRef.current.muted = false;
@@ -55,7 +72,7 @@ export default function Stream() {
         };
       };
     };
-  }, [streamRef]);
+  }, [])
 
   const start = () => {
     const streamingTrue = async () => {
@@ -134,7 +151,7 @@ export default function Stream() {
           <video width="80%" height="80%" ref={videoRef} />
         </div>
       )}
-      {streamInfo && streamInfo.attributes.userId !== currentUser.id && (
+      {streamInfo && (
         <WatchStream
           streamRef={streamRef}
           streamInfo={streamInfo}

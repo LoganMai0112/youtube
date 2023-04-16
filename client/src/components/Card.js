@@ -50,7 +50,7 @@ function Card({
             <div className="flex items-center text-text-color text-sm">
               {type !== 'playlist' && (
                 <>
-                  <p>{view || 0} views</p>
+                  {view && <p>{view} views</p>}
                   <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
                 </>
               )}

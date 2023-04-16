@@ -26,7 +26,7 @@ function SearchCard({
               {title}
             </p>
             <div className="flex items-center text-text-color text-sm">
-              <p>{view || 0} view</p>
+              {view && <p>{view} view</p>}
               <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
               <p>{moment(createdAt).fromNow()}</p>
             </div>
