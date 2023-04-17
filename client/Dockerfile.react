@@ -1,4 +1,4 @@
-FROM node:14.17.6
+FROM node:14.16.1-alpine
 
 WORKDIR /client
 
@@ -6,10 +6,10 @@ COPY package*.json ./
 
 RUN npm install --force
 
-# COPY . .
+COPY . .
 
 EXPOSE 3000
 
-RUN npm install react-scripts -g --silent
+# RUN npm install react-scripts -g --silent
 
 CMD ["npm", "start"]
