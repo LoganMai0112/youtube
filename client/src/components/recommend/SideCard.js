@@ -32,11 +32,11 @@ export default function SideCard({
                 </p>
               </Link>
             )}
-            <div className="flex items-center text-text-color text-sm">
+            <div className="flex sm:items-center flex-col sm:flex-row text-text-color text-sm">
               {type !== 'playlist' && (
                 <>
                   {view && <p>{view} views</p>}
-                  <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
+                  <div className="hidden sm:block rounded-full w-1 h-1 mx-2 bg-icon-color" />
                 </>
               )}
               <p>{moment(createdAt).fromNow()}</p>

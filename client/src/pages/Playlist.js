@@ -224,10 +224,10 @@ function Playlist() {
   }, [params]);
 
   return (
-    <div className="px-2 flex h-full">
+    <div className="sm:px-2 flex flex-col sm:flex-row h-full">
       <div
         id="container"
-        className="mt-3 ml-3 h-full w-96 bg-gradient-to-b rounded-xl fixed"
+        className="mt-3 sm:ml-3 h-full sm:w-96 w-full bg-gradient-to-b rounded-xl sm:fixed"
       >
         <div className="p-6 flex flex-col">
           {videos && videos[0] && (
@@ -423,7 +423,7 @@ function Playlist() {
           </div>
         </div>
       </div>
-      <div className="pl-[400px] w-full px-5 flex flex-col">
+      <div className="mb-3 sm:pl-[400px] w-full px-5 flex flex-col">
         {videos &&
           includedVideo &&
           videos.map((video) => (

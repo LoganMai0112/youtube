@@ -11,7 +11,6 @@ RUN apt-get update && \
     apt-get install -y build-essential postgresql-client nodejs yarn tzdata imagemagick ffmpeg && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 # Copy the Gemfile and Gemfile.lock files into the container
 
 RUN gem install bundler:2.4.6

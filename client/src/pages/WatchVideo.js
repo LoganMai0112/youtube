@@ -124,13 +124,13 @@ function WatchVideo() {
   };
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex flex-col sm:flex-row h-full w-full">
       <div className="flex-1 px-5 h-fit">
         {videoSource && (
           <div className="max-h-[600px]">
             <Player
               fluid={false}
-              height={600}
+              height={window.innerWidth > 400 ? 600 : 300}
               width="100%"
               ref={(player) => {
                 setPlayerState(player);
@@ -148,7 +148,7 @@ function WatchVideo() {
             </div>
           )}
           <p className="text-white text-2xl font-bold">{video.title}</p>
-          <div className="flex justify-between items-center w-full pt-3">
+          <div className="flex justify-between items-center w-full pt-3 overflow-x-scroll">
             <div className="flex flex-row items-center">
               <div className="p-1 min-w-[48px] rounded-full border-dashed border-2 border-main-color mr-3">
                 <Link to={`/users/${channel.id}`}>
@@ -178,7 +178,7 @@ function WatchVideo() {
               {channel.id === currentUser.id && (
                 <button
                   type="button"
-                  className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5"
+                  className="py-2 px-4 rounded-3xl bg-main-color text-black ml-5 whitespace-nowrap mr-2"
                   onClick={() => navigate(`/videos/${params.videoId}/edit`)}
                 >
                   Edit video
@@ -264,9 +264,10 @@ function WatchVideo() {
                 setShowDescription(true);
               }}
             >
-              <span>
-                <div id="view">{video.viewsCount || 0} views - </div>
-                {moment(video.createdAt).fromNow()}
+              <span className="flex items-center">
+                <div id="view">{video.viewsCount || 0} views</div>
+                <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
+                <div>{moment(video.createdAt).fromNow()}</div>
               </span>
               <br />
               {parse(video.description ? video.description : '')}
@@ -290,7 +291,7 @@ function WatchVideo() {
           />
         </div>
       </div>
-      <div className="w-[420px] flex flex-col">
+      <div className="sm:w-[420px] w-full px-5 sm:px-0 flex flex-col">
         <RecommendSide />
       </div>
       {shareBox && <ShareVideoPortal setShareBox={setShareBox} />}

@@ -136,7 +136,7 @@ function Header({ dropdownOpen }) {
             <button
               type="button"
               onClick={() => setNotiBox(!notiBox)}
-              className="group rounded-full p-3 hover:bg-hover relative"
+              className="group rounded-full p-3 hover:bg-hover relative hidden sm:block"
             >
               <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
             </button>

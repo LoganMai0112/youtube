@@ -79,13 +79,13 @@ function User() {
         <div className="w-full flex justify-between px-5 pb-1">
           <div className="flex justify-between gap-5">
             <img
-              className="rounded-full w-20 h-20 object-cover"
+              className="rounded-full w-10 h-10 sm:w-20 sm:h-20 object-cover"
               src={user.avatarUrl}
               alt="avatar"
             />
             <div className="text-text-color">
-              <p className="text-white text-2xl">{user.name}</p>
-              <p>{user.email}</p>
+              <p className="text-white text-md sm:text-2xl">{user.name}</p>
+              <p className="text-sm sm:text-md">{user.email}</p>
               {user.subscribersCount > 0 ? (
                 <p>{user.subscribersCount} subscribers</p>
               ) : (
@@ -94,7 +94,7 @@ function User() {
             </div>
           </div>
           {currentUser.id === user.id && currentUser.role !== 'admin' ? (
-            <Link to="/settings">
+            <Link to="/settings" className="hidden sm:block">
               <div className="px-4 py-2 bg-main-color hover:bg-yellow-600 rounded-2xl">
                 Manage channel
               </div>

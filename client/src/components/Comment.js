@@ -59,7 +59,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   };
 
   return (
-    <div>
+    <div className="h-[400px] sm:h-full border border-main-color rounded-xl sm:border-none overflow-y-scroll p-3 sm:p-0 my-3 sm:my-0">
       <div className="my-6 flex flex-col">
         <p className="text-white mb-4">{commentsCount} Comments</p>
         <div className="flex items-start">

@@ -44,7 +44,7 @@ function RecommendSide() {
   };
 
   return (
-    <div className="w-[420px] flex flex-col gap-2 pr-4">
+    <div className="sm:w-[420px] w-full flex flex-col gap-2 pr-4">
       {videos &&
         videos.map((video) => (
           <SideCard

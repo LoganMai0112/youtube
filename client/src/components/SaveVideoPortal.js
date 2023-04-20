@@ -64,7 +64,7 @@ function SaveVideoPortal({ setSaveBox, videoId }) {
     ]);
     if (event.target.checked) {
       await axiosClient
-        .post(`/playlist_item`, {
+        .post(`/playlists/${event.target.value}/playlist_item`, {
           video_id: videoId,
         })
         .then((res) => {

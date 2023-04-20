@@ -55,7 +55,7 @@ function CreateVideoButton() {
         type="button"
         ref={menuRef}
         onClick={() => toggleMenu()}
-        className="relative rounded-full p-3 bg-sec-color flex items-center w-fit h-fit hover:bg-hover"
+        className="relative rounded-full p-3 bg-sec-color items-center w-fit h-fit hover:bg-hover hidden sm:flex"
       >
         <div className="h-5 w-5 mr-3">
           <AiOutlineVideoCameraAdd className="h-full w-full fill-main-color" />

@@ -22,7 +22,7 @@ function SearchBar() {
       </button>
       <form onSubmit={submitSearch}>
         <input
-          className="bg-sec-color outline-none text-white"
+          className="bg-sec-color outline-none text-white w-24 sm:w-64"
           placeholder="Search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

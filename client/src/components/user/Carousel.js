@@ -14,7 +14,7 @@ function Carousel({ listName, datas }) {
       <Swiper
         className="relative"
         spaceBetween={5}
-        slidesPerView={5}
+        slidesPerView={window.innerWidth > 400 ? 5 : 2.5}
         navigation={{
           prevEl: navigationPrevRef.current,
           nextEl: navigationNextRef.current,
@@ -34,7 +34,7 @@ function Carousel({ listName, datas }) {
                 createdAt={data.attributes.createdAt}
                 thumbnailUrl={data.attributes.thumbnailUrl}
                 status={data.attributes.status}
-                view={data.attributes.viewCount}
+                view={data.attributes.viewsCount}
               />
             </SwiperSlide>
           ))}

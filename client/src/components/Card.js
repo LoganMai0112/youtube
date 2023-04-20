@@ -47,12 +47,12 @@ function Card({
                 <p className="text-text-color">Private</p>
               </div>
             )}
-            <div className="flex items-center text-text-color text-sm">
-              {type !== 'playlist' && (
-                <>
-                  {view && <p>{view} views</p>}
-                  <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
-                </>
+            <div className="flex sm:items-center text-text-color text-sm flex-col sm:flex-row">
+              {type !== 'playlist' && view && (
+                <div className="flex items-center">
+                  <p>{view} views</p>
+                  <div className="hidden sm:block rounded-full w-1 h-1 mx-2 bg-icon-color" />
+                </div>
               )}
               <p>{moment(createdAt).fromNow()}</p>
             </div>

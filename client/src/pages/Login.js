@@ -189,7 +189,7 @@ function Login() {
             </div>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 hidden sm:block">
           <img
             className="h-full w-full rounded-2xl"
             src="./login.jpeg"
