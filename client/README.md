@@ -16,7 +16,7 @@ Install the dependencies and devDependencies and start the server
 
 ```sh
 cd youtube/client
-npm i --legacy-peer-deps=
+npm i --legacy-peer-deps
 ```
 ### Install streaming server
 
