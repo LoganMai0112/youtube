@@ -62,9 +62,9 @@ services:
       GITHUB_OAUTH_SECRET: 5738d9fa4b19642292ee1494fd2239aa89b8a84c
       FB_OAUTH_ID: 783380446539231
       FB_OAUTH_SECRET: 9ed155e157c9cde2da579553bac74460
-      GOOGLE_OAUTH_ID: 1033037452883-609un9i072dvc0slqmf182rb7jaifgmq.apps.googleusercontent.com
-      GOOGLE_OAUTH_SECRET: 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
-      PEXEL_KEY: uuLJIZgul6lOurUhWU2I9rETUCgFE4dX8FdTyuIdpFGeWKDyyM1weTPG
+      GOOGLE_OAUTH_ID: ${GOOGLE_OAUTH_ID}
+      GOOGLE_OAUTH_SECRET: ${GOOGLE_OAUTH_SECRET}
+      PEXEL_KEY: ${PEXEL_KEY}
     volumes:
       - ./server:/server
     networks:
@@ -102,12 +102,12 @@ services:
       - youtube
     environment:
       NODE_ENV: development
-      REACT_APP_SERVER_URL: http://localhost:3001
-      REACT_APP_GOOGLE_CLIENT_ID: 1033037452883-609un9i072dvc0slqmf182rb7jaifgmq.apps.googleusercontent.com
-      REACT_APP_FACEBOOK_CLIENT_ID: 783380446539231
+      REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL}
+      REACT_APP_GOOGLE_CLIENT_ID: ${REACT_APP_GOOGLE_CLIENT_ID}
+      REACT_APP_FACEBOOK_CLIENT_ID: ${REACT_APP_FACEBOOK_CLIENT_ID}
       REACT_APP_STUN_SERVER: stun:stun.l.google.com:19320
-      REACT_APP_SIGNAL_SERVER: ws://localhost:7000/ws
-      REACT_APP_CABLE_URL: ws://localhost:3001/cable
+      REACT_APP_SIGNAL_SERVER: ${REACT_APP_SIGNAL_URL}
+      REACT_APP_CABLE_URL: ${REACT_APP_CABLE_URL}
     command: npm start
     volumes:
       - ./client:/client
