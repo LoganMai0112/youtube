@@ -18,6 +18,9 @@ Install the dependencies and devDependencies and start the server
 cd youtube/client
 npm i --legacy-peer-deps=
 ```
+### Install streaming server
+
+[Ion-sfu](https://github.com/ionorg/ion-sfu): I use this library to connect peer to peer user through webRTC 
 
 ## Development
 ```sh
