@@ -18,7 +18,7 @@ export default function SideCard({
         <img
           src={thumbnail || '/logo.png'}
           alt="thumbnail"
-          className="aspect-video rounded-lg w-40 object-cover"
+          className="aspect-video rounded-md w-40 object-cover"
         />
         <div className="flex flex-row items-start pl-3">
           <div>
@@ -32,11 +32,11 @@ export default function SideCard({
                 </p>
               </Link>
             )}
-            <div className="flex items-center text-text-color text-sm">
+            <div className="flex sm:items-center flex-col sm:flex-row text-text-color text-sm">
               {type !== 'playlist' && (
                 <>
-                  <p>{view || 0} views</p>
-                  <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
+                  {view && <p>{view} views</p>}
+                  <div className="hidden sm:block rounded-full w-1 h-1 mx-2 bg-icon-color" />
                 </>
               )}
               <p>{moment(createdAt).fromNow()}</p>

@@ -22,7 +22,7 @@ function SubSideBar({ setDropdownOpen }) {
     setDropdownOpen(true);
   };
   return (
-    <div className="bg-sec h-full min-w-[72px] max-w-[72px] flex flex-col overflow-y-scroll [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted">
+    <div className="bg-sec h-full min-w-[72px] max-w-[72px] flex-col overflow-y-scroll [&>section]:py-4 [&>section]:border-b-[0.5px] [&>section]:border-icon-color [&>section]:border-dotted sm:block hidden">
       <div className="py-4 px-4 flex flex-row items-center justify-between">
         <div
           onClick={() => dropdownToggle()}

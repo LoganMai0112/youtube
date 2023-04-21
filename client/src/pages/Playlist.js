@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -13,6 +12,7 @@ import ShareVideoPortal from '../components/ShareVideoPortal';
 import SaveVideoPortal from '../components/SaveVideoPortal';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import SideCard from '../components/recommend/SideCard';
+import axiosClient from '../axios/axiosConfig';
 
 function Playlist() {
   const params = useParams();
@@ -60,12 +60,15 @@ function Playlist() {
       event.preventDefault();
     }
 
-    axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          title: titleInput,
-        },
-      })
+    axiosClient
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            title: titleInput,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setTitleInput(res.data.title);
@@ -105,12 +108,15 @@ function Playlist() {
   }, [multipleDropdownRef]);
 
   const updatePrivacy = (status) => {
-    axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          status,
-        },
-      })
+    axiosClient
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            status,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setPrivacy(res.data.status);
@@ -120,12 +126,15 @@ function Playlist() {
   };
 
   const updateDescription = () => {
-    axios
-      .put(`/playlists/${params.playlistId}`, {
-        playlist: {
-          description: descriptionInput,
-        },
-      })
+    axiosClient
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`,
+        {
+          playlist: {
+            description: descriptionInput,
+          },
+        }
+      )
       .then((res) => {
         if (res) {
           setDescriptionInput(res.data.description);
@@ -137,8 +146,10 @@ function Playlist() {
 
   const deletePlaylist = (savedOrCreated) => {
     if (savedOrCreated === 'created') {
-      axios
-        .delete(`/playlists/${params.playlistId}`)
+      axiosClient
+        .delete(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`
+        )
         .then((res) => {
           if (res) {
             toast('Playlist deleted');
@@ -147,8 +158,10 @@ function Playlist() {
         })
         .catch((err) => toast(err.message));
     } else if (savedOrCreated === 'saved') {
-      axios
-        .delete(`/playlists/${params.playlistId}/user_playlist`)
+      axiosClient
+        .delete(
+          `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
+        )
         .then((res) => {
           if (res) {
             toast('Removed playlist from your Library');
@@ -161,10 +174,13 @@ function Playlist() {
   };
 
   const removeVideoFromPlaylist = (videoId) => {
-    axios
-      .delete(`/playlists/${params.playlistId}/playlist_item`, {
-        data: { video_id: videoId },
-      })
+    axiosClient
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/playlist_item`,
+        {
+          data: { video_id: videoId },
+        }
+      )
       .then((res) => {
         if (res) {
           toast(`Removed from ${playlist.attributes.title}`);
@@ -175,8 +191,10 @@ function Playlist() {
   };
 
   const savePlaylist = () => {
-    axios
-      .post(`/playlists/${params.playlistId}/user_playlist`)
+    axiosClient
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}/user_playlist`
+      )
       .then((res) => {
         if (res) {
           toast('Saved this playlist to your library');
@@ -187,8 +205,8 @@ function Playlist() {
   };
 
   useEffect(() => {
-    axios
-      .get(`/playlists/${params.playlistId}`)
+    axiosClient
+      .get(`${process.env.REACT_APP_SERVER_URL}/playlists/${params.playlistId}`)
       .then((res) => {
         setCreatedOrSaved(res.data.playlist.data.attributes.createdOrSaved);
         setPlaylist(res.data.playlist.data);
@@ -206,10 +224,10 @@ function Playlist() {
   }, [params]);
 
   return (
-    <div className="px-2 flex h-full">
+    <div className="sm:px-2 flex flex-col sm:flex-row h-full">
       <div
         id="container"
-        className="mt-3 ml-3 h-full w-96 bg-gradient-to-b rounded-xl fixed"
+        className="mt-3 sm:ml-3 h-full sm:w-96 w-full bg-gradient-to-b rounded-xl sm:fixed"
       >
         <div className="p-6 flex flex-col">
           {videos && videos[0] && (
@@ -405,7 +423,7 @@ function Playlist() {
           </div>
         </div>
       </div>
-      <div className="pl-[400px] w-full px-5 flex flex-col">
+      <div className="mb-3 sm:pl-[400px] w-full px-5 flex flex-col">
         {videos &&
           includedVideo &&
           videos.map((video) => (

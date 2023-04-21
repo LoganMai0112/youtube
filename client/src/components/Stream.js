@@ -5,11 +5,11 @@
 import React, { useRef, useEffect, useContext, useState } from 'react';
 import { Client, LocalStream } from 'ion-sdk-js';
 import { IonSFUJSONRPCSignal } from 'ion-sdk-js/lib/signal/json-rpc-impl';
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
 import WatchStream from './WatchStream';
+import axiosClient from '../axios/axiosConfig';
 
 export default function Stream() {
   const config = {
@@ -34,7 +34,7 @@ export default function Stream() {
 
   useEffect(() => {
     const getStream = async () => {
-      await axios
+      await axiosClient
         .get(`/streams/${params.streamId}`)
         .then((res) => {
           setChannel(res.data.included[0]);
@@ -58,9 +58,11 @@ export default function Stream() {
   }, [streamRef]);
 
   const start = () => {
-    const streamingTrue = () => {
-      axios
-        .put(`/streams/${params.streamId}`, { stream: { streaming: true } })
+    const streamingTrue = async () => {
+      await axiosClient
+        .put(`/streams/${params.streamId}`, {
+          stream: { streaming: true },
+        })
         .then((res) => {
           if (res) {
             toast('Start stream');
@@ -89,8 +91,8 @@ export default function Stream() {
       });
   };
 
-  const closeStream = () => {
-    axios
+  const closeStream = async () => {
+    await axiosClient
       .delete(`/streams/${params.streamId}`)
       .then(() => {
         toast('Close Stream');

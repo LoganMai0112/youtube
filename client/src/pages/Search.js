@@ -9,7 +9,6 @@ import React, {
   useState,
 } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
 // import { toast } from 'react-toastify';
 import { GoSettings } from 'react-icons/go';
 import SearchCard from '../components/SearchCard';
@@ -17,6 +16,7 @@ import SideCard from '../components/recommend/SideCard';
 import SubscribeButton from '../components/SubscribeButton';
 import { UserContext } from '../contexts/UserContext';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
+import axiosClient from '../axios/axiosConfig';
 
 function Search() {
   const [searchParams] = useSearchParams();
@@ -34,11 +34,11 @@ function Search() {
   const getSearch = useCallback(async () => {
     if (page <= maxPages) {
       setIsLoading(true);
-      await axios
+      await axiosClient
         .get(
-          `/search?query=${searchParams.get('search_query')}&type=${type}${
-            date ? `&date=${date}` : ''
-          }&page=${page}`
+          `${process.env.REACT_APP_SERVER_URL}/search?query=${searchParams.get(
+            'search_query'
+          )}&type=${type}${date ? `&date=${date}` : ''}&page=${page}`
         )
         .then((res) => {
           setMaxPages(res.data.pagy.pages);
@@ -80,7 +80,7 @@ function Search() {
 
   return (
     <div className="w-full">
-      <div className="px-5 mx-auto flex flex-col gap-2 w-[1024px]">
+      <div className="px-5 mx-auto flex flex-col gap-2 full full lg:w-[1024px]">
         <div
           ref={filterRef}
           className="w-full flex justify-end relative border-b border-text-color"
@@ -170,7 +170,7 @@ function Search() {
                   Video
                 </button>
                 <button
-                  className={`rounded-xl hover:bg-hover ${
+                  className={`hidden sm:block rounded-xl hover:bg-hover ${
                     type === 'channel' ? 'bg-hover text-white' : ''
                   }`}
                   onClick={() => {

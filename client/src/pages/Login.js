@@ -12,6 +12,7 @@ import FacebookLogin from 'react-facebook-login';
 import { useGoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { UserUpdateContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function Login() {
   const useUserUpdate = useContext(UserUpdateContext);
@@ -25,8 +26,8 @@ function Login() {
   } = useForm();
 
   const onSubmit = async (user) => {
-    await axios
-      .post('login', { user })
+    await axiosClient
+      .post(`${process.env.REACT_APP_SERVER_URL}/login`, { user })
       .then(async (res) => {
         if (res.status === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
@@ -42,8 +43,10 @@ function Login() {
   };
 
   const responseFacebook = async (res) => {
-    await axios
-      .post('/auth/facebook/callback', { res })
+    await axiosClient
+      .post(`${process.env.REACT_APP_SERVER_URL}/auth/facebook/callback`, {
+        res,
+      })
       .then(async (response) => {
         if (response.data.code === '200') {
           await localStorage.setItem(
@@ -62,10 +65,13 @@ function Login() {
 
   const responseGoogle = useGoogleLogin({
     onSuccess: (codeResponse) => {
-      axios
-        .post('/auth/google_oauth2/callback', {
-          code: codeResponse.code,
-        })
+      axiosClient
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/auth/google_oauth2/callback`,
+          {
+            code: codeResponse.code,
+          }
+        )
         .then(async (res) => {
           if (res.data.code === '200') {
             await localStorage.setItem(
@@ -183,7 +189,7 @@ function Login() {
             </div>
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 hidden sm:block">
           <img
             className="h-full w-full rounded-2xl"
             src="./login.jpeg"

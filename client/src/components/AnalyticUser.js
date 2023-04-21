@@ -5,9 +5,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
-import axios from 'axios';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import axiosClient from '../axios/axiosConfig';
 
 function AnalyticUser() {
   const [type, setType] = useState('view');
@@ -49,8 +49,8 @@ function AnalyticUser() {
 
   useEffect(() => {
     const getAnalytic = async () => {
-      await axios
-        .get('/analytics')
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/analytics`)
         .then((res) => {
           setDataChannel(res.data.channelAnalytics);
           setDataAnalytics(res.data.channelAnalytics);

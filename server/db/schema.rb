@@ -103,10 +103,10 @@ ActiveRecord::Schema[7.0].define(version: 20_230_405_064_513) do
   create_table 'streams', force: :cascade do |t|
     t.string 'title'
     t.text 'description'
+    t.boolean 'streaming'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.bigint 'user_id', null: false
-    t.boolean 'streaming'
     t.index ['user_id'], name: 'index_streams_on_user_id'
   end
 

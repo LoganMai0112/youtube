@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import CommentSentence from './CommentSentence';
+import axiosClient from '../axios/axiosConfig';
 
 function Comment({ videoId, commentsCount, setCommentsCount }) {
   const currentUser = useContext(UserContext);
@@ -17,9 +17,9 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getComments = () => {
-      axios
-        .get(`/videos/${videoId}/comments`)
+    const getComments = async () => {
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`)
         .then((res) => {
           setComments(res.data.data);
           setCommenters(res.data.included);
@@ -31,8 +31,8 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   }, [commentsCount]);
 
   const submitComment = async () => {
-    await axios
-      .post(`/videos/${videoId}/comments`, {
+    await axiosClient
+      .post(`${process.env.REACT_APP_SERVER_URL}/videos/${videoId}/comments`, {
         comment: { content: commentInput },
       })
       .then((res) => {
@@ -59,7 +59,7 @@ function Comment({ videoId, commentsCount, setCommentsCount }) {
   };
 
   return (
-    <div>
+    <div className="h-[400px] sm:h-full border border-main-color rounded-xl sm:border-none overflow-y-scroll p-3 sm:p-0 my-3 sm:my-0">
       <div className="my-6 flex flex-col">
         <p className="text-white mb-4">{commentsCount} Comments</p>
         <div className="flex items-start">

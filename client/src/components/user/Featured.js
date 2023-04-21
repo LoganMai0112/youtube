@@ -19,7 +19,9 @@ function Featured() {
 
   return (
     <div>
-      <Carousel listName="Videos" datas={outletContext.videos} />
+      {outletContext.videos && outletContext.videos.length > 0 && (
+        <Carousel listName="Videos" datas={outletContext.videos} />
+      )}
       {outletContext.createdPlaylists &&
         outletContext.createdPlaylists.map((playlist) => (
           <Carousel

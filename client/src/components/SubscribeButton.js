@@ -1,16 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { UserSignedInContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function SubscribeButton({ subscribedYet, channelId }) {
   const navigate = useNavigate();
   const [subscribed, setSubscribed] = useState(subscribedYet);
   const signedIn = useContext(UserSignedInContext);
   const subscribe = async () => {
-    await axios
-      .post(`/users/${channelId}/subscribe`)
+    await axiosClient
+      .post(`${process.env.REACT_APP_SERVER_URL}/users/${channelId}/subscribe`)
       .then((res) => {
         if (res) {
           setSubscribed(true);
@@ -27,8 +27,10 @@ function SubscribeButton({ subscribedYet, channelId }) {
       });
   };
   const unsubscribe = async () => {
-    await axios
-      .delete(`/users/${channelId}/subscribe`)
+    await axiosClient
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/users/${channelId}/subscribe`
+      )
       .then((res) => {
         if (res) {
           setSubscribed(false);

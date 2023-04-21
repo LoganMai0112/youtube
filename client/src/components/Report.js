@@ -1,15 +1,15 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axiosClient from '../axios/axiosConfig';
 
 function Report() {
   const [reports, setReports] = useState();
 
   useEffect(() => {
     const getReports = async () => {
-      await axios
-        .get('/reports')
+      await axiosClient
+        .get(`/reports`)
         .then((res) => setReports(res.data))
         .catch((err) => toast(err.response.data.message));
     };
@@ -18,7 +18,7 @@ function Report() {
   }, []);
 
   const deleteReport = async (reportId) => {
-    await axios
+    await axiosClient
       .delete(`/reports/${reportId}`)
       .then((res) => {
         toast(res.data.message);

@@ -9,10 +9,10 @@ import React, {
   useMemo,
 } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { UserContext, UserUpdateContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 const baseStyle = {
   flex: 1,
@@ -51,9 +51,9 @@ function Setting() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getUser = () => {
-      axios
-        .get(`/users/${currentUser.id}/edit`)
+    const getUser = async () => {
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}/edit`)
         .then((res) => {
           setUser(res.data.data.attributes);
           setAvatarPreview(res.data.data.attributes.avatarUrl);
@@ -107,7 +107,7 @@ function Setting() {
   );
 
   const submitToAPI = async (data) => {
-    await fetch(`/users/${currentUser.id}`, {
+    await fetch(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
@@ -137,8 +137,8 @@ function Setting() {
   };
 
   const deleteAccount = async () => {
-    await axios
-      .delete(`/users/${currentUser.id}`)
+    await axiosClient
+      .delete(`${process.env.REACT_APP_SERVER_URL}/users/${currentUser.id}`)
       .then((res) => {
         if (res) {
           localStorage.clear();

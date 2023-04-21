@@ -14,7 +14,6 @@ import React, {
   useMemo,
   useContext,
 } from 'react';
-import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { EditorState, convertFromHTML, ContentState } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
@@ -23,6 +22,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { toast } from 'react-toastify';
 import { UserContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 const baseStyle = {
   flex: 1,
@@ -69,7 +69,7 @@ function EditVideo() {
 
   useEffect(() => {
     const getVideo = async () => {
-      const res = await axios.get(`/videos/${params.videoId}`);
+      const res = await axiosClient.get(`/videos/${params.videoId}`);
       setUserOfVideo(
         currentUser.id == res.data.data.relationships.user.data.id
       );
@@ -107,7 +107,7 @@ function EditVideo() {
   });
 
   const submitToAPI = (data) => {
-    fetch(`/videos/${params.videoId}`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
@@ -122,8 +122,8 @@ function EditVideo() {
   };
 
   const handleDelete = async () => {
-    await axios
-      .delete(`/videos/${params.videoId}`, {
+    await axiosClient
+      .delete(`${process.env.REACT_APP_SERVER_URL}/videos/${params.videoId}`, {
         headers: {
           Authorization: localStorage.getItem('token'),
         },

@@ -5,13 +5,13 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { AiTwotoneBell, AiFillYoutube } from 'react-icons/ai';
 import { createConsumer } from '@rails/actioncable';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { UserContext, UserSignedInContext } from '../contexts/UserContext';
 import LogOutButton from './LogOutButton';
 import CreateVideoButton from './CreateVideoButton';
 import SearchBar from './SearchBar';
+import axiosClient from '../axios/axiosConfig';
 
 function Header({ dropdownOpen }) {
   const useUser = useContext(UserContext);
@@ -55,8 +55,8 @@ function Header({ dropdownOpen }) {
 
   useEffect(() => {
     const getNotifications = async () => {
-      await axios
-        .get('/notifications')
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/notifications`)
         .then((res) => setNotifications(res.data.data))
         .catch((err) => toast(err.message));
     };
@@ -66,7 +66,7 @@ function Header({ dropdownOpen }) {
   }, [useUserSignedIn]);
 
   useEffect(() => {
-    const cable = createConsumer('ws://localhost:3001/cable');
+    const cable = createConsumer(process.env.REACT_APP_CABLE_URL);
     const notificationChannel = cable.subscriptions.create(
       'NotificationsChannel',
       {
@@ -92,11 +92,14 @@ function Header({ dropdownOpen }) {
     setHaveUnread(havingUnread);
   }, [notifications]);
 
-  const readNotification = (notificationId, index) => {
-    axios
-      .put(`/notifications/${notificationId}`, {
-        notification: { read: true },
-      })
+  const readNotification = async (notificationId, index) => {
+    await axiosClient
+      .put(
+        `${process.env.REACT_APP_SERVER_URL}/notifications/${notificationId}`,
+        {
+          notification: { read: true },
+        }
+      )
       .then((res) => {
         if (res) {
           setNotifications((prevState) => [
@@ -133,7 +136,7 @@ function Header({ dropdownOpen }) {
             <button
               type="button"
               onClick={() => setNotiBox(!notiBox)}
-              className="group rounded-full p-3 hover:bg-hover relative"
+              className="group rounded-full p-3 hover:bg-hover relative hidden sm:block"
             >
               <AiTwotoneBell className="w-6 h-6 fill-icon-color group-hover:fill-main-color" />
             </button>

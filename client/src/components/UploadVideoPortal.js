@@ -63,7 +63,7 @@ function UploadVideoPortal({ setCreating }) {
   );
 
   const submitToAPI = (data) => {
-    fetch('/videos', {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/videos`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user_playlist do
-    action { 1 }
+    action { 'created' }
     user { nil }
     playlist { nil }
   end

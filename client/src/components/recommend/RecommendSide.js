@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import SideCard from './SideCard';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import axiosClient from '../../axios/axiosConfig';
 
 function RecommendSide() {
   const [videos, setVideos] = useState([]);
@@ -15,7 +15,7 @@ function RecommendSide() {
     const getVideos = async () => {
       if (page <= maxPage) {
         setIsLoading(true);
-        await axios
+        await axiosClient
           .get(`/videos?page=${page}`)
           .then((res) => {
             setMaxPage(res.data.pagy.pages);
@@ -44,7 +44,7 @@ function RecommendSide() {
   };
 
   return (
-    <div className="w-[420px] flex flex-col gap-2 pr-4">
+    <div className="sm:w-[420px] w-full flex flex-col gap-2 pr-4">
       {videos &&
         videos.map((video) => (
           <SideCard

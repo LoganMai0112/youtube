@@ -1,0 +1,125 @@
+version: "3"
+
+services:
+  sfu:
+    image: pionwebrtc/ion-sfu:latest-jsonrpc
+    networks:
+      - youtube
+    ports:
+      - 7000:7000
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    environment:
+      - cluster.name=docker-cluster
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - xpack.security.enabled=false # disable authentication
+    networks:
+      - youtube
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+  redis:
+    image: redis:4-alpine
+    command: redis-server --appendonly yes
+    networks:
+      - youtube
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+  db:
+    image: postgres:15.2
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - youtube
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3001 -b '0.0.0.0'"
+    environment:
+      DB_HOST: db
+      DB_NAME: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      RAILS_ENV: development
+      REDIS_URL: redis://redis:6379/0
+      REDIS_CABLE_URL: redis://redis:6379/1
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      SENTRY_KEY: ${SENTRY_KEY}
+      GITHUB_OAUTH_ID: ${GITHUB_OAUTH_ID}
+      GITHUB_OAUTH_SECRET: ${GITHUB_OAUTH_SECRET}
+      FB_OAUTH_ID: ${FB_OAUTH_ID}
+      FB_OAUTH_SECRET: ${FB_OAUTH_SECRET}
+      GOOGLE_OAUTH_ID: ${GOOGLE_OAUTH_ID}
+      GOOGLE_OAUTH_SECRET: ${GOOGLE_OAUTH_SECRET}
+      PEXEL_KEY: ${PEXEL_KEY}
+    volumes:
+      - ./server:/server
+    networks:
+      - youtube
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+      - elasticsearch
+      - redis
+  sidekiq:
+    build: ./server
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - ./server:/server
+    networks:
+      - youtube
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DB_HOST: db
+      DB_NAME: postgres
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      - redis
+      - db
+    # ports:
+    #   - "3001:3001"
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.react
+    stdin_open: true
+    networks:
+      - youtube
+    environment:
+      NODE_ENV: development
+      REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL}
+      REACT_APP_GOOGLE_CLIENT_ID: ${REACT_APP_GOOGLE_CLIENT_ID}
+      REACT_APP_FACEBOOK_CLIENT_ID: ${REACT_APP_FACEBOOK_CLIENT_ID}
+      REACT_APP_STUN_SERVER: stun:stun.l.google.com:19320
+      REACT_APP_SIGNAL_SERVER: ${REACT_APP_SIGNAL_URL}
+      REACT_APP_CABLE_URL: ${REACT_APP_CABLE_URL}
+    command: npm start
+    volumes:
+      - ./client:/client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+volumes:
+  postgres-data:
+  elasticsearch-data:
+  redis-data:
+
+networks:
+  youtube:
+    driver: bridge

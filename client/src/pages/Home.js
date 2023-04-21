@@ -2,13 +2,13 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Card from '../components/Card';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import axiosClient from '../axios/axiosConfig';
 
 function Home() {
   const [videos, setVideos] = useState([]);
@@ -49,8 +49,8 @@ function Home() {
   useEffect(() => {
     const getVideos = async () => {
       setLoading(true);
-      await axios
-        .get(`/videos?page=${page}`)
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/videos?page=${page}`)
         .then((res) => {
           setMaxPages(res.data.pagy.pages);
           setVideos((data) => [...data, ...res.data.videos.data]);
@@ -70,8 +70,8 @@ function Home() {
 
   useEffect(() => {
     const getStreams = async () => {
-      axios
-        .get('/streams')
+      await axiosClient
+        .get(`${process.env.REACT_APP_SERVER_URL}/streams`)
         .then((res) => {
           setStreams(res.data.data);
         })

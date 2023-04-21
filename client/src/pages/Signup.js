@@ -8,6 +8,7 @@ import { Link, redirect, useNavigate } from 'react-router-dom';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
 import { UserUpdateContext } from '../contexts/UserContext';
+import axiosClient from '../axios/axiosConfig';
 
 function Signup() {
   const navigate = useNavigate();
@@ -23,8 +24,8 @@ function Signup() {
   const useUserUpdate = useContext(UserUpdateContext);
 
   const onSubmit = async (user) => {
-    await axios
-      .post('signup', { user })
+    await axiosClient
+      .post(`${process.env.REACT_APP_SERVER_URL}/signup`, { user })
       .then(async (res) => {
         if (res.data.status.code === 200) {
           await localStorage.setItem('token', res.headers.get('Authorization'));
