@@ -1,6 +1,6 @@
 # MyTube
 
-This is youtube clone using Reactjs, ROR. Integrate many service to execute background job like Redis, Sidekiq gem, elasticsearch with Searchkick gem and webRTC for livestream video. For more information, you can seek Readme.md in /client and /server.
+This is youtube clone using Reactjs, ROR. Integrate many service to execute background job like Redis, Sidekiq gem, elasticsearch with Searchkick gem and webRTC for livestream video. For more information, you can seek Readme.md in ```/client``` and ```/server```.
 
 ## Features
 
