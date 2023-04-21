@@ -18,7 +18,7 @@ export default function SideCard({
         <img
           src={thumbnail || '/logo.png'}
           alt="thumbnail"
-          className="aspect-video rounded-lg w-40 object-cover"
+          className="aspect-video rounded-md w-40 object-cover"
         />
         <div className="flex flex-row items-start pl-3">
           <div>

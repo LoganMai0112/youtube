@@ -18,14 +18,14 @@ function SearchCard({
         <img
           src={thumbnail}
           alt="thumbnail"
-          className="aspect-video rounded-lg w-1/4 min-w-[200px] object-cover"
+          className="aspect-video rounded-md w-1/4 min-w-[200px] object-cover"
         />
         <div className="flex flex-row items-start pl-3">
           <div>
             <p className="text-ellipsis overflow-hidden text-white text-xl font-bold max-h-14">
               {title}
             </p>
-            <div className="flex items-center text-text-color text-sm">
+            <div className="flex sm:items-center flex-col sm:flex-row text-text-color text-sm">
               {view && <p>{view} view</p>}
               <div className="rounded-full w-1 h-1 mx-2 bg-icon-color" />
               <p>{moment(createdAt).fromNow()}</p>

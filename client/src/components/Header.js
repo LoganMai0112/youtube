@@ -66,7 +66,7 @@ function Header({ dropdownOpen }) {
   }, [useUserSignedIn]);
 
   useEffect(() => {
-    const cable = createConsumer('ws://localhost:3001/cable');
+    const cable = createConsumer(process.env.REACT_APP_CABLE_URL);
     const notificationChannel = cable.subscriptions.create(
       'NotificationsChannel',
       {

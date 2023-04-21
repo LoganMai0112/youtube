@@ -47,6 +47,3 @@ user_ids = User.pluck(:id)
   video.save!
   video_file.close
 end
-
-
-

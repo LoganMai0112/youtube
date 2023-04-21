@@ -19,7 +19,7 @@ function Card({
         <img
           src={thumbnailUrl || '/logo.png'}
           alt="thumbnail"
-          className="aspect-video rounded-xl object-cover"
+          className="aspect-video rounded-md object-cover"
         />
         <div className="flex flex-row items-start pt-3">
           {channel && (

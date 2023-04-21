@@ -80,7 +80,7 @@ function Search() {
 
   return (
     <div className="w-full">
-      <div className="px-5 mx-auto flex flex-col gap-2 w-[1024px]">
+      <div className="px-5 mx-auto flex flex-col gap-2 full full lg:w-[1024px]">
         <div
           ref={filterRef}
           className="w-full flex justify-end relative border-b border-text-color"
@@ -170,7 +170,7 @@ function Search() {
                   Video
                 </button>
                 <button
-                  className={`rounded-xl hover:bg-hover ${
+                  className={`hidden sm:block rounded-xl hover:bg-hover ${
                     type === 'channel' ? 'bg-hover text-white' : ''
                   }`}
                   onClick={() => {
