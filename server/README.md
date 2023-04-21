@@ -1,11 +1,5 @@
 # MyTube
 
-
-
-This is my project to learn how to build a app using Ruby on Rails framework. Watch demo [here](http://137.184.91.249/)
-
-
-
 - Ruby [3.2.1](https://github.com/rbenv/rbenv)
 
 - Rails [7.0.4](https://github.com/rails/rails)
@@ -56,9 +50,15 @@ rails db:seed
 
 ```
 
+### 2. Install service
+
+- Elasticsearch: You can read about how to install elastic search [here](https://phoenixnap.com/kb/install-elasticsearch-ubuntu)
 
 
-### 4. Start server
+- Redis: Install database for background job [here](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-20-04)
+
+
+### 3. Start server
 
 
 
