@@ -5,10 +5,10 @@ RSpec.describe Stream, type: :model do
     it { is_expected.to have_one_attached(:source) }
     it { is_expected.to have_one_attached(:thumbnail) }
     it { is_expected.to have_many(:notifications) }
-    it { is_expected.to belong_to(:user)}
+    it { is_expected.to belong_to(:user) }
   end
 
   describe 'validation' do
-    it { is_expected.to validate_presence_of(:title)}
+    it { is_expected.to validate_presence_of(:title) }
   end
 end

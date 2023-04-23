@@ -4,9 +4,9 @@ RSpec.describe 'Playlists', type: :request do
   describe 'POST /create' do
     let(:user) { create(:user) }
 
-    it 'should return :created http status' do
+    it 'returns :created http status' do
       sign_in user
-      post "/playlists", params: { playlist: { title: 'title', status: 'published' } }
+      post '/playlists', params: { playlist: { title: 'title', status: 'published' } }
       expect(response).to have_http_status(:created)
     end
   end
@@ -14,8 +14,8 @@ RSpec.describe 'Playlists', type: :request do
   describe 'PUT /update' do
     let(:user) { create(:user) }
     let(:playlist) { create(:playlist) }
-    let!(:user_playlist) { create(:user_playlist, user: user, playlist: playlist, action: 'created')}
-  
+    let!(:user_playlist) { create(:user_playlist, user: user, playlist: playlist, action: 'created') }
+
     it 'return :created http status' do
       sign_in user
 
@@ -27,8 +27,8 @@ RSpec.describe 'Playlists', type: :request do
   describe 'DELETE /update' do
     let(:user) { create(:user) }
     let(:playlist) { create(:playlist) }
-    let!(:user_playlist) { create(:user_playlist, user: user, playlist: playlist, action: 'created')}
-  
+    let!(:user_playlist) { create(:user_playlist, user: user, playlist: playlist, action: 'created') }
+
     it 'return :created http status' do
       sign_in user
 
