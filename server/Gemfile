@@ -90,6 +90,7 @@ group :development do
 end
 
 group :test do
+  gem 'pundit-matchers', '~> 2.0'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', require: false
 end

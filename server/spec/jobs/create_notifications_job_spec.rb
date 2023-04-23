@@ -1,5 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe CreateNotificationsJob, type: :job do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe NotificationsBroadcastJob, type: :job do
+  it 'queue the job' do
+    ActiveJob::Base.queue_adapter = :test
+    expect do
+      CreateNotificationsJob.perform_later
+    end.to have_enqueued_job(CreateNotificationsJob)
+  end
 end

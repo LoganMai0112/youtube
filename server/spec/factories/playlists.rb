@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :playlist do
     title { 'MyString' }
     description { 'MyText' }
-    user { nil }
+    status { 'published' }
   end
 end

@@ -16,6 +16,7 @@
 
 require 'rails_helper'
 require 'support/controller_helpers'
+require 'pundit/matchers'
 
 RSpec.configure do |config|
   config.before(:suite) do

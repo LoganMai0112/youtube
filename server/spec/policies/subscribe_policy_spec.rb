@@ -1,27 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe SubscribePolicy, type: :policy do
-  subject { described_class }
+  subject { described_class.new(user, subscribe) }
 
-  let(:user) { User.new }
+  let(:user) { create(:user) }
+  let(:user2) { create(:user) }
+  let(:subscribe) { create(:subscribe, subscriber: user, subscribed_user: user) }
 
-  permissions '.scope' do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  it { is_expected.to forbid_actions(:create) }
+  it { is_expected.to permit_actions(:destroy) }
 end
