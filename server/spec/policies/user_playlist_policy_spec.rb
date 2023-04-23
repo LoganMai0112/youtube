@@ -1,27 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe UserPlaylistPolicy, type: :policy do
-  subject { described_class }
+  subject { described_class.new(user, user_playlist) }
 
-  let(:user) { User.new }
+  let(:user) { create(:user) }
+  let(:playlist) { create(:playlist) }
+  let(:user_playlist) { create(:user_playlist, user: user, playlist: playlist) }
 
-  permissions '.scope' do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  it { is_expected.to permit_actions(%i[create destroy]) }
 
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
 end

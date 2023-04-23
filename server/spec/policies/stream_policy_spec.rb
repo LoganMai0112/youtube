@@ -1,27 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe StreamPolicy, type: :policy do
-  subject { described_class }
+  subject { described_class.new(user, stream) }
 
-  let(:user) { User.new }
+  let(:user) { create(:user, :admin) }
+  let(:stream) { create(:stream, user_id: user.id) }
 
-  permissions '.scope' do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :create? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :update? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :destroy? do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+  it { is_expected.to permit_action(:create) }
+  it { is_expected.to permit_action(:update) }
+  it { is_expected.to permit_action(:destroy) }
+  it { is_expected.to permit_action(:show) }
 end

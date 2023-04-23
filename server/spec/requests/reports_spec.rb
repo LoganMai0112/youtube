@@ -1,24 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe 'Reports', type: :request do
-  describe 'GET /index' do
+  describe 'POST /create' do
+    let(:user) { create(:user) }
+
     it 'returns http success' do
-      get '/reports/index'
+      sign_in user
+
+      post '/reports', params: { report: { reportable_id: user.id, reportable_type: 'User', content: 'content' } }
       expect(response).to have_http_status(:success)
     end
   end
 
-  describe 'GET /create' do
-    it 'returns http success' do
-      get '/reports/create'
-      expect(response).to have_http_status(:success)
-    end
-  end
+  describe 'DELETE /destroy' do
+    let(:user) { create(:user, :admin) }
+    let(:report) { create(:report, reportable: user) }
 
-  describe 'GET /destroy' do
     it 'returns http success' do
-      get '/reports/destroy'
-      expect(response).to have_http_status(:success)
+      delete "/reports/#{report.id}"
+      expect(response).to have_http_status(:ok)
     end
   end
 end
